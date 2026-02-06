@@ -147,7 +147,7 @@ export const socialLinks = [
   { name: 'Instagram', href: 'https://instagram.com/_hey_yasii_', icon: Instagram },
   { name: 'WhatsApp', href: 'https://wa.me/917034229912', icon: WhatsAppIcon },
   { name: 'LinkedIn', href: 'https://linkedin.com', icon: Linkedin },
-  { name: 'GitHub', href: 'https://github.com', icon: Github },
+  { name: 'GitHub', href: 'https://github.com/mhdyaseenvattappara', icon: Github },
 ];
 
 export const skillsData = [

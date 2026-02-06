@@ -1,25 +1,15 @@
 # Yazzfolio
 
-A high-end, modern portfolio built with **Next.js 15**, **Firebase**, **Genkit AI**, and **Tailwind CSS**.
+A high-end, modern portfolio built with **Next.js 15**, **Firebase**, and **Genkit AI**.
 
-## 🚀 Key Features
+## 🚀 Project Overview
+- **Admin Dashboard**: Site-wide management for projects and messages.
+- **AI Studio Assistant**: Real-time design tips and witty humor.
+- **Invoice Vault**: Professional billing with high-res A4 exports.
+- **Visual Archive**: Categorized and searchable portfolio gallery.
 
-- **Admin Command Center**: A 100vh locked dashboard for site-wide management (Inbox, Portfolio, Invoices).
-- **AI Studio Assistant**: A top-right comedy popup providing snarky design tips and witty humor, refreshable on tap.
-- **Invoice Vault**: Professional multi-template generator (Modern, Minimalist, Professional) with direct high-res A4 Image and PDF exports.
-- **AI Powered Workflows**: 
-  - AI Background Remover for project assets.
-  - AI Project Image Analysis (Automatic Titles & Descriptions).
-  - AI Tag Generation for SEO-optimized categorization.
-- **Custom Aesthetic**: Inverse custom cursor (mix-blend-difference), infinite animated marquee, and "Cosmic" theme.
-
-## 🛠️ Tech Stack
-
-- **Framework**: Next.js 15 (App Router)
-- **Backend**: Firebase Firestore & Authentication
-- **AI Engine**: Google Genkit (Gemini 2.5 Flash)
-- **UI & Styling**: Tailwind CSS, ShadCN UI, Lucide Icons, Recharts
-- **Export Engine**: html2canvas & jsPDF
+## 🔗 Developer
+[mhdyaseenvattappara](https://github.com/mhdyaseenvattappara)
 
 ---
 Developed with ❤️ by **Mhd Yaseen V**
