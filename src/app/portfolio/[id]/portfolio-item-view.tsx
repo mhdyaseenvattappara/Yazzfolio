@@ -1,4 +1,3 @@
-
 'use client';
 
 import type { PortfolioItem } from '@/lib/data';
@@ -37,16 +36,16 @@ export function PortfolioItemView({ project }: { project: PortfolioItem | null }
             {/* The "Big Card" Hero */}
             <div className="bg-card border border-border/50 rounded-[2.5rem] overflow-hidden shadow-2xl transition-all duration-700">
               <div className="grid lg:grid-cols-5 min-h-[600px]">
-                {/* Visual Side (Left) */}
-                <div className="lg:col-span-3 relative bg-muted group">
+                {/* Visual Side (Left) - Optimized for full image display */}
+                <div className="lg:col-span-3 relative bg-[#111] group flex items-center justify-center aspect-square sm:aspect-video lg:aspect-auto">
                   <Image
                     src={project.imageUrl}
                     alt={project.title}
                     fill
-                    className="object-cover transition-transform duration-1000 group-hover:scale-105"
+                    className="object-contain transition-transform duration-1000 group-hover:scale-105 p-4 sm:p-8"
                     priority
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent pointer-events-none" />
                 </div>
 
                 {/* Info Side (Right) */}
@@ -114,12 +113,12 @@ export function PortfolioItemView({ project }: { project: PortfolioItem | null }
                       <CarouselContent className="-ml-4">
                         {project.gallery.map((image, index) => (
                           <CarouselItem key={index} className="pl-4 md:basis-1/2 lg:basis-2/3">
-                            <div className="relative aspect-video rounded-[2rem] overflow-hidden border border-border/50 group">
+                            <div className="relative aspect-video rounded-[2rem] overflow-hidden border border-border/50 group bg-[#111]">
                               <Image 
                                 src={image.imageUrl} 
                                 alt={`Gallery ${index + 1}`} 
                                 fill 
-                                className="object-cover transition-transform duration-700 group-hover:scale-110" 
+                                className="object-contain transition-transform duration-700 group-hover:scale-110 p-4" 
                               />
                             </div>
                           </CarouselItem>

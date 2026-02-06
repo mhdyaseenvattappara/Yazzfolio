@@ -2,7 +2,7 @@
 
 import { useDoc, useFirestore, useMemoFirebase } from '@/firebase';
 import { doc, collection, query, limit, getDocs } from 'firebase/firestore';
-import { useState, useEffect, use } from 'react';
+import { useState, useEffect } from 'react';
 import { PortfolioItemView } from './portfolio-item-view';
 import { useParams } from 'next/navigation';
 import { Loader2 } from 'lucide-react';
