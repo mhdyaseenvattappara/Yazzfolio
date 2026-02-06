@@ -1,83 +1,69 @@
+'use client';
 
-import { getUnauthenticatedFirestore } from '@/firebase/server-auth';
+import { useDoc, useFirestore, useMemoFirebase } from '@/firebase';
+import { doc, collection, query, limit, getDocs } from 'firebase/firestore';
+import { useState, useEffect, use } from 'react';
+import { PortfolioItemView } from './portfolio-item-view';
+import { useParams } from 'next/navigation';
+import { Loader2 } from 'lucide-react';
 import type { PortfolioItem } from '@/lib/data';
 import { projectsData as fallbackProjects } from '@/lib/data';
-import { notFound } from 'next/navigation';
-import { Timestamp } from 'firebase-admin/firestore';
-import { PortfolioItemView } from './portfolio-item-view';
 
-export const dynamic = 'force-dynamic';
+export default function ProjectPage() {
+  const params = useParams();
+  const id = params?.id as string;
+  const firestore = useFirestore();
+  const [adminId, setAdminId] = useState<string | null>(null);
+  const [isSearching, setIsSearching] = useState(true);
 
-export async function generateStaticParams() {
-  const firestoreParams: { id: string }[] = [];
-  try {
-    const db = getUnauthenticatedFirestore();
-    const adminUsersSnapshot = await db.collection('admin_users').limit(1).get();
-    
-    if (!adminUsersSnapshot.empty) {
-      const adminUserId = adminUsersSnapshot.docs[0].id;
-      const portfolioSnapshot = await db.collection(`admin_users/${adminUserId}/portfolio_items`).get();
-      
-      if (!portfolioSnapshot.empty) {
-        portfolioSnapshot.docs.forEach(doc => {
-          firestoreParams.push({ id: doc.id });
-        });
-      }
-    }
-  } catch (error) {
-    console.error("Error fetching Firestore params for portfolio:", error);
-  }
-
-  const fallbackParams = fallbackProjects.map(project => ({
-    id: project.id,
-  }));
-  
-  const allParams = [...firestoreParams, ...fallbackParams];
-  const uniqueParams = Array.from(new Map(allParams.map(p => [p.id, p])).values());
-
-  return uniqueParams;
-}
-
-async function getProject(id: string): Promise<PortfolioItem | null> {
-    try {
-        const db = getUnauthenticatedFirestore();
-        const adminUsersSnapshot = await db.collection('admin_users').limit(1).get();
-        
-        if (!adminUsersSnapshot.empty) {
-            const adminUserId = adminUsersSnapshot.docs[0].id;
-            const projectDoc = await db.collection(`admin_users/${adminUserId}/portfolio_items`).doc(id).get();
-
-            if (projectDoc.exists) {
-                const data = projectDoc.data() as PortfolioItem;
-                const convertTimestamp = (ts: any) => {
-                    if (ts instanceof Timestamp) {
-                        return ts.toDate().toISOString();
-                    }
-                    return ts;
-                };
-
-                return {
-                    ...data,
-                    createdAt: convertTimestamp(data.createdAt),
-                    updatedAt: convertTimestamp(data.updatedAt),
-                } as unknown as PortfolioItem;
-            }
+  useEffect(() => {
+    const findAdmin = async () => {
+      if (!firestore) return;
+      try {
+        const adminUsersRef = collection(firestore, 'admin_users');
+        const q = query(adminUsersRef, limit(1));
+        const snapshot = await getDocs(q);
+        if (!snapshot.empty) {
+          setAdminId(snapshot.docs[0].id);
+        } else {
+            setAdminId('fallback');
         }
-    } catch (error) {
-        console.error(`Failed to fetch project ${id}:`, error);
-    }
+      } catch (err) {
+        console.error("Error finding admin:", err);
+        setAdminId('fallback');
+      } finally {
+        setIsSearching(false);
+      }
+    };
+    findAdmin();
+  }, [firestore]);
 
-    const project = fallbackProjects.find(p => p.id === id);
-    return project ? project as unknown as PortfolioItem : null;
-}
+  const projectRef = useMemoFirebase(() => {
+    if (!firestore || !adminId || adminId === 'fallback' || !id) return null;
+    return doc(firestore, `admin_users/${adminId}/portfolio_items`, id);
+  }, [firestore, adminId, id]);
 
-export default async function ProjectPage({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = await params;
-  const project = await getProject(id);
+  const { data: projectFromDb, isLoading } = useDoc<PortfolioItem>(projectRef);
+
+  // Determine the final project data: prefer DB, then check fallback list
+  const project = projectFromDb || (adminId === 'fallback' || (!isLoading && !projectFromDb) ? fallbackProjects.find(p => p.id === id) : null);
+
+  if (isSearching || (isLoading && adminId !== 'fallback')) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-background">
+        <Loader2 className="h-12 w-12 animate-spin text-primary" />
+      </div>
+    );
+  }
 
   if (!project) {
-    notFound();
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-background flex-col gap-4">
+        <h1 className="text-2xl font-black">Project Not Found</h1>
+        <p className="text-muted-foreground">The requested work could not be located in our archive.</p>
+      </div>
+    );
   }
 
-  return <PortfolioItemView project={project} />;
+  return <PortfolioItemView project={project as PortfolioItem} />;
 }
