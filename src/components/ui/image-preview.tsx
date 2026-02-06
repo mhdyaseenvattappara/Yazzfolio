@@ -135,6 +135,7 @@ export function ImagePreview({ project, onClose }: ImagePreviewProps) {
       let newX = dislikeOffset.x + Math.cos(angle) * moveDistance;
       let newY = dislikeOffset.y + Math.sin(angle) * moveDistance;
 
+      // Restrict movement to keep it within visible bounds but allow overlap with image column
       const limitDist = 150;
       if (Math.abs(newX) > limitDist) newX = (newX / Math.abs(newX)) * limitDist * -0.5;
       if (Math.abs(newY) > limitDist) newY = (newY / Math.abs(newY)) * limitDist * -0.5;
@@ -233,8 +234,8 @@ export function ImagePreview({ project, onClose }: ImagePreviewProps) {
         className="relative w-full max-w-5xl h-fit max-h-[95vh] shadow-2xl rounded-[2.5rem] border border-border/50 overflow-hidden bg-card cursor-default flex flex-col md:flex-row animate-in zoom-in-95 duration-500"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Carousel Side - Optimized Fit */}
-        <div className="w-full md:w-[50%] min-h-[400px] md:h-auto bg-[#1a1a1a] relative overflow-hidden border-b md:border-b-0 md:border-r border-border/50 shrink-0 flex items-center justify-center">
+        {/* Carousel Side - Lower z-index so prank overlaps it */}
+        <div className="w-full md:w-[50%] min-h-[400px] md:h-auto bg-[#1a1a1a] relative overflow-hidden border-b md:border-b-0 md:border-r border-border/50 shrink-0 flex items-center justify-center z-10">
             <Carousel setApi={setApi} className="w-full h-full">
                 <CarouselContent className="h-full ml-0">
                     {allImages.map((url, idx) => (
@@ -271,8 +272,8 @@ export function ImagePreview({ project, onClose }: ImagePreviewProps) {
             </button>
         </div>
 
-        {/* Details Side */}
-        <div className="w-full md:w-[50%] flex flex-col bg-card overflow-hidden">
+        {/* Details Side - Higher z-index and overflow visible for the prank */}
+        <div className="w-full md:w-[50%] flex flex-col bg-card relative z-20">
             <div className="hidden md:flex p-5 border-b border-border/50 justify-between items-center bg-muted/5 shrink-0">
                 <div className="flex items-center gap-2 text-[10px] font-black text-primary bg-primary/5 px-4 py-1.5 rounded-full border border-primary/10 uppercase tracking-[0.2em]">
                     <div className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
@@ -317,8 +318,8 @@ export function ImagePreview({ project, onClose }: ImagePreviewProps) {
                     </div>
                 </div>
 
-                {/* Interactions */}
-                <div className="flex items-center gap-6 pt-1">
+                {/* Interactions - Container allows overflow for moving buttons */}
+                <div className="flex items-center gap-6 pt-1 overflow-visible relative">
                     <div className="flex flex-col items-center gap-1.5 relative">
                         {particles.map(p => (
                             <div key={p.id} className="absolute pointer-events-none animate-float-up text-red-500 z-50"
@@ -347,7 +348,7 @@ export function ImagePreview({ project, onClose }: ImagePreviewProps) {
                         className="flex flex-col items-center gap-1.5 relative z-50"
                     >
                         <div className={cn(
-                            "absolute -top-12 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground px-3 py-1.5 rounded-lg text-[10px] font-black whitespace-nowrap shadow-xl transition-all duration-300 pointer-events-none",
+                            "absolute -top-12 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground px-3 py-1.5 rounded-lg text-[10px] font-black whitespace-nowrap shadow-2xl transition-all duration-300 pointer-events-none z-[110]",
                             showMessage ? "opacity-100 translate-y-0 scale-100" : "opacity-0 translate-y-2 scale-90"
                         )}>
                             {funnyMessage}
