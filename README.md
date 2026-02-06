@@ -1,4 +1,4 @@
-# Mhd Yaseen V - Yazzfolio Creative Suite
+# Yazzfolio
 
 A high-end, modern portfolio built with **Next.js 15**, **Firebase**, **Genkit AI**, and **Tailwind CSS**.
 
