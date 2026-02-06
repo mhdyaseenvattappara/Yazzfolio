@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useEffect, useMemo } from 'react';
@@ -99,8 +100,8 @@ export default function PortfolioPage() {
             </p>
           </div>
 
-          {/* Persistent Control Bar - Optimized for Mobile */}
-          <div className="max-w-6xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-4 mb-12 bg-card/40 backdrop-blur-2xl border border-border/50 py-3 px-4 sm:px-8 rounded-[2rem] sm:rounded-[3rem] sticky top-20 z-30 shadow-2xl">
+          {/* Persistent Control Bar - Optimized for Mobile Sticky */}
+          <div className="max-w-6xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-4 mb-12 bg-card/60 backdrop-blur-xl border border-border/50 py-2.5 px-4 sm:px-8 rounded-[2rem] sm:rounded-[3rem] sticky top-[72px] md:top-8 z-30 shadow-xl transition-all duration-500">
               
               {/* Category Area: Horizontal Scroll on Mobile */}
               <div className="w-full lg:w-auto overflow-x-auto no-scrollbar py-1">
