@@ -46,7 +46,6 @@ export function ImagePreview({ project, onClose }: ImagePreviewProps) {
   const [particles, setParticles] = useState<LoveParticle[]>([]);
   const [userIp, setUserIp] = useState<string | null>(null);
   const [isLoadingIp, setIsLoadingIp] = useState(false);
-  const [isDescExpanded, setIsDescExpanded] = useState(false);
   
   // Carousel State
   const [api, setApi] = useState<CarouselApi>();
@@ -89,7 +88,6 @@ export function ImagePreview({ project, onClose }: ImagePreviewProps) {
         setEscapeCount(0);
         setFunnyMessage("");
         setShowMessage(false);
-        setIsDescExpanded(false);
     }
   }, [project, firestore, userIp]);
 
@@ -126,16 +124,18 @@ export function ImagePreview({ project, onClose }: ImagePreviewProps) {
       Math.pow(e.clientX - btnCenterX, 2) + Math.pow(e.clientY - btnCenterY, 2)
     );
 
+    // Escape zone: when mouse is close, jump away
     if (distance < 100) {
       const angle = Math.atan2(btnCenterY - e.clientY, btnCenterX - e.clientX);
-      const moveDistance = 140; 
+      const moveDistance = 150; 
       
       let newX = dislikeOffset.x + Math.cos(angle) * moveDistance;
       let newY = dislikeOffset.y + Math.sin(angle) * moveDistance;
 
-      const limitDist = 200;
-      if (Math.abs(newX) > limitDist) newX = (newX / Math.abs(newX)) * limitDist * -0.5;
-      if (Math.abs(newY) > limitDist) newY = (newY / Math.abs(newY)) * limitDist * -0.5;
+      // Keep within reasonable bounds of the modal
+      const limitDist = 220;
+      if (Math.abs(newX) > limitDist) newX = (newX / Math.abs(newX)) * limitDist * -0.4;
+      if (Math.abs(newY) > limitDist) newY = (newY / Math.abs(newY)) * limitDist * -0.4;
 
       setDislikeOffset({ x: newX, y: newY });
       
@@ -148,7 +148,7 @@ export function ImagePreview({ project, onClose }: ImagePreviewProps) {
                 setShowMessage(true);
               }
               if (messageTimeoutRef.current) clearTimeout(messageTimeoutRef.current);
-              messageTimeoutRef.current = setTimeout(() => setShowMessage(false), 2500);
+              messageTimeoutRef.current = setTimeout(() => setShowMessage(false), 3000);
           }
           return next;
       });
@@ -269,8 +269,9 @@ export function ImagePreview({ project, onClose }: ImagePreviewProps) {
             </button>
         </div>
 
-        {/* Details Side - Overflow visible for the prank */}
+        {/* Details Side - Restructured for No-Clip interactions */}
         <div className="w-full md:w-[50%] flex flex-col bg-card relative z-20 overflow-visible">
+            {/* Header (Fixed) */}
             <div className="hidden md:flex p-5 border-b border-border/50 justify-between items-center bg-muted/5 shrink-0 overflow-visible">
                 <div className="flex items-center gap-2 text-[10px] font-black text-primary bg-primary/5 px-4 py-1.5 rounded-full border border-primary/10 uppercase tracking-[0.2em]">
                     <div className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
@@ -281,7 +282,8 @@ export function ImagePreview({ project, onClose }: ImagePreviewProps) {
                 </button>
             </div>
 
-            <div className="p-6 sm:p-8 space-y-5 md:space-y-6 overflow-y-auto no-scrollbar flex-grow overflow-x-visible">
+            {/* Scrollable Content (Description) */}
+            <div className="p-6 sm:p-8 space-y-5 overflow-y-auto no-scrollbar flex-grow">
                 <div>
                     <div className="flex flex-wrap gap-2 mb-3">
                         {sortedTags.slice(0, 4).map(tag => (
@@ -297,33 +299,26 @@ export function ImagePreview({ project, onClose }: ImagePreviewProps) {
 
                 <div className="space-y-3">
                     <p className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.3em] opacity-50">Overview</p>
-                    <div className="relative">
-                        <p className={cn(
-                            "text-sm leading-relaxed text-muted-foreground font-medium transition-all duration-300",
-                            !isDescExpanded && "line-clamp-4 md:line-clamp-5"
-                        )}>
-                            {project.description}
-                        </p>
-                        {project.description.length > 150 && (
-                            <button 
-                                onClick={() => setIsDescExpanded(!isDescExpanded)}
-                                className="text-primary text-[9px] font-black uppercase tracking-[0.2em] mt-3 hover:underline flex items-center gap-2"
-                            >
-                                {isDescExpanded ? 'View less' : 'View more'}
-                            </button>
-                        )}
-                    </div>
+                    <p className="text-sm leading-relaxed text-muted-foreground font-medium">
+                        {project.description}
+                    </p>
                 </div>
+            </div>
 
-                {/* Interactions - Allow absolute children to pop out */}
-                <div className="flex items-center gap-6 pt-1 relative overflow-visible">
-                    <div className="flex flex-col items-center gap-1.5 relative">
-                        {particles.map(p => (
-                            <div key={p.id} className="absolute pointer-events-none animate-float-up text-red-500 z-50"
-                                style={{ left: `calc(50% + ${p.x}px)`, top: `calc(50% + ${p.y}px)`, fontSize: `${p.size}px`, animationDelay: `${p.delay}s` }}>
-                                <Heart className="fill-current" />
-                            </div>
-                        ))}
+            {/* Fixed Interaction Area (CRITICAL: No overflow-y-auto here) */}
+            <div className="p-6 sm:p-8 pt-0 space-y-6 bg-card relative z-[100] overflow-visible border-t border-border/50 md:border-t-0 shrink-0">
+                
+                {/* Interactions - Absolutely positioned children can now pop out! */}
+                <div className="flex items-center gap-6 relative overflow-visible">
+                    <div className="flex flex-col items-center gap-1.5 relative overflow-visible">
+                        <div className="absolute inset-0 pointer-events-none overflow-visible">
+                            {particles.map(p => (
+                                <div key={p.id} className="absolute pointer-events-none animate-float-up text-red-500 z-50"
+                                    style={{ left: `calc(50% + ${p.x}px)`, top: `calc(50% + ${p.y}px)`, fontSize: `${p.size}px`, animationDelay: `${p.delay}s` }}>
+                                    <Heart className="fill-current" />
+                                </div>
+                            ))}
+                        </div>
                         <button 
                             onClick={handleLike}
                             disabled={!userIp || isLoadingIp}
@@ -342,11 +337,11 @@ export function ImagePreview({ project, onClose }: ImagePreviewProps) {
                             transform: `translate3d(${dislikeOffset.x}px, ${dislikeOffset.y}px, 0)`,
                             transition: 'transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)'
                         }}
-                        className="flex flex-col items-center gap-1.5 relative z-[100]"
+                        className="flex flex-col items-center gap-1.5 relative z-[110] overflow-visible"
                     >
-                        {/* The Message Box */}
+                        {/* The Message Box - Fixed Clipping! */}
                         <div className={cn(
-                            "absolute -top-12 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground px-3 py-1.5 rounded-lg text-[10px] font-black whitespace-nowrap shadow-2xl transition-all duration-300 pointer-events-none z-[110]",
+                            "absolute -top-12 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground px-4 py-2 rounded-2xl text-[10px] font-black whitespace-nowrap shadow-2xl transition-all duration-300 pointer-events-none z-[120]",
                             showMessage ? "opacity-100 translate-y-0 scale-100" : "opacity-0 translate-y-2 scale-90"
                         )}>
                             {funnyMessage}
@@ -362,7 +357,7 @@ export function ImagePreview({ project, onClose }: ImagePreviewProps) {
                     </div>
                 </div>
 
-                <div className="grid gap-3 pt-4 shrink-0">
+                <div className="grid gap-3 pt-2">
                     <Button size="lg" className="w-full h-14 rounded-2xl text-lg font-black tracking-tight shadow-lg" asChild>
                         <Link href="/#contact" onClick={onClose}>
                             Let's Collaborate
@@ -376,7 +371,7 @@ export function ImagePreview({ project, onClose }: ImagePreviewProps) {
                     </Button>
                 </div>
 
-                <div className="flex items-center justify-between pt-6 border-t border-border/50 shrink-0">
+                <div className="flex items-center justify-between pt-4 border-t border-border/50">
                     <div className="flex items-center gap-3">
                         <span className="text-[9px] font-black uppercase tracking-[0.3em] text-muted-foreground opacity-40">Share:</span>
                         <button onClick={handleShare} className="h-9 w-9 hover:bg-accent text-muted-foreground hover:text-foreground rounded-full transition-all flex items-center justify-center border border-border/50">
