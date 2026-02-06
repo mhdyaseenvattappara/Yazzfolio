@@ -47,12 +47,10 @@ export function ImagePreview({ project, onClose }: ImagePreviewProps) {
   const [userIp, setUserIp] = useState<string | null>(null);
   const [isLoadingIp, setIsLoadingIp] = useState(false);
   
-  // Carousel State
   const [api, setApi] = useState<CarouselApi>();
   const [current, setCurrent] = useState(0);
   const [count, setCount] = useState(0);
 
-  // Prank Dislike State
   const [dislikeOffset, setDislikeOffset] = useState({ x: 0, y: 0 });
   const [funnyMessage, setFunnyMessage] = useState("");
   const [escapeCount, setEscapeCount] = useState(0);
@@ -62,7 +60,6 @@ export function ImagePreview({ project, onClose }: ImagePreviewProps) {
   const dislikeContainerRef = useRef<HTMLDivElement>(null);
   const modalContainerRef = useRef<HTMLDivElement>(null);
 
-  // Fetch user IP
   useEffect(() => {
     setIsLoadingIp(true);
     fetch('https://api.ipify.org?format=json')
@@ -83,7 +80,6 @@ export function ImagePreview({ project, onClose }: ImagePreviewProps) {
         const likeRef = doc(firestore, 'project_likes', likeId);
         getDoc(likeRef).then(snap => setIsLiked(snap.exists()));
 
-        // Reset prank
         setDislikeOffset({ x: 0, y: 0 });
         setEscapeCount(0);
         setFunnyMessage("");
@@ -124,7 +120,6 @@ export function ImagePreview({ project, onClose }: ImagePreviewProps) {
       Math.pow(e.clientX - btnCenterX, 2) + Math.pow(e.clientY - btnCenterY, 2)
     );
 
-    // Escape zone: when mouse is close, jump away
     if (distance < 100) {
       const angle = Math.atan2(btnCenterY - e.clientY, btnCenterX - e.clientX);
       const moveDistance = 150; 
@@ -132,7 +127,6 @@ export function ImagePreview({ project, onClose }: ImagePreviewProps) {
       let newX = dislikeOffset.x + Math.cos(angle) * moveDistance;
       let newY = dislikeOffset.y + Math.sin(angle) * moveDistance;
 
-      // Keep within reasonable bounds of the modal
       const limitDist = 220;
       if (Math.abs(newX) > limitDist) newX = (newX / Math.abs(newX)) * limitDist * -0.4;
       if (Math.abs(newY) > limitDist) newY = (newY / Math.abs(newY)) * limitDist * -0.4;
@@ -269,9 +263,9 @@ export function ImagePreview({ project, onClose }: ImagePreviewProps) {
             </button>
         </div>
 
-        {/* Details Side - Restructured for No-Clip interactions */}
+        {/* Details Side */}
         <div className="w-full md:w-[50%] flex flex-col bg-card relative z-20 overflow-visible">
-            {/* Header (Fixed) */}
+            {/* Header */}
             <div className="hidden md:flex p-5 border-b border-border/50 justify-between items-center bg-muted/5 shrink-0 overflow-visible">
                 <div className="flex items-center gap-2 text-[10px] font-black text-primary bg-primary/5 px-4 py-1.5 rounded-full border border-primary/10 uppercase tracking-[0.2em]">
                     <div className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
@@ -282,12 +276,12 @@ export function ImagePreview({ project, onClose }: ImagePreviewProps) {
                 </button>
             </div>
 
-            {/* Scrollable Content (Description) */}
+            {/* Scrollable Content */}
             <div className="p-6 sm:p-8 space-y-5 overflow-y-auto no-scrollbar flex-grow">
                 <div>
                     <div className="flex flex-wrap gap-2 mb-3">
                         {sortedTags.slice(0, 4).map(tag => (
-                            <span key={tag} className="text-[9px] font-manjari font-bold uppercase tracking-[0.2em] text-primary/60 bg-primary/5 px-3 py-1 rounded-full border border-primary/5 flex items-center justify-center text-center">
+                            <span key={tag} className="text-[9px] font-manjari font-bold uppercase tracking-[0.2em] text-primary/60 bg-primary/5 px-3 py-1 rounded-full border border-primary/5">
                                 {tag}
                             </span>
                         ))}
@@ -305,10 +299,9 @@ export function ImagePreview({ project, onClose }: ImagePreviewProps) {
                 </div>
             </div>
 
-            {/* Fixed Interaction Area (CRITICAL: No overflow-y-auto here) */}
+            {/* Interaction Area */}
             <div className="p-6 sm:p-8 pt-0 space-y-6 bg-card relative z-[100] overflow-visible border-t border-border/50 md:border-t-0 shrink-0">
                 
-                {/* Interactions - Absolutely positioned children can now pop out! */}
                 <div className="flex items-center gap-6 relative overflow-visible">
                     <div className="flex flex-col items-center gap-1.5 relative overflow-visible">
                         <div className="absolute inset-0 pointer-events-none overflow-visible">
@@ -339,9 +332,9 @@ export function ImagePreview({ project, onClose }: ImagePreviewProps) {
                         }}
                         className="flex flex-col items-center gap-1.5 relative z-[110] overflow-visible"
                     >
-                        {/* The Message Box - Fixed Clipping! */}
+                        {/* Prank Bubble */}
                         <div className={cn(
-                            "absolute -top-12 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground px-4 py-2 rounded-2xl text-[10px] font-black whitespace-nowrap shadow-2xl transition-all duration-300 pointer-events-none z-[120]",
+                            "absolute -top-14 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground px-4 py-2 rounded-2xl text-[10px] font-black whitespace-nowrap shadow-2xl transition-all duration-300 pointer-events-none z-[150]",
                             showMessage ? "opacity-100 translate-y-0 scale-100" : "opacity-0 translate-y-2 scale-90"
                         )}>
                             {funnyMessage}
