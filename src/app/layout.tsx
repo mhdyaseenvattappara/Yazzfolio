@@ -30,6 +30,11 @@ export const metadata: Metadata = {
   alternates: {
     canonical: '/',
   },
+  icons: {
+    icon: '/my-photo.jpg',
+    shortcut: '/my-photo.jpg',
+    apple: '/my-photo.jpg',
+  },
   openGraph: {
     title: 'Mhd Yaseen V | Graphic & UI/UX Designer',
     description:
