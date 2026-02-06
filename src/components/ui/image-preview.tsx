@@ -93,13 +93,11 @@ export function ImagePreview({ project, onClose }: ImagePreviewProps) {
     }
   }, [project, firestore, userIp]);
 
-  // Sort tags by character length for aesthetic alignment
   const sortedTags = useMemo(() => {
     if (!project?.tags) return [];
     return [...project.tags].sort((a, b) => a.length - b.length);
   }, [project?.tags]);
 
-  // Carousel Logic
   useEffect(() => {
     if (!api) return;
     setCount(api.scrollSnapList().length);
@@ -128,15 +126,14 @@ export function ImagePreview({ project, onClose }: ImagePreviewProps) {
       Math.pow(e.clientX - btnCenterX, 2) + Math.pow(e.clientY - btnCenterY, 2)
     );
 
-    if (distance < 80) {
+    if (distance < 100) {
       const angle = Math.atan2(btnCenterY - e.clientY, btnCenterX - e.clientX);
-      const moveDistance = 120; 
+      const moveDistance = 140; 
       
       let newX = dislikeOffset.x + Math.cos(angle) * moveDistance;
       let newY = dislikeOffset.y + Math.sin(angle) * moveDistance;
 
-      // Restrict movement to keep it within visible bounds but allow overlap with image column
-      const limitDist = 150;
+      const limitDist = 200;
       if (Math.abs(newX) > limitDist) newX = (newX / Math.abs(newX)) * limitDist * -0.5;
       if (Math.abs(newY) > limitDist) newY = (newY / Math.abs(newY)) * limitDist * -0.5;
 
@@ -151,7 +148,7 @@ export function ImagePreview({ project, onClose }: ImagePreviewProps) {
                 setShowMessage(true);
               }
               if (messageTimeoutRef.current) clearTimeout(messageTimeoutRef.current);
-              messageTimeoutRef.current = setTimeout(() => setShowMessage(false), 3000);
+              messageTimeoutRef.current = setTimeout(() => setShowMessage(false), 2500);
           }
           return next;
       });
@@ -231,11 +228,11 @@ export function ImagePreview({ project, onClose }: ImagePreviewProps) {
     >
       <div 
         ref={modalContainerRef}
-        className="relative w-full max-w-5xl h-fit max-h-[95vh] shadow-2xl rounded-[2.5rem] border border-border/50 overflow-hidden bg-card cursor-default flex flex-col md:flex-row animate-in zoom-in-95 duration-500"
+        className="relative w-full max-w-5xl h-fit max-h-[95vh] shadow-2xl rounded-[2.5rem] border border-border/50 bg-card cursor-default flex flex-col md:flex-row animate-in zoom-in-95 duration-500 overflow-visible"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Carousel Side - Lower z-index so prank overlaps it */}
-        <div className="w-full md:w-[50%] min-h-[400px] md:h-auto bg-[#1a1a1a] relative overflow-hidden border-b md:border-b-0 md:border-r border-border/50 shrink-0 flex items-center justify-center z-10">
+        {/* Carousel Side */}
+        <div className="w-full md:w-[50%] min-h-[400px] md:h-auto bg-[#1a1a1a] relative overflow-hidden border-b md:border-b-0 md:border-r border-border/50 shrink-0 flex items-center justify-center z-10 rounded-t-[2.5rem] md:rounded-tr-none md:rounded-l-[2.5rem]">
             <Carousel setApi={setApi} className="w-full h-full">
                 <CarouselContent className="h-full ml-0">
                     {allImages.map((url, idx) => (
@@ -272,9 +269,9 @@ export function ImagePreview({ project, onClose }: ImagePreviewProps) {
             </button>
         </div>
 
-        {/* Details Side - Higher z-index and overflow visible for the prank */}
-        <div className="w-full md:w-[50%] flex flex-col bg-card relative z-20">
-            <div className="hidden md:flex p-5 border-b border-border/50 justify-between items-center bg-muted/5 shrink-0">
+        {/* Details Side - Overflow visible for the prank */}
+        <div className="w-full md:w-[50%] flex flex-col bg-card relative z-20 overflow-visible">
+            <div className="hidden md:flex p-5 border-b border-border/50 justify-between items-center bg-muted/5 shrink-0 overflow-visible">
                 <div className="flex items-center gap-2 text-[10px] font-black text-primary bg-primary/5 px-4 py-1.5 rounded-full border border-primary/10 uppercase tracking-[0.2em]">
                     <div className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
                     Project Preview
@@ -284,7 +281,7 @@ export function ImagePreview({ project, onClose }: ImagePreviewProps) {
                 </button>
             </div>
 
-            <div className="p-6 sm:p-8 space-y-5 md:space-y-6 overflow-y-auto no-scrollbar flex-grow">
+            <div className="p-6 sm:p-8 space-y-5 md:space-y-6 overflow-y-auto no-scrollbar flex-grow overflow-x-visible">
                 <div>
                     <div className="flex flex-wrap gap-2 mb-3">
                         {sortedTags.slice(0, 4).map(tag => (
@@ -318,8 +315,8 @@ export function ImagePreview({ project, onClose }: ImagePreviewProps) {
                     </div>
                 </div>
 
-                {/* Interactions - Container allows overflow for moving buttons */}
-                <div className="flex items-center gap-6 pt-1 overflow-visible relative">
+                {/* Interactions - Allow absolute children to pop out */}
+                <div className="flex items-center gap-6 pt-1 relative overflow-visible">
                     <div className="flex flex-col items-center gap-1.5 relative">
                         {particles.map(p => (
                             <div key={p.id} className="absolute pointer-events-none animate-float-up text-red-500 z-50"
@@ -345,8 +342,9 @@ export function ImagePreview({ project, onClose }: ImagePreviewProps) {
                             transform: `translate3d(${dislikeOffset.x}px, ${dislikeOffset.y}px, 0)`,
                             transition: 'transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)'
                         }}
-                        className="flex flex-col items-center gap-1.5 relative z-50"
+                        className="flex flex-col items-center gap-1.5 relative z-[100]"
                     >
+                        {/* The Message Box */}
                         <div className={cn(
                             "absolute -top-12 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground px-3 py-1.5 rounded-lg text-[10px] font-black whitespace-nowrap shadow-2xl transition-all duration-300 pointer-events-none z-[110]",
                             showMessage ? "opacity-100 translate-y-0 scale-100" : "opacity-0 translate-y-2 scale-90"
@@ -364,7 +362,6 @@ export function ImagePreview({ project, onClose }: ImagePreviewProps) {
                     </div>
                 </div>
 
-                {/* Actions Stack */}
                 <div className="grid gap-3 pt-4 shrink-0">
                     <Button size="lg" className="w-full h-14 rounded-2xl text-lg font-black tracking-tight shadow-lg" asChild>
                         <Link href="/#contact" onClick={onClose}>
