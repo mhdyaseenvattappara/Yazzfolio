@@ -1,4 +1,3 @@
-
 'use client';
 
 import { z } from 'zod';
@@ -289,7 +288,7 @@ export function PortfolioItemForm({ project, onSuccess }: PortfolioItemFormProps
             name="category"
             render={({ field }) => (
                 <FormItem>
-                <FormLabel className="text-base font-bold">Industry Category</FormLabel>
+                <FormLabel className="text-base font-bold">Categorize Industry</FormLabel>
                 <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                     <SelectTrigger className="h-12 rounded-xl">

@@ -102,37 +102,39 @@ export function Projects() {
             </p>
           </div>
 
-          {/* Filter & Sort Bar */}
+          {/* Filter & Sort Bar - Optimized Mobile Scroll */}
           <div className={cn(
-              "flex flex-col md:flex-row items-center justify-between gap-4 mb-12 transition-all duration-700 delay-200",
+              "flex flex-col md:flex-row items-center justify-between gap-4 mb-12 transition-all duration-700 delay-200 sticky top-4 lg:relative z-30",
               isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
           )}>
-              <div className="flex flex-wrap items-center justify-center gap-1.5">
-                  {categories.map((cat) => (
-                      <button
-                        key={cat}
-                        onClick={() => setActiveCategory(cat)}
-                        className={cn(
-                            "px-5 py-2 rounded-full text-[10px] font-black uppercase tracking-widest transition-all duration-300 ease-out active:scale-95",
-                            activeCategory === cat 
-                                ? "bg-primary text-primary-foreground shadow-lg scale-105" 
-                                : "bg-card/50 text-foreground/70 hover:bg-accent border border-border/50 hover:text-foreground hover:scale-105"
-                        )}
-                      >
-                          {cat}
-                      </button>
-                  ))}
+              <div className="w-full md:w-auto overflow-x-auto no-scrollbar py-2">
+                  <div className="flex flex-nowrap md:flex-wrap items-center justify-start md:justify-center gap-1.5 min-w-max px-2 md:px-0">
+                      {categories.map((cat) => (
+                          <button
+                            key={cat}
+                            onClick={() => setActiveCategory(cat)}
+                            className={cn(
+                                "px-5 py-2 rounded-full text-[10px] font-black uppercase tracking-widest transition-all duration-300 ease-out active:scale-95 whitespace-nowrap",
+                                activeCategory === cat 
+                                    ? "bg-primary text-primary-foreground shadow-lg scale-105 ring-2 ring-primary/20" 
+                                    : "bg-card/50 text-foreground/70 hover:bg-accent border border-border/50 hover:text-foreground hover:scale-105"
+                            )}
+                          >
+                              {cat}
+                          </button>
+                      ))}
+                  </div>
               </div>
 
               <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                      <Button variant="outline" className="rounded-full px-6 h-10 border-border/50 bg-card/50 gap-2 font-bold text-[10px] uppercase tracking-widest text-foreground transition-all duration-300 hover:scale-105 active:scale-95">
+                      <Button variant="outline" className="rounded-full px-6 h-10 border-border/50 bg-card/50 gap-2 font-bold text-[10px] uppercase tracking-widest text-foreground transition-all duration-300 hover:scale-105 active:scale-95 shrink-0">
                           <Filter className="h-3.5 w-3.5" />
-                          Sort: {sortBy === 'newest' ? 'Newest' : sortBy === 'likes' ? 'Most Liked' : 'A-Z'}
+                          Sort: {sortBy}
                           <ChevronDown className="h-3.5 w-3.5 opacity-50" />
                       </Button>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" className="w-48 rounded-xl p-2">
+                  <DropdownMenuContent align="end" className="w-48 rounded-xl p-2 shadow-2xl">
                       <DropdownMenuRadioGroup value={sortBy} onValueChange={(v) => setSortBy(v as SortOption)}>
                           <DropdownMenuRadioItem value="newest" className="rounded-lg py-2">Latest Releases</DropdownMenuRadioItem>
                           <DropdownMenuRadioItem value="likes" className="rounded-lg py-2">Most Appreciated</DropdownMenuRadioItem>

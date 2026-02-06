@@ -99,31 +99,35 @@ export default function PortfolioPage() {
             </p>
           </div>
 
-          {/* Persistent Control Bar */}
-          <div className="max-w-6xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-4 mb-12 bg-card/30 backdrop-blur-xl border border-border/50 py-3 px-6 sm:px-8 rounded-[3rem] sticky top-20 z-30 shadow-xl">
-              <div className="flex flex-wrap items-center justify-center gap-1.5">
-                  {categories.map((cat) => (
-                      <button
-                        key={cat}
-                        onClick={() => setActiveCategory(cat)}
-                        className={cn(
-                            "px-5 py-2 rounded-full text-[10px] font-black uppercase tracking-widest transition-all duration-300 ease-out active:scale-95",
-                            activeCategory === cat 
-                                ? "bg-primary text-primary-foreground shadow-lg scale-105" 
-                                : "bg-transparent text-foreground/70 hover:text-foreground hover:bg-foreground/5 hover:scale-105"
-                        )}
-                      >
-                          {cat}
-                      </button>
-                  ))}
+          {/* Persistent Control Bar - Optimized for Mobile */}
+          <div className="max-w-6xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-4 mb-12 bg-card/40 backdrop-blur-2xl border border-border/50 py-3 px-4 sm:px-8 rounded-[2rem] sm:rounded-[3rem] sticky top-20 z-30 shadow-2xl">
+              
+              {/* Category Area: Horizontal Scroll on Mobile */}
+              <div className="w-full lg:w-auto overflow-x-auto no-scrollbar py-1">
+                  <div className="flex flex-nowrap lg:flex-wrap items-center justify-start lg:justify-center gap-1.5 min-w-max px-2 lg:px-0">
+                      {categories.map((cat) => (
+                          <button
+                            key={cat}
+                            onClick={() => setActiveCategory(cat)}
+                            className={cn(
+                                "px-5 py-2 rounded-full text-[10px] font-black uppercase tracking-widest transition-all duration-300 ease-out active:scale-95 whitespace-nowrap",
+                                activeCategory === cat 
+                                    ? "bg-primary text-primary-foreground shadow-lg scale-105 ring-2 ring-primary/20" 
+                                    : "bg-transparent text-foreground/70 hover:text-foreground hover:bg-foreground/5 hover:scale-105"
+                            )}
+                          >
+                              {cat}
+                          </button>
+                      ))}
+                  </div>
               </div>
 
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-3 shrink-0">
                   <DropdownMenu>
                       <DropdownMenuTrigger asChild>
-                          <Button variant="outline" className="rounded-full px-6 h-10 border-border/50 bg-background/50 gap-3 font-black text-[9px] uppercase tracking-widest text-foreground transition-all duration-300 hover:scale-105 active:scale-95">
+                          <Button variant="outline" className="rounded-full px-5 h-10 border-border/50 bg-background/50 gap-3 font-black text-[9px] uppercase tracking-widest text-foreground transition-all duration-300 hover:scale-105 active:scale-95">
                               <Filter className="h-3.5 w-3.5" />
-                              Sorted By: {sortBy.replace('_', ' ')}
+                              Sorted: {sortBy}
                               <ChevronDown className="h-3.5 w-3.5 opacity-50" />
                           </Button>
                       </DropdownMenuTrigger>
@@ -137,9 +141,9 @@ export default function PortfolioPage() {
                       </DropdownMenuContent>
                   </DropdownMenu>
 
-                  <Button asChild variant="ghost" size="icon" className="h-10 w-10 rounded-full border border-border/50 text-foreground/70 hover:text-foreground hover:scale-110 transition-all duration-300">
+                  <Button asChild variant="ghost" size="icon" className="h-10 w-10 rounded-full border border-border/50 text-foreground/70 hover:text-foreground hover:scale-110 transition-all duration-300 bg-background/50">
                     <Link href="/">
-                        <Home className="h-4.5 w-4.5" />
+                        <Home className="h-4 w-4" />
                     </Link>
                   </Button>
               </div>
