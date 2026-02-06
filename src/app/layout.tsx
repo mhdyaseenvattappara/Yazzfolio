@@ -31,7 +31,13 @@ export const metadata: Metadata = {
     canonical: '/',
   },
   icons: {
-    icon: '/my-photo.jpg',
+    icon: [
+      {
+        url: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><clipPath id='c'><circle cx='50' cy='50' r='50'/></clipPath><image href='/my-photo.jpg' width='100' height='100' clip-path='url(#c)'/></svg>",
+        type: "image/svg+xml",
+      },
+      { url: "/my-photo.jpg" }
+    ],
     shortcut: '/my-photo.jpg',
     apple: '/my-photo.jpg',
   },
