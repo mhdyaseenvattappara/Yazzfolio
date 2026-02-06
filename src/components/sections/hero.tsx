@@ -4,15 +4,13 @@
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { ArrowDown, MoveRight } from 'lucide-react';
-import { useState, useEffect } from 'react';
 
 export function Hero() {
-
   return (
     <>
     <section
       id="hero"
-      className="relative w-full h-screen min-h-[700px] flex items-center justify-center text-center overflow-hidden"
+      className="relative w-full h-screen min-h-[600px] flex items-center justify-center text-center overflow-hidden"
     >
       <div className="absolute inset-0 bg-gradient-to-b from-background via-background/80 to-background" />
       
@@ -20,25 +18,25 @@ export function Hero() {
         <div
           className='flex flex-col items-center max-w-4xl mx-auto'
         >
-          <div className="mb-8">
-            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold tracking-tighter mb-4 font-headline leading-tight animate-blur-reveal" style={{ animationDelay: '200ms', animationFillMode: 'backwards' }}>
+          <div className="mb-8 md:mb-12">
+            <h1 className="text-4xl xs:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tighter mb-6 font-headline leading-[1.1] animate-blur-reveal" style={{ animationDelay: '200ms', animationFillMode: 'backwards' }}>
               Crafting visual narratives 
               <br />
               <span className="text-foreground/80">
                 through design
               </span>
             </h1>
-            <p className="max-w-2xl mx-auto text-base md:text-lg text-muted-foreground animate-in fade-in slide-in-from-bottom-10 duration-1000 delay-200">
+            <p className="max-w-xl mx-auto text-sm md:text-lg text-muted-foreground px-4 animate-in fade-in slide-in-from-bottom-10 duration-1000 delay-200">
               A UI/UX and graphic designer dedicated to building beautiful, intuitive, and impactful digital solutions.
             </p>
           </div>
-          <div className="flex flex-col sm:flex-row justify-center gap-4 animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-400">
-            <Button asChild size="lg" className="group text-lg py-7 px-8">
+          <div className="flex flex-col sm:flex-row justify-center gap-4 w-full sm:w-auto px-6 animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-400">
+            <Button asChild size="lg" className="group text-base md:text-lg py-6 md:py-7 px-8 w-full sm:w-auto">
               <Link href="#contact">
                 Let's Collaborate <MoveRight className="transition-transform group-hover:translate-x-1" />
               </Link>
             </Button>
-             <Button asChild size="lg" variant="outline" className="group text-lg py-7 px-8">
+             <Button asChild size="lg" variant="outline" className="group text-base md:text-lg py-6 md:py-7 px-8 w-full sm:w-auto">
               <Link href="#projects">
                 View My Work
               </Link>
@@ -47,10 +45,10 @@ export function Hero() {
         </div>
       </div>
       
-      <div className="absolute bottom-24 left-1/2 -translate-x-1/2 z-10 animate-in fade-in duration-1000 delay-1000">
+      <div className="absolute bottom-12 md:bottom-24 left-1/2 -translate-x-1/2 z-10 animate-in fade-in duration-1000 delay-1000">
         <Link href="#about" aria-label="Scroll to about section">
-          <div className="h-14 w-8 border-2 border-muted-foreground/50 rounded-full flex items-center justify-center">
-            <ArrowDown className="h-6 w-6 text-muted-foreground/50 animate-bounce" />
+          <div className="h-12 w-7 md:h-14 md:w-8 border-2 border-muted-foreground/30 rounded-full flex items-center justify-center">
+            <ArrowDown className="h-4 w-4 md:h-6 md:w-6 text-muted-foreground/50 animate-bounce" />
           </div>
         </Link>
       </div>

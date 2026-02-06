@@ -24,14 +24,14 @@ import { cn } from '@/lib/utils';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
 const dashboardTabs = [
-  { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
+  { id: 'dashboard', label: 'Home', icon: LayoutDashboard },
   { id: 'inbox', label: 'Inbox', icon: Inbox },
   { id: 'invoices', label: 'Invoices', icon: FileText },
-  { id: 'portfolio', label: 'Portfolio', icon: Briefcase },
-  { id: 'testimonials', label: 'Testimonials', icon: Star },
+  { id: 'portfolio', label: 'Projects', icon: Briefcase },
+  { id: 'testimonials', label: 'Reviews', icon: Star },
   { id: 'services', label: 'Services', icon: Sparkles },
   { id: 'timeline', label: 'Timeline', icon: Milestone },
-  { id: 'tool-stack', label: 'Tool Stack', icon: Code },
+  { id: 'tool-stack', label: 'Stack', icon: Code },
   { id: 'profile', label: 'Profile', icon: UserIcon },
 ];
 
@@ -76,45 +76,54 @@ function AdminDashboard() {
   }
 
   return (
-    <div className="flex h-screen w-full overflow-hidden bg-muted/40">
-      {/* Sidebar */}
+    <div className="flex flex-col md:flex-row h-screen w-full overflow-hidden bg-muted/40">
+      {/* Sidebar - Adaptive: Vertical Dock on Desktop, Bottom Bar on Mobile */}
       <TooltipProvider delayDuration={0}>
         <nav className={cn(
-          'group fixed left-4 top-1/2 z-50 flex -translate-y-1/2 flex-col items-center justify-center p-2 transition-all duration-300 ease-in-out',
-          'bg-card/80 shadow-lg border backdrop-blur-sm rounded-full',
-           isMounted ? 'translate-x-0' : '-translate-x-full'
+          'z-50 flex transition-all duration-500 ease-in-out',
+          // Desktop Styles
+          'md:fixed md:left-4 md:top-1/2 md:-translate-y-1/2 md:flex-col md:p-2 md:rounded-full md:border md:bg-card/80 md:shadow-lg md:backdrop-blur-sm',
+          // Mobile Styles
+          'fixed bottom-4 left-4 right-4 h-16 flex-row items-center justify-around px-4 rounded-3xl border bg-card/90 shadow-2xl backdrop-blur-xl md:h-auto md:w-auto md:bottom-auto md:right-auto',
+           isMounted ? 'translate-y-0 opacity-100' : 'translate-y-20 opacity-0 md:translate-y-0 md:-translate-x-full'
         )}>
-          <div className="flex flex-col items-center gap-1">
-            <Link href="/" className="mb-2 transition-transform duration-300 group-hover:scale-110">
-              <div className="relative h-10 w-10 flex-shrink-0 overflow-hidden rounded-full">
-                <Image src={profileData?.profileImageUrl || "/my-photo.jpg"} alt="Admin" fill className="object-cover" />
-              </div>
-            </Link>
+          {/* Admin Avatar - Desktop Only */}
+          <Link href="/" className="mb-2 hidden md:block transition-transform duration-300 hover:scale-110">
+            <div className="relative h-10 w-10 flex-shrink-0 overflow-hidden rounded-full ring-2 ring-primary/10">
+              <Image src={profileData?.profileImageUrl || "/my-photo.jpg"} alt="Admin" fill className="object-cover" />
+            </div>
+          </Link>
 
+          <div className="flex flex-row md:flex-col items-center gap-1 w-full justify-around md:justify-center">
             {dashboardTabs.map((tab) => (
               <Tooltip key={tab.id}>
                 <TooltipTrigger asChild>
                   <button
                     onClick={() => setActiveTab(tab.id)}
                     className={cn(
-                      'flex w-10 h-10 items-center justify-center gap-4 rounded-full text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground',
-                      activeTab === tab.id && 'bg-primary text-primary-foreground'
+                      'flex w-10 h-10 items-center justify-center rounded-full transition-all duration-300 relative',
+                      activeTab === tab.id 
+                        ? 'bg-primary text-primary-foreground scale-110 shadow-lg' 
+                        : 'text-muted-foreground hover:bg-accent hover:text-accent-foreground'
                     )}
                   >
                     <tab.icon className="h-5 w-5 flex-shrink-0" />
+                    {activeTab === tab.id && (
+                        <span className="absolute -top-1 -right-1 w-2 h-2 bg-accent rounded-full md:hidden" />
+                    )}
                   </button>
                 </TooltipTrigger>
-                 <TooltipContent side="right">
+                 <TooltipContent side="right" className="hidden md:block">
                   <p>{tab.label}</p>
                 </TooltipContent>
               </Tooltip>
             ))}
           
-            <div className="my-2 h-[1px] w-8 bg-border" />
+            <div className="hidden md:block my-2 h-[1px] w-8 bg-border" />
           
              <Tooltip>
                 <TooltipTrigger asChild>
-                    <Button variant="ghost" size="icon" className="w-10 h-10" asChild>
+                    <Button variant="ghost" size="icon" className="w-10 h-10 rounded-full hidden md:flex" asChild>
                          <Link href="/" aria-label="Go to Homepage">
                             <Home className="h-5 w-5" />
                          </Link>
@@ -124,13 +133,13 @@ function AdminDashboard() {
             </Tooltip>
              <Tooltip>
                 <TooltipTrigger asChild>
-                    <Button variant="ghost" size="icon" className="w-10 h-10" onClick={handleLogout}>
+                    <Button variant="ghost" size="icon" className="w-10 h-10 rounded-full hidden md:flex" onClick={handleLogout}>
                         <LogOut className="h-5 w-5" />
                     </Button>
                 </TooltipTrigger>
                 <TooltipContent side="right">Logout</TooltipContent>
             </Tooltip>
-            <div className="flex items-center justify-center h-10 w-10">
+            <div className="hidden md:flex items-center justify-center h-10 w-10">
                  <ThemeToggle />
             </div>
           </div>
@@ -138,13 +147,28 @@ function AdminDashboard() {
       </TooltipProvider>
 
       {/* Main Content Area - Locked to Viewport */}
-      <div className="flex-1 flex flex-col pl-24 h-screen overflow-hidden">
-        <main className="flex-1 p-4 md:p-6 lg:p-8 h-full flex flex-col overflow-hidden">
+      <div className="flex-1 flex flex-col h-full overflow-hidden md:pl-24">
+        {/* Mobile Header */}
+        <header className="md:hidden flex items-center justify-between px-6 py-4 bg-background/50 backdrop-blur-sm border-b shrink-0">
+            <div className="flex items-center gap-3">
+                <div className="relative h-8 w-8 overflow-hidden rounded-full ring-2 ring-primary/10">
+                    <Image src={profileData?.profileImageUrl || "/my-photo.jpg"} alt="Admin" fill className="object-cover" />
+                </div>
+                <h2 className="text-sm font-black tracking-tight uppercase">{activeTab}</h2>
+            </div>
+            <div className="flex items-center gap-2">
+                <ThemeToggle />
+                <Button variant="ghost" size="icon" className="h-8 w-8" onClick={handleLogout}>
+                    <LogOut className="h-4 w-4" />
+                </Button>
+            </div>
+        </header>
+
+        <main className="flex-1 p-4 md:p-8 lg:p-10 h-full flex flex-col overflow-hidden">
           <div className="mx-auto w-full max-w-7xl h-full flex flex-col min-h-0">
             {activeTab === 'dashboard' && <DashboardHome profile={profileData} />}
             
-            {/* Scrollable containers for manager tabs only */}
-            <div className="flex-1 min-h-0 overflow-y-auto no-scrollbar">
+            <div className="flex-1 min-h-0 overflow-y-auto no-scrollbar pb-24 md:pb-0">
                 {activeTab === 'inbox' && <InboxManager />}
                 {activeTab === 'invoices' && <InvoiceManager />}
                 {activeTab === 'portfolio' && <PortfolioManager />}
@@ -156,7 +180,7 @@ function AdminDashboard() {
             </div>
           </div>
         </main>
-         <footer className="border-t bg-transparent px-6 py-2 shrink-0">
+         <footer className="hidden md:block border-t bg-transparent px-6 py-2 shrink-0">
             <p className="text-center text-[9px] uppercase font-black tracking-widest text-muted-foreground/40">
             &copy; {new Date().getFullYear()} {profileData?.name || 'Admin'}. Secure Studio Node v2.0
             </p>

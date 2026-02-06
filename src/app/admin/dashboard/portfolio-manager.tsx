@@ -112,17 +112,17 @@ export function PortfolioManager() {
 
   return (
     <div className="space-y-6">
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div>
                 <h2 className="text-2xl font-black tracking-tight">Portfolio Works</h2>
-                <p className="text-muted-foreground text-sm">Manage, categorize, and track appreciation for your projects.</p>
+                <p className="text-muted-foreground text-sm">Manage and track appreciation for your projects.</p>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto">
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                        <Button variant="outline" size="sm" className="rounded-full gap-2">
+                        <Button variant="outline" size="sm" className="rounded-full gap-2 h-9">
                             <Filter className="h-3 w-3" />
-                            {filterCategory}
+                            <span className="hidden xs:inline">{filterCategory}</span>
                         </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end" className="w-48">
@@ -139,9 +139,9 @@ export function PortfolioManager() {
 
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                        <Button variant="outline" size="sm" className="rounded-full gap-2">
+                        <Button variant="outline" size="sm" className="rounded-full gap-2 h-9">
                             <ArrowUpDown className="h-3 w-3" />
-                            Sort
+                            <span className="hidden xs:inline">Sort</span>
                         </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end" className="w-48">
@@ -158,12 +158,12 @@ export function PortfolioManager() {
 
                 <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>
                 <DialogTrigger asChild>
-                    <Button onClick={handleAddNew} className="rounded-full shadow-lg transition-all active:scale-95">
+                    <Button onClick={handleAddNew} className="rounded-full shadow-lg transition-all active:scale-95 ml-auto sm:ml-0 h-9">
                     <PlusCircle className="mr-2 h-4 w-4" />
                     New Work
                     </Button>
                 </DialogTrigger>
-                <DialogContent className="max-w-4xl max-h-[90vh]">
+                <DialogContent className="max-w-4xl max-h-[95vh]">
                     <DialogHeader>
                     <DialogTitle className="text-2xl font-black">{editingProject ? 'Modify Project' : 'Publish New Work'}</DialogTitle>
                     </DialogHeader>
@@ -177,71 +177,73 @@ export function PortfolioManager() {
         </div>
         
         <div className="rounded-2xl border border-border/50 bg-card overflow-hidden shadow-sm">
-            <Table>
-            <TableHeader className="bg-muted/30">
-                <TableRow>
-                <TableHead className="font-bold">Project Identity</TableHead>
-                <TableHead className="font-bold">Category</TableHead>
-                <TableHead className="text-center font-bold">Appreciations</TableHead>
-                <TableHead className="text-right font-bold">Management</TableHead>
-                </TableRow>
-            </TableHeader>
-            <TableBody>
-                {isLoadingPortfolio ? (
-                <TableRow>
-                    <TableCell colSpan={4} className="text-center h-32">
-                    <Loader2 className="mx-auto h-8 w-8 animate-spin text-primary" />
-                    </TableCell>
-                </TableRow>
-                ) : processedItems.length > 0 ? (
-                processedItems.map((project) => (
-                    <TableRow key={project.id} className="hover:bg-muted/20 transition-colors">
-                    <TableCell>
-                        <div className="flex flex-col">
-                            <span className="font-bold text-base">{project.title}</span>
-                            <div className="flex flex-wrap gap-1 mt-1">
-                                {project.tags.slice(0, 2).map(tag => (
-                                    <span key={tag} className="text-[8px] text-muted-foreground uppercase font-bold tracking-widest">{tag}</span>
-                                ))}
-                            </div>
-                        </div>
-                    </TableCell>
-                    <TableCell>
-                        <Badge variant="secondary" className="rounded-full text-[10px] font-black uppercase tracking-wider px-3">
-                            {project.category || 'General'}
-                        </Badge>
-                    </TableCell>
-                    <TableCell className="text-center">
-                        <div className="flex items-center justify-center gap-2 px-3 py-1 rounded-full bg-red-50 text-red-600 font-black w-fit mx-auto border border-red-100 shadow-sm">
-                            <Heart className="h-4 w-4 fill-current" />
-                            <span>{project.likes || 0}</span>
-                        </div>
-                    </TableCell>
-                    <TableCell className="text-right">
-                        <div className="flex justify-end gap-1">
-                            <Button variant="ghost" size="icon" onClick={() => handleEdit(project)} className="rounded-full hover:bg-accent hover:text-accent-foreground">
-                                <Edit className="h-4 w-4" />
-                            </Button>
-                            <Button variant="ghost" size="icon" className="text-destructive rounded-full hover:bg-destructive/10" onClick={() => handleDelete(project.id)}>
-                                <Trash2 className="h-4 w-4" />
-                            </Button>
-                        </div>
-                    </TableCell>
+            <div className="overflow-x-auto no-scrollbar">
+                <Table>
+                <TableHeader className="bg-muted/30">
+                    <TableRow>
+                    <TableHead className="font-bold min-w-[200px]">Project Identity</TableHead>
+                    <TableHead className="font-bold min-w-[120px]">Category</TableHead>
+                    <TableHead className="text-center font-bold min-w-[100px]">Appreciations</TableHead>
+                    <TableHead className="text-right font-bold min-w-[120px]">Management</TableHead>
                     </TableRow>
-                ))
-                ) : (
-                <TableRow>
-                    <TableCell colSpan={4} className="text-center h-48 text-muted-foreground">
-                        <div className="flex flex-col items-center gap-2">
-                            <PlusCircle className="h-10 w-10 opacity-20" />
-                            <p className="font-medium text-lg">No projects match your current filters.</p>
-                            <Button variant="link" onClick={() => { setFilterCategory('All'); setSortBy('newest'); }} className="mt-2">Clear all filters</Button>
-                        </div>
-                    </TableCell>
-                </TableRow>
-                )}
-            </TableBody>
-            </Table>
+                </TableHeader>
+                <TableBody>
+                    {isLoadingPortfolio ? (
+                    <TableRow>
+                        <TableCell colSpan={4} className="text-center h-32">
+                        <Loader2 className="mx-auto h-8 w-8 animate-spin text-primary" />
+                        </TableCell>
+                    </TableRow>
+                    ) : processedItems.length > 0 ? (
+                    processedItems.map((project) => (
+                        <TableRow key={project.id} className="hover:bg-muted/20 transition-colors">
+                        <TableCell>
+                            <div className="flex flex-col">
+                                <span className="font-bold text-base line-clamp-1">{project.title}</span>
+                                <div className="flex flex-wrap gap-1 mt-1">
+                                    {project.tags.slice(0, 2).map(tag => (
+                                        <span key={tag} className="text-[8px] text-muted-foreground uppercase font-bold tracking-widest">{tag}</span>
+                                    ))}
+                                </div>
+                            </div>
+                        </TableCell>
+                        <TableCell>
+                            <Badge variant="secondary" className="rounded-full text-[10px] font-black uppercase tracking-wider px-3">
+                                {project.category || 'General'}
+                            </Badge>
+                        </TableCell>
+                        <TableCell className="text-center">
+                            <div className="flex items-center justify-center gap-2 px-3 py-1 rounded-full bg-red-50 text-red-600 font-black w-fit mx-auto border border-red-100 shadow-sm">
+                                <Heart className="h-3 w-3 fill-current" />
+                                <span>{project.likes || 0}</span>
+                            </div>
+                        </TableCell>
+                        <TableCell className="text-right">
+                            <div className="flex justify-end gap-1">
+                                <Button variant="ghost" size="icon" onClick={() => handleEdit(project)} className="h-8 w-8 rounded-full hover:bg-accent hover:text-accent-foreground">
+                                    <Edit className="h-4 w-4" />
+                                </Button>
+                                <Button variant="ghost" size="icon" className="h-8 w-8 text-destructive rounded-full hover:bg-destructive/10" onClick={() => handleDelete(project.id)}>
+                                    <Trash2 className="h-4 w-4" />
+                                </Button>
+                            </div>
+                        </TableCell>
+                        </TableRow>
+                    ))
+                    ) : (
+                    <TableRow>
+                        <TableCell colSpan={4} className="text-center h-48 text-muted-foreground">
+                            <div className="flex flex-col items-center gap-2">
+                                <PlusCircle className="h-10 w-10 opacity-20" />
+                                <p className="font-medium text-lg">No projects match your current filters.</p>
+                                <Button variant="link" onClick={() => { setFilterCategory('All'); setSortBy('newest'); }} className="mt-2">Clear all filters</Button>
+                            </div>
+                        </TableCell>
+                    </TableRow>
+                    )}
+                </TableBody>
+                </Table>
+            </div>
         </div>
     </div>
   );
