@@ -1,0 +1,68 @@
+
+/**
+ * @fileoverview Firestore Security Rules for Vanguard Folio.
+ */
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+    
+    match /project_likes/{likeId} {
+      allow read: if true;
+      allow create, delete: if true; // Open for prototyping IP-based uniqueness
+    }
+
+    match /admin_users/{adminUserId} {
+      allow read: if true;
+      allow create: if isOwner(adminUserId) && request.resource.data.id == adminUserId;
+      allow update: if isOwner(adminUserId) && request.resource.data.id == resource.data.id;
+      allow delete: if false;
+
+      match /portfolio_items/{portfolioItemId} {
+        allow read: if true;
+        // Allow anyone to update the 'likes' field, but restrict all other writes to the owner
+        allow update: if isOwner(adminUserId) || (request.resource.data.diff(resource.data).affectedKeys().hasOnly(['likes']));
+        allow create, delete: if isOwner(adminUserId);
+      }
+      
+      match /testimonials/{testimonialId} {
+        allow read: if true;
+        allow write: if isOwner(adminUserId);
+      }
+
+      match /services/{serviceId} {
+        allow read: if true;
+        allow write: if isOwner(adminUserId);
+      }
+
+      match /timeline_events/{timelineEventId} {
+        allow read: if true;
+        allow write: if isOwner(adminUserId);
+      }
+
+      match /contact_messages/{messageId} {
+        allow create: if true;
+        allow read, update, delete: if isOwner(adminUserId);
+      }
+
+      match /tools/{toolId} {
+        allow get, list: if true;
+        allow write: if isOwner(adminUserId);
+      }
+
+      match /invoices/{invoiceId} {
+        allow write: if isOwner(adminUserId);
+        allow list: if isOwner(adminUserId);
+        allow get: if true;
+      }
+    }
+  }
+}

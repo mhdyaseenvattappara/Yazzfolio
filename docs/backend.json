@@ -1,0 +1,339 @@
+
+{
+  "entities": {
+    "AdminUser": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "AdminUser",
+      "type": "object",
+      "description": "Represents an administrator user with access to site control and settings.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the AdminUser entity."
+        },
+        "username": {
+          "type": "string",
+          "description": "Username for the administrator user."
+        },
+        "email": {
+          "type": "string",
+          "description": "Email address for the administrator user.",
+          "format": "email"
+        },
+        "name": {
+          "type": "string",
+          "description": "The full name of the admin user."
+        },
+        "bio": {
+            "type": "string",
+            "description": "A short biography of the admin user."
+        },
+        "address": {
+            "type": "string",
+            "description": "The business address of the admin user."
+        },
+        "profileImageUrl": {
+            "type": "string",
+            "format": "uri",
+            "description": "URL to the admin user's profile picture."
+        }
+      },
+      "required": [
+        "id",
+        "username",
+        "email",
+        "name"
+      ]
+    },
+    "PortfolioItem": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "PortfolioItem",
+      "type": "object",
+      "description": "Represents an item in the portfolio, controlled by the admin user.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the PortfolioItem entity."
+        },
+        "title": {
+          "type": "string",
+          "description": "Title of the portfolio item."
+        },
+        "description": {
+          "type": "string",
+          "description": "Description of the portfolio item."
+        },
+        "imageUrl": {
+          "type": "string",
+          "description": "URL to the primary image for the portfolio item.",
+          "format": "uri"
+        },
+        "gallery": {
+          "type": "array",
+          "description": "A collection of secondary images for the project carousel.",
+          "items": {
+            "type": "object",
+            "properties": {
+              "imageUrl": { "type": "string", "format": "uri" }
+            }
+          }
+        },
+        "tags": {
+          "type": "array",
+          "description": "Tags for the portfolio item.",
+          "items": {
+            "type": "string"
+          }
+        },
+        "likes": {
+          "type": "number",
+          "description": "Total number of likes for this project."
+        },
+        "adminUserId": {
+          "type": "string",
+          "description": "Reference to AdminUser. (Relationship: AdminUser 1:N PortfolioItem)"
+        }
+      },
+      "required": [
+        "id",
+        "title",
+        "description",
+        "imageUrl",
+        "adminUserId"
+      ]
+    },
+    "ProjectLike": {
+      "title": "ProjectLike",
+      "type": "object",
+      "description": "Tracks a unique like from an IP address for a project.",
+      "properties": {
+        "projectId": { "type": "string" },
+        "ipAddress": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["projectId", "ipAddress", "createdAt"]
+    },
+    "Testimonial": {
+        "title": "Testimonial",
+        "type": "object",
+        "description": "Represents a client testimonial.",
+        "properties": {
+            "id": { "type": "string", "description": "Unique identifier for the testimonial." },
+            "name": { "type": "string", "description": "Name of the person giving the testimonial." },
+            "title": { "type": "string", "description": "Title or company of the person." },
+            "quote": { "type": "string", "description": "The content of the testimonial." },
+            "imageUrl": { "type": "string", "format": "uri", "description": "URL to the person's image." },
+            "rating": { "type": "number", "description": "Star rating from 1 to 5." },
+            "adminUserId": { "type": "string", "description": "Reference to the AdminUser." }
+        },
+        "required": ["id", "name", "title", "quote", "imageUrl", "rating", "adminUserId"]
+    },
+    "Service": {
+        "title": "Service",
+        "type": "object",
+        "description": "Represents a service offered.",
+        "properties": {
+            "id": { "type": "string", "description": "Unique identifier for the service." },
+            "title": { "type": "string", "description": "Title of the service." },
+            "description": { "type": "string", "description": "Description of the service." },
+            "icon": { "type": "string", "description": "Name of the Lucide icon for the service." },
+            "adminUserId": { "type": "string", "description": "Reference to the AdminUser." }
+        },
+        "required": ["id", "title", "description", "icon", "adminUserId"]
+    },
+    "TimelineEvent": {
+        "title": "TimelineEvent",
+        "type": "object",
+        "description": "Represents an event in the career timeline.",
+        "properties": {
+            "id": { "type": "string", "description": "Unique identifier for the timeline event." },
+            "year": { "type": "string", "description": "The year of the event." },
+            "event": { "type": "string", "description": "Description of the event." },
+            "adminUserId": { "type": "string", "description": "Reference to the AdminUser." }
+        },
+        "required": ["id", "year", "event", "adminUserId"]
+    },
+    "ContactMessage": {
+      "title": "ContactMessage",
+      "type": "object",
+      "description": "Represents a message sent through the contact form.",
+      "properties": {
+        "id": { "type": "string", "description": "Unique identifier for the message." },
+        "name": { "type": "string", "description": "Name of the sender." },
+        "email": { "type": "string", "format": "email", "description": "Email of the sender." },
+        "message": { "type": "string", "description": "The content of the message." },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Timestamp when the message was sent." },
+        "isRead": { "type": "boolean", "description": "Whether the admin has read the message." },
+        "adminUserId": { "type": "string", "description": "Reference to the AdminUser." }
+      },
+      "required": ["id", "name", "email", "message", "createdAt", "adminUserId"]
+    },
+     "Tool": {
+      "title": "Tool",
+      "type": "object",
+      "description": "Represents a tool in the tool stack.",
+      "properties": {
+        "id": { "type": "string", "description": "Unique identifier for the tool." },
+        "name": { "type": "string", "description": "Name of the tool." },
+        "icon": { "type": "string", "description": "Name of the custom icon for the tool." },
+        "adminUserId": { "type": "string", "description": "Reference to the AdminUser." }
+      },
+      "required": ["id", "name", "icon", "adminUserId"]
+    },
+    "Invoice": {
+      "title": "Invoice",
+      "type": "object",
+      "description": "Represents a single invoice.",
+      "properties": {
+        "id": { "type": "string", "description": "Unique identifier for the invoice." },
+        "invoiceNumber": { "type": "string", "description": "The unique number for this invoice." },
+        "clientName": { "type": "string", "description": "Name of the client." },
+        "clientAddress": { "type": "string", "description": "Address of the client." },
+        "invoiceDate": { "type": "string", "format": "date-time", "description": "Date the invoice was issued." },
+        "dueDate": { "type": "string", "format": "date-time", "description": "Date the invoice is due." },
+        "templateId": { "type": "string", "description": "The visual template ID used for this invoice." },
+        "lineItems": {
+          "type": "array",
+          "description": "List of items or services being billed.",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": { "type": "number" },
+              "description": { "type": "string" },
+              "quantity": { "type": "number" },
+              "price": { "type": "number" }
+            },
+            "required": ["id", "description", "quantity", "price"]
+          }
+        },
+        "tax": { "type": "number", "description": "Tax rate in percentage." },
+        "notes": { "type": "string", "description": "Additional notes or terms." },
+        "currency": {
+          "type": "object",
+          "properties": {
+            "value": { "type": "string" },
+            "label": { "type": "string" },
+            "symbol": { "type": "string" }
+          },
+          "required": ["value", "label", "symbol"]
+        },
+        "status": {
+          "type": "string",
+          "enum": ["Draft", "Pending", "Paid"],
+          "description": "The current status of the invoice."
+        },
+        "total": { "type": "number", "description": "The total amount of the invoice." },
+        "yourName": { "type": "string", "description": "The name of the issuer." },
+        "yourAddress": { "type": "string", "description": "The address of the issuer." },
+        "yourEmail": { "type": "string", "format": "email", "description": "The email of the issuer." },
+        "logoUrl": { "type": "string", "format": "uri", "description": "URL to the issuer's logo." },
+        "adminUserId": { "type": "string", "description": "Reference to the AdminUser." }
+      },
+      "required": [
+        "id",
+        "invoiceNumber",
+        "clientName",
+        "invoiceDate",
+        "dueDate",
+        "lineItems",
+        "status",
+        "total",
+        "adminUserId"
+      ]
+    }
+  },
+  "auth": {
+    "providers": [
+      "password",
+      "anonymous"
+    ]
+  },
+  "firestore": {
+    "structure": [
+      {
+        "path": "/admin_users/{adminUserId}",
+        "definition": {
+          "entityName": "AdminUser",
+          "schema": {
+            "$ref": "#/entities/AdminUser"
+          },
+          "description": "Stores administrator user information.",
+          "params": [
+            {
+              "name": "adminUserId",
+              "description": "Unique identifier for the administrator user."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/admin_users/{adminUserId}/portfolio_items/{portfolioItemId}",
+        "definition": {
+          "entityName": "PortfolioItem",
+          "schema": {
+            "$ref": "#/entities/PortfolioItem"
+          },
+          "description": "Stores portfolio items for an admin user."
+        }
+      },
+      {
+        "path": "/project_likes/{likeId}",
+        "definition": {
+          "entityName": "ProjectLike",
+          "schema": { "$ref": "#/entities/ProjectLike" },
+          "description": "Tracks unique likes by IP address."
+        }
+      },
+      {
+        "path": "/admin_users/{adminUserId}/testimonials/{testimonialId}",
+        "definition": {
+            "entityName": "Testimonial",
+            "schema": { "$ref": "#/entities/Testimonial" },
+            "description": "Stores testimonials for an admin user."
+        }
+      },
+      {
+        "path": "/admin_users/{adminUserId}/services/{serviceId}",
+        "definition": {
+            "entityName": "Service",
+            "schema": { "$ref": "#/entities/Service" },
+            "description": "Stores services offered by an admin user."
+        }
+      },
+      {
+        "path": "/admin_users/{adminUserId}/timeline_events/{timelineEventId}",
+        "definition": {
+            "entityName": "TimelineEvent",
+            "schema": { "$ref": "#/entities/TimelineEvent" },
+            "description": "Stores career timeline events for an admin user."
+        }
+      },
+      {
+        "path": "/admin_users/{adminUserId}/contact_messages/{messageId}",
+        "definition": {
+            "entityName": "ContactMessage",
+            "schema": { "$ref": "#/entities/ContactMessage" },
+            "description": "Stores contact form messages for an admin user."
+        }
+      },
+      {
+        "path": "/admin_users/{adminUserId}/tools/{toolId}",
+        "definition": {
+            "entityName": "Tool",
+            "schema": { "$ref": "#/entities/Tool" },
+            "description": "Stores tools for the admin's tool stack."
+        }
+      },
+       {
+        "path": "/admin_users/{adminUserId}/invoices/{invoiceId}",
+        "definition": {
+          "entityName": "Invoice",
+          "schema": {
+            "$ref": "#/entities/Invoice"
+          },
+          "description": "Stores invoices created by the admin user."
+        }
+      }
+    ]
+  }
+}
