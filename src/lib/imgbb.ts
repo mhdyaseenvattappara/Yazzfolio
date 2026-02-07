@@ -6,12 +6,14 @@
  */
 export async function uploadToImgBB(file: File, onProgress?: (progress: number) => void): Promise<string> {
   const apiKey = process.env.NEXT_PUBLIC_IMGBB_API_KEY;
-  if (!apiKey) {
-    throw new Error('ImgBB API key is not configured in environment variables.');
+  
+  if (!apiKey || apiKey === 'YOUR_IMGBB_API_KEY' || apiKey === '') {
+    console.error('ImgBB API key is missing in environment variables (NEXT_PUBLIC_IMGBB_API_KEY).');
+    throw new Error('Image upload service is not configured. Please add your ImgBB API key to the environment variables.');
   }
 
-  // Simulate progress steps for better UX
-  if (onProgress) onProgress(10);
+  // Initial progress kick-off
+  if (onProgress) onProgress(15);
 
   const formData = new FormData();
   formData.append('image', file);
@@ -22,19 +24,24 @@ export async function uploadToImgBB(file: File, onProgress?: (progress: number) 
       body: formData,
     });
 
-    if (onProgress) onProgress(80);
+    if (onProgress) onProgress(75);
+
+    if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData?.error?.message || `ImgBB upload failed with status ${response.status}`);
+    }
 
     const result = await response.json();
 
-    if (result.success) {
+    if (result.success && result.data?.url) {
       if (onProgress) onProgress(100);
-      // Returns the direct image URL
+      // Returns the direct image URL (i.ibb.co)
       return result.data.url;
     } else {
-      throw new Error(result.error?.message || 'Failed to upload image to ImgBB');
+      throw new Error(result.error?.message || 'Failed to upload image to ImgBB: Invalid response format');
     }
   } catch (error: any) {
     console.error('ImgBB Upload Error:', error);
-    throw error;
+    throw new Error(error.message || 'An unexpected error occurred during image upload.');
   }
 }
