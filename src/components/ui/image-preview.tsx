@@ -38,6 +38,8 @@ const COMEDY_MESSAGES = [
     "You can't catch the visual ninja! 🥷"
 ];
 
+const CLOSE_CURSOR = `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='white' fill-opacity='0.1' stroke='white' stroke-width='2'/%3E%3Cpath d='M11 11 L21 21 M21 11 L11 21' stroke='white' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E") 16 16, auto`;
+
 export function ImagePreview({ project, onClose }: ImagePreviewProps) {
   const { toast } = useToast();
   const firestore = useFirestore();
@@ -216,7 +218,8 @@ export function ImagePreview({ project, onClose }: ImagePreviewProps) {
 
   return (
     <div 
-        className="fixed inset-0 z-[100] bg-background/95 backdrop-blur-2xl flex items-center justify-center animate-in fade-in duration-300 p-2 sm:p-4 cursor-pointer overflow-y-auto"
+        className="fixed inset-0 z-[100] bg-black/95 backdrop-blur-3xl flex items-center justify-center animate-in fade-in duration-300 p-2 sm:p-4 overflow-y-auto"
+        style={{ cursor: CLOSE_CURSOR }}
         onClick={onClose}
         onMouseMove={handleMouseMove}
     >
@@ -271,7 +274,7 @@ export function ImagePreview({ project, onClose }: ImagePreviewProps) {
                     <div className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
                     Project Preview
                 </div>
-                <button onClick={onClose} className="h-10 w-10 rounded-full border border-border flex items-center justify-center hover:bg-accent transition-all">
+                <button onClick={onClose} className="h-10 w-10 rounded-full border border-border flex items-center justify-center hover:bg-accent transition-all cursor-pointer">
                     <X className="h-5 w-5" />
                 </button>
             </div>
@@ -315,7 +318,7 @@ export function ImagePreview({ project, onClose }: ImagePreviewProps) {
                         <button 
                             onClick={handleLike}
                             disabled={!userIp || isLoadingIp}
-                            className={cn("flex items-center justify-center h-12 w-12 rounded-full border-2 transition-all duration-300",
+                            className={cn("flex items-center justify-center h-12 w-12 rounded-full border-2 transition-all duration-300 cursor-pointer",
                                 isLiked ? "bg-red-500 border-red-500 text-white scale-110 shadow-xl" : "border-border hover:border-red-500 hover:text-red-500 hover:bg-red-50/50")}>
                             <Heart className={cn("h-5 w-5 transition-transform", isLiked && "fill-current")} />
                         </button>
@@ -351,12 +354,12 @@ export function ImagePreview({ project, onClose }: ImagePreviewProps) {
                 </div>
 
                 <div className="grid gap-3 pt-2">
-                    <Button size="lg" className="w-full h-14 rounded-2xl text-lg font-black tracking-tight shadow-lg" asChild>
+                    <Button size="lg" className="w-full h-14 rounded-2xl text-lg font-black tracking-tight shadow-lg cursor-pointer" asChild>
                         <Link href="/#contact" onClick={onClose}>
                             Let's Collaborate
                         </Link>
                     </Button>
-                    <Button variant="ghost" size="sm" className="w-full h-10 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] group opacity-60 hover:opacity-100" asChild>
+                    <Button variant="ghost" size="sm" className="w-full h-10 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] group opacity-60 hover:opacity-100 cursor-pointer" asChild>
                         <Link href={`/portfolio/${project.id}`} onClick={onClose}>
                             Full Narrative
                             <ArrowRight className="ml-2 w-3.5 h-3.5 transition-transform group-hover:translate-x-1" />
@@ -367,7 +370,7 @@ export function ImagePreview({ project, onClose }: ImagePreviewProps) {
                 <div className="flex items-center justify-between pt-4 border-t border-border/50">
                     <div className="flex items-center gap-3">
                         <span className="text-[9px] font-black uppercase tracking-[0.3em] text-muted-foreground opacity-40">Share:</span>
-                        <button onClick={handleShare} className="h-9 w-9 hover:bg-accent text-muted-foreground hover:text-foreground rounded-full transition-all flex items-center justify-center border border-border/50">
+                        <button onClick={handleShare} className="h-9 w-9 hover:bg-accent text-muted-foreground hover:text-foreground rounded-full transition-all flex items-center justify-center border border-border/50 cursor-pointer">
                             <Share2 className="w-4 h-4" />
                         </button>
                     </div>
