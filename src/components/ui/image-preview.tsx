@@ -225,13 +225,13 @@ export function ImagePreview({ project, onClose }: ImagePreviewProps) {
         className="relative w-full max-w-5xl h-fit max-h-[95vh] shadow-2xl rounded-[2.5rem] border border-border/50 bg-card cursor-default flex flex-col md:flex-row animate-in zoom-in-95 duration-500 overflow-visible"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Carousel Side */}
+        {/* Carousel Side - Enhanced Frame Fitting */}
         <div className="w-full md:w-[50%] min-h-[400px] md:h-auto bg-[#1a1a1a] relative overflow-hidden border-b md:border-b-0 md:border-r border-border/50 shrink-0 flex items-center justify-center z-10 rounded-t-[2.5rem] md:rounded-tr-none md:rounded-l-[2.5rem]">
             <Carousel setApi={setApi} className="w-full h-full">
                 <CarouselContent className="h-full ml-0">
                     {allImages.map((url, idx) => (
-                        <CarouselItem key={idx} className="relative aspect-square md:aspect-[4/5] lg:aspect-square w-full p-4 flex items-center justify-center">
-                            <div className="relative w-full h-full">
+                        <CarouselItem key={idx} className="relative w-full h-full flex items-center justify-center p-0">
+                            <div className="relative w-full h-full min-h-[400px] md:min-h-full">
                                 <Image
                                     src={url}
                                     alt={`${project.title} - ${idx}`}

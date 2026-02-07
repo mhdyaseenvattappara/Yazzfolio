@@ -37,19 +37,19 @@ export function PortfolioItemView({ project }: { project: PortfolioItem | null }
             <div className="bg-card border border-border/50 rounded-[2.5rem] overflow-hidden shadow-2xl transition-all duration-700">
               <div className="grid lg:grid-cols-5 min-h-[600px]">
                 {/* Visual Side (Left) - Optimized for full image display */}
-                <div className="lg:col-span-3 relative bg-[#111] group flex items-center justify-center aspect-square sm:aspect-video lg:aspect-auto">
+                <div className="lg:col-span-3 relative bg-[#111] group flex items-center justify-center min-h-[500px] lg:min-h-0">
                   <Image
                     src={project.imageUrl}
                     alt={project.title}
                     fill
-                    className="object-contain transition-transform duration-1000 group-hover:scale-105 p-4 sm:p-8"
+                    className="object-contain transition-transform duration-1000 group-hover:scale-105 p-0"
                     priority
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent pointer-events-none" />
                 </div>
 
                 {/* Info Side (Right) */}
-                <div className="lg:col-span-2 p-8 md:p-12 flex flex-col justify-center">
+                <div className="lg:col-span-2 p-8 md:p-12 flex flex-col justify-center border-t lg:border-t-0 lg:border-l border-border/50 bg-card">
                   <div className="space-y-8">
                     <div>
                       <div className="flex flex-wrap gap-2 mb-6">
@@ -118,7 +118,7 @@ export function PortfolioItemView({ project }: { project: PortfolioItem | null }
                                 src={image.imageUrl} 
                                 alt={`Gallery ${index + 1}`} 
                                 fill 
-                                className="object-contain transition-transform duration-700 group-hover:scale-110 p-4" 
+                                className="object-contain transition-transform duration-700 group-hover:scale-110 p-0" 
                               />
                             </div>
                           </CarouselItem>
