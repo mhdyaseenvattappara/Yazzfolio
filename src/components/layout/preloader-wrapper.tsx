@@ -8,6 +8,7 @@ import { MobileNav } from './mobile-nav';
 import { Dock } from './dock';
 import { InstagramChat } from './instagram-chat';
 import { CustomCursor } from '../ui/custom-cursor';
+import { InstallPWA } from './install-pwa';
 
 export function PreloaderWrapper({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -59,6 +60,7 @@ export function PreloaderWrapper({ children }: { children: React.ReactNode }) {
             <MobileNav />
             {children}
             <InstagramChat username="_hey_yasii_" />
+            <InstallPWA />
           </>
         )}
       </div>
