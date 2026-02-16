@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState, useRef } from 'react';
@@ -23,6 +22,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
+  DialogDescription,
 } from '@/components/ui/dialog';
 import {
   DropdownMenu,
@@ -207,6 +207,7 @@ export function InvoiceManager() {
                 <DialogContent className="max-w-7xl h-[95vh]">
                     <DialogHeader>
                         <DialogTitle className="text-2xl font-black">{selectedInvoice ? `Edit Invoice #${selectedInvoice.invoiceNumber}` : `Generate Invoice #${nextInvoiceNumber}`}</DialogTitle>
+                        <DialogDescription className="sr-only">Form to create or update an invoice document.</DialogDescription>
                     </DialogHeader>
                     {profile && (
                         <InvoiceForm
@@ -325,6 +326,10 @@ export function InvoiceManager() {
     {/* A4 Preview Modal - Balanced scaling for full visibility */}
     <Dialog open={!!previewInvoice} onOpenChange={() => setPreviewInvoice(null)}>
         <DialogContent className="max-w-[95vw] sm:max-w-screen-2xl h-[95vh] p-0 bg-muted border-none overflow-hidden flex flex-col rounded-3xl">
+            <DialogHeader className="sr-only">
+                <DialogTitle>Document Preview # {previewInvoice?.invoiceNumber}</DialogTitle>
+                <DialogDescription>A4 visual representation of the invoice.</DialogDescription>
+            </DialogHeader>
             <div className="p-4 bg-background/80 backdrop-blur-md border-b flex items-center justify-between z-10 shrink-0">
                 <div className="flex items-center gap-4">
                     <Badge className="rounded-full px-4 py-1 font-bold tracking-widest uppercase">Document Preview</Badge>

@@ -16,6 +16,7 @@ export function InstallPWA() {
       setDeferredPrompt(e);
       // Update UI notify the user they can install the PWA
       setIsVisible(true);
+      console.log('PWA installation is available');
     };
 
     window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
@@ -46,7 +47,7 @@ export function InstallPWA() {
   if (!isVisible) return null;
 
   return (
-    <div className="fixed left-8 bottom-8 z-[60] animate-in fade-in slide-in-from-left-4 duration-500">
+    <div className="fixed left-8 bottom-8 z-[70] animate-in fade-in slide-in-from-left-4 duration-500">
         <Button 
             onClick={handleInstallClick}
             className="group h-12 px-6 rounded-2xl bg-primary text-primary-foreground shadow-2xl hover:scale-105 transition-all border border-white/10 flex items-center gap-3"

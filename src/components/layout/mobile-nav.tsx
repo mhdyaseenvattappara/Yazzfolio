@@ -5,6 +5,9 @@ import { Menu, X } from 'lucide-react';
 import {
   Sheet,
   SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetDescription,
   SheetTrigger,
 } from '@/components/ui/sheet';
 import { Button } from '../ui/button';
@@ -35,6 +38,12 @@ export function MobileNav() {
             </Button>
           </SheetTrigger>
           <SheetContent side="left" className="w-[300px]">
+            <SheetHeader className="sr-only">
+              <SheetTitle>Navigation Menu</SheetTitle>
+              <SheetDescription>
+                Browse portfolio categories, about me, and contact information.
+              </SheetDescription>
+            </SheetHeader>
             <div className="flex h-full flex-col p-6">
               <Link href="/" className="mb-8 flex items-center gap-2 font-bold text-lg" onClick={() => setIsOpen(false)}>
                  <Image
