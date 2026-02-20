@@ -48,7 +48,7 @@ export function About() {
             </div>
             <div className="space-y-6">
               <div className="space-y-2">
-                  <h2 className="text-4xl md:text-6xl font-black tracking-tighter">Hey, I'm {profile.name}</h2>
+                  <h2 className="text-4xl md:text-6xl font-bold tracking-tighter">Hey, I'm {profile.name}</h2>
               </div>
               <div className="max-w-2xl mx-auto text-muted-foreground text-base md:text-xl leading-relaxed" dangerouslySetInnerHTML={{ __html: profile.bio.replace(/\n/g, '<br />') }} />
                <div className="pt-6">
