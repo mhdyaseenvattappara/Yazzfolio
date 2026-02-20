@@ -111,7 +111,7 @@ export function Testimonials() {
                                     </CarouselItem>
                                 ))}
                             </CarouselContent>
-                            <div className="flex justify-start gap-4 mt-10">
+                            <div className="flex justify-center gap-4 mt-10">
                                 <CarouselPrevious className="static translate-y-0 h-14 w-14 rounded-full border-border/50 bg-card/50 backdrop-blur-xl hover:bg-primary hover:text-primary-foreground transition-all shadow-xl" />
                                 <CarouselNext className="static translate-y-0 h-14 w-14 rounded-full border-border/50 bg-card/50 backdrop-blur-xl hover:bg-primary hover:text-primary-foreground transition-all shadow-xl" />
                             </div>
