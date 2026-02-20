@@ -38,45 +38,57 @@ export function MobileNav() {
               <Menu className="h-5 w-5" strokeWidth={2.5} />
             </Button>
           </SheetTrigger>
-          <SheetContent side="bottom" className="h-[85vh] rounded-t-[3rem] bg-[#0a0a0a] border-t-white/10 text-white p-0 overflow-hidden">
+          <SheetContent side="bottom" className="h-[90vh] rounded-t-[3rem] bg-[#0a0a0a] border-t-white/10 text-white p-0 overflow-hidden outline-none">
             <SheetHeader className="sr-only">
               <SheetTitle>Navigation Menu</SheetTitle>
               <SheetDescription>
                 Explore portfolio categories and contact information.
               </SheetDescription>
             </SheetHeader>
-            <div className="flex h-full flex-col p-10 pt-16">
-              <div className="flex items-center justify-between mb-12">
-                <div className="flex items-center gap-3">
-                  <div className="relative h-12 w-12 overflow-hidden rounded-full ring-2 ring-primary/20">
+            <div className="flex h-full flex-col p-8 pt-12">
+              {/* Branding Section */}
+              <div className="flex items-center justify-between mb-16">
+                <div className="flex items-center gap-4">
+                  <div className="relative h-14 w-14 overflow-hidden rounded-full ring-2 ring-primary/20">
                       <Image src="/my-photo.jpg" alt="Mhd Yaseen V" fill className="object-cover" />
                   </div>
-                  <span className="text-white font-black text-2xl tracking-tighter">Yazzfolio<span className="text-primary">.</span></span>
+                  <span className="text-white font-black text-2xl tracking-tighter">
+                    Yazzfolio<span className="text-primary">.</span>
+                  </span>
                 </div>
-                <ThemeToggle />
+                <div className="flex items-center gap-2">
+                    <ThemeToggle />
+                </div>
               </div>
               
+              {/* Navigation Links */}
               <nav className="flex-1">
-                <ul className="space-y-4">
+                <ul className="space-y-6">
                   {navLinks.map((link) => (
                     <li key={link.href}>
                       <Link
                         href={link.href}
-                        className="flex items-center gap-6 text-2xl font-black text-gray-500 transition-all hover:text-white group py-2"
+                        className="flex items-center gap-6 group py-2"
                         onClick={() => setIsOpen(false)}
                       >
-                        <div className="h-12 w-12 rounded-2xl bg-white/5 flex items-center justify-center group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-500 rotate-3 group-hover:rotate-0">
-                            <link.icon className="h-6 w-6" />
+                        <div className="h-14 w-14 rounded-2xl bg-white/5 flex items-center justify-center text-gray-400 group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-500 transform group-hover:scale-110">
+                            <link.icon className="h-7 w-7" strokeWidth={2.5} />
                         </div>
-                        <span className="tracking-tighter">{link.name}</span>
+                        <span className="text-3xl font-black tracking-tighter text-gray-500 group-hover:text-white transition-colors duration-300">
+                            {link.name}
+                        </span>
                       </Link>
                     </li>
                   ))}
                 </ul>
               </nav>
               
-              <div className="mt-auto flex items-center justify-center pt-8 border-t border-white/5">
-                <p className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-600">Secure Node v2.0 // Port 9002</p>
+              {/* Bottom Footer */}
+              <div className="mt-auto flex flex-col items-center gap-4 pt-8 border-t border-white/5">
+                <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10">
+                    <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+                    <span className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400">Secure Studio Node v2.0</span>
+                </div>
               </div>
             </div>
           </SheetContent>
