@@ -34,14 +34,14 @@ export function MobileNav() {
         "transition-all duration-500 ease-in-out pointer-events-auto",
         isOpen ? "opacity-0 -translate-y-full" : "opacity-100 translate-y-0"
       )}>
-        <Marquee />
+        <Marquee className="nav-liquid" />
       </div>
 
       {/* Floating Capsule Header - Sitting below Marquee */}
       <div className="px-6 mt-4 pointer-events-none">
         <header 
           className={cn(
-            "mx-auto max-w-md bg-background/80 backdrop-blur-2xl border border-border/50 h-14 rounded-full flex items-center px-6 justify-between shadow-2xl transition-all duration-500 ease-in-out pointer-events-auto",
+            "mx-auto max-w-md bg-background/80 backdrop-blur-2xl border border-border/50 h-14 rounded-full flex items-center px-6 justify-between shadow-2xl transition-all duration-500 ease-in-out pointer-events-auto nav-liquid",
             isOpen ? "opacity-0 translate-y-[-10px] scale-95 pointer-events-none" : "opacity-100 translate-y-0 scale-100"
           )}
         >

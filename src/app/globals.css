@@ -271,6 +271,34 @@
     background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
     pointer-events: none;
   }
+
+  /* Liquid Navigation Specifics for iOS 26 */
+  .ios-dark .nav-liquid {
+    position: relative;
+    background: rgba(255, 255, 255, 0.04) !important;
+    backdrop-filter: blur(30px) saturate(210%) !important;
+    -webkit-backdrop-filter: blur(30px) saturate(210%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    overflow: hidden !important;
+  }
+
+  .ios-dark .nav-liquid::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle at center, rgba(var(--primary), 0.15) 0%, transparent 60%);
+    animation: nav-liquid-drift 12s infinite alternate ease-in-out;
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  @keyframes nav-liquid-drift {
+    from { transform: translate(-15%, -15%) rotate(0deg); }
+    to { transform: translate(15%, 15%) rotate(10deg); }
+  }
 }
 
 @layer utilities {

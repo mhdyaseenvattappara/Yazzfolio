@@ -84,7 +84,7 @@ export function Dock() {
       'hidden md:flex flex-col items-center justify-center fixed top-1/2 -translate-y-1/2 left-0 z-50 p-2 transition-transform duration-700 ease-out',
       isMounted ? 'translate-x-0' : '-translate-x-full'
     )}>
-      <div className="flex flex-col items-center gap-1 p-1 rounded-full bg-card/80 shadow-lg border backdrop-blur-sm">
+      <div className="flex flex-col items-center gap-1 p-1 rounded-full bg-card/80 shadow-lg border backdrop-blur-sm nav-liquid">
         {navLinks.map((link) => (
           <Link 
             key={link.href} 
