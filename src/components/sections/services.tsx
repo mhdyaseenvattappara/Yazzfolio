@@ -41,19 +41,19 @@ export function Services() {
             <div className="container mx-auto px-4 md:px-6">
                 <div
                 className={cn(
-                    'max-w-3xl text-left mb-16',
+                    'max-w-3xl mx-auto text-center mb-16',
                     isInView ? 'animate-blur-reveal' : 'opacity-0'
                 )}
                 >
                     <p className="text-xs font-black uppercase tracking-[0.3em] text-primary mb-4">My Services</p>
                     <h2 className="text-4xl md:text-6xl font-black tracking-tighter mb-6">Expertise</h2>
-                    <p className="text-muted-foreground text-lg md:text-xl max-w-2xl">
+                    <p className="text-muted-foreground text-lg md:text-xl max-w-2xl mx-auto">
                         From concept to launch, I provide a range of design services to bring your vision to life.
                     </p>
                 </div>
                 <div
                 className={cn(
-                    'grid grid-cols-1 md:grid-cols-2 gap-8 justify-start max-w-5xl',
+                    'grid grid-cols-1 md:grid-cols-2 gap-8 justify-center max-w-5xl mx-auto',
                     isInView ? 'animate-blur-reveal' : 'opacity-0'
                 )}
                 style={{animationDelay: '200ms'}}
@@ -79,7 +79,7 @@ export function Services() {
                     );
                 })}
                  {!isLoading && servicesData?.length === 0 && (
-                    <div className="md:col-span-2 text-left text-muted-foreground">
+                    <div className="md:col-span-2 text-center text-muted-foreground">
                         Services not available. Please add them in the admin dashboard.
                     </div>
                  )}

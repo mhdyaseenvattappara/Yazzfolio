@@ -91,18 +91,18 @@ export function Testimonials() {
         <div className="container mx-auto px-4 md:px-6">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-center">
                 
-                {/* Left Side: Brand Narrative - Strict Left Alignment */}
+                {/* Left Side: Brand Narrative */}
                 <div className={cn(
-                    "lg:col-span-4 space-y-6 lg:space-y-8 text-left transition-all duration-1000",
+                    "lg:col-span-4 space-y-6 lg:space-y-8 text-center lg:text-left transition-all duration-1000",
                     isInView ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-10'
                 )}>
                     <div className="space-y-4">
                         <p className="text-[10px] font-black uppercase tracking-[0.4em] text-primary">Social Proof</p>
-                        <h2 className="text-5xl md:text-8xl font-black tracking-tighter text-foreground leading-[0.85]">
+                        <h2 className="text-4xl md:text-6xl font-black tracking-tighter text-foreground leading-tight">
                             Client Stories
                         </h2>
                     </div>
-                    <p className="text-muted-foreground text-lg md:text-xl leading-relaxed max-w-sm">
+                    <p className="text-muted-foreground text-lg md:text-xl leading-relaxed max-w-sm mx-auto lg:mx-0">
                         Collaborating with industry leaders to turn visionary ideas into reality.
                     </p>
                 </div>
@@ -151,7 +151,7 @@ export function Testimonials() {
                     )}
 
                     {!isLoading && (!testimonialsData || testimonialsData.length === 0) && (
-                        <div className="text-left text-muted-foreground bg-accent/5 p-20 rounded-[3rem] border border-dashed border-white/10">
+                        <div className="text-center text-muted-foreground bg-accent/5 p-20 rounded-[3rem] border border-dashed border-white/10 mx-auto">
                             No stories yet.
                         </div>
                     )}

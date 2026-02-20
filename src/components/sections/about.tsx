@@ -26,14 +26,14 @@ export function About() {
     <section id="about" ref={ref} className="pt-0 pb-24 sm:pb-32 md:py-0 md:min-h-screen md:flex md:items-center">
       <div className="container mx-auto px-4 md:px-6">
         {isLoading && (
-          <div className="flex justify-start">
+          <div className="flex justify-center">
             <Loader2 className="h-12 w-12 animate-spin text-primary" />
           </div>
         )}
         {profile && (
           <div
             className={cn(
-              'flex flex-col items-start text-left max-w-4xl',
+              'flex flex-col items-center text-center max-w-4xl mx-auto',
               isInView ? 'animate-blur-reveal' : 'opacity-0'
             )}
           >
@@ -50,7 +50,7 @@ export function About() {
               <div className="space-y-2">
                   <h2 className="text-4xl md:text-6xl font-black tracking-tighter">Hey, I'm {profile.name}</h2>
               </div>
-              <div className="max-w-2xl text-muted-foreground text-base md:text-xl leading-relaxed" dangerouslySetInnerHTML={{ __html: profile.bio.replace(/\n/g, '<br />') }} />
+              <div className="max-w-2xl mx-auto text-muted-foreground text-base md:text-xl leading-relaxed" dangerouslySetInnerHTML={{ __html: profile.bio.replace(/\n/g, '<br />') }} />
                <div className="pt-6">
                   <Button asChild size="lg" className="group text-lg py-7 px-8">
                       <Link href="#contact">
@@ -62,7 +62,7 @@ export function About() {
           </div>
         )}
         {!isLoading && !profile && (
-            <div className="text-left text-muted-foreground">Profile information not available. Please set it up in the admin dashboard.</div>
+            <div className="text-center text-muted-foreground">Profile information not available. Please set it up in the admin dashboard.</div>
         )}
       </div>
     </section>

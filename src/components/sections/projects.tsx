@@ -91,25 +91,25 @@ export function Projects() {
         <div className="container mx-auto px-4 md:px-6">
           <div
             className={cn(
-              'max-w-3xl text-left mb-16',
+              'max-w-3xl mx-auto text-center mb-16',
               isInView ? 'animate-blur-reveal' : 'opacity-0'
             )}
           >
             <p className="text-xs font-black uppercase tracking-[0.3em] text-primary mb-4">Curated Portfolio</p>
             <h2 className="text-4xl md:text-6xl font-black tracking-tighter mb-6">Selected Works</h2>
-            <p className="text-muted-foreground text-lg md:text-xl max-w-2xl leading-relaxed">
+            <p className="text-muted-foreground text-lg md:text-xl max-w-2xl mx-auto leading-relaxed">
               Explore a collection of high-impact designs categorized by industry and impact.
             </p>
           </div>
 
-          {/* Left-Aligned Control Bar */}
+          {/* Centered Control Bar */}
           <div className={cn(
-              "max-w-fit flex flex-col items-start gap-4 mb-20 bg-card/80 backdrop-blur-3xl border border-white/10 p-6 rounded-[3rem] sticky top-24 md:top-12 lg:relative z-30 shadow-2xl transition-all duration-700",
+              "max-w-fit mx-auto flex flex-col items-center gap-4 mb-20 bg-card/80 backdrop-blur-3xl border border-white/10 p-6 rounded-[3rem] sticky top-24 md:top-12 z-30 shadow-2xl transition-all duration-700",
               isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
           )}>
               {/* Row 1: Categories */}
               <div className="w-full overflow-x-auto no-scrollbar py-1">
-                  <div className="flex flex-nowrap items-center justify-start gap-2 min-w-max px-2">
+                  <div className="flex flex-nowrap items-center justify-center gap-2 min-w-max px-2">
                       {categories.map((cat) => (
                           <button
                             key={cat}
@@ -136,7 +136,7 @@ export function Projects() {
                           <ChevronDown className="h-3.5 w-3.5 opacity-50" />
                       </Button>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent align="start" className="w-56 rounded-2xl p-2 shadow-2xl border-border/50 bg-card/95 backdrop-blur-xl">
+                  <DropdownMenuContent align="center" className="w-56 rounded-2xl p-2 shadow-2xl border-border/50 bg-card/95 backdrop-blur-xl">
                       <DropdownMenuRadioGroup value={sortBy} onValueChange={(v) => setSortBy(v as SortOption)}>
                           <DropdownMenuRadioItem value="newest" className="rounded-xl py-3 cursor-pointer">Latest Releases</DropdownMenuRadioItem>
                           <DropdownMenuRadioItem value="likes" className="rounded-xl py-3 cursor-pointer">Most Appreciated</DropdownMenuRadioItem>
@@ -146,7 +146,7 @@ export function Projects() {
               </DropdownMenu>
           </div>
 
-          <div className={cn("max-w-6xl grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 transition-all duration-1000 ease-out delay-300", isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10')}>
+          <div className={cn("max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 transition-all duration-1000 ease-out delay-300", isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10')}>
             {isLoading && Array.from({ length: 6 }).map((_, index) => <Skeleton key={index} className="h-[450px] w-full rounded-[2.5rem]" />)}
             
             {!isLoading && displayProjects.map((project, index) => (
@@ -159,13 +159,13 @@ export function Projects() {
             ))}
             
             {!isLoading && displayProjects.length === 0 && (
-              <div className="md:col-span-2 lg:col-span-3 text-left text-muted-foreground bg-accent/10 p-20 rounded-[2.5rem] border border-dashed border-border/50">
+              <div className="md:col-span-2 lg:col-span-3 text-center text-muted-foreground bg-accent/10 p-20 rounded-[2.5rem] border border-dashed border-border/50">
                   No projects found in the "{activeCategory}" category.
               </div>
             )}
           </div>
 
-          <div className="mt-20 text-left">
+          <div className="mt-20 text-center">
               <Button asChild size="lg" variant="outline" className="group text-lg py-8 px-12 rounded-full border-border/50 hover:bg-card transition-all text-foreground/80 hover:text-foreground">
                   <Link href="/portfolio">
                       Enter Full Gallery <MoveRight className="transition-transform group-hover:translate-x-2 ml-3 w-5 h-5"/>

@@ -98,14 +98,14 @@ export function Contact() {
     <section id="contact" ref={ref} className="py-24 sm:py-32 md:py-0 md:min-h-screen md:flex md:items-center">
       <div className="container mx-auto px-4 md:px-6">
         <div className={cn('transition-all duration-1000 ease-out', isInView ? 'animate-blur-reveal' : 'opacity-0')}>
-          <div className="max-w-3xl text-left mb-16">
+          <div className="max-w-3xl mx-auto text-center mb-16">
               <p className="text-xs font-black uppercase tracking-[0.3em] text-primary mb-4">Contact</p>
               <h2 className="text-4xl md:text-6xl font-black tracking-tighter mb-6">Let's Create Together</h2>
               <p className="text-muted-foreground text-lg md:text-xl">
                 Have a project in mind or just want to say hi? I'd love to hear from you.
               </p>
           </div>
-          <Card className="max-w-4xl bg-card border-border/50">
+          <Card className="max-w-4xl mx-auto bg-card border-border/50">
             <CardContent className="p-4 sm:p-8">
               <Form {...form}>
                 <form 
@@ -174,10 +174,10 @@ export function Contact() {
               </Form>
             </CardContent>
           </Card>
-           <div className="mt-12 text-left">
+           <div className="mt-12 text-center">
             <p className="text-muted-foreground mb-2 text-sm uppercase font-black tracking-widest opacity-50">Reach out directly:</p>
             <a href="mailto:mhdyaseenvattappara@gmail.com" className="text-foreground text-2xl font-black hover:text-primary transition-colors">mhdyaseenvattappara@gmail.com</a>
-            <div className="flex justify-start gap-4 mt-8">
+            <div className="flex justify-center gap-4 mt-8">
                 {socialLinks.map((link) => (
                     <Button asChild key={link.name} variant="outline" size="icon" className="h-12 w-12 rounded-full">
                         <a href={link.href} target="_blank" rel="noopener noreferrer" aria-label={link.name}>
