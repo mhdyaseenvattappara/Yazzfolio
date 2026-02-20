@@ -17,6 +17,14 @@ import { cn } from '@/lib/utils';
 
 export function MobileNav() {
   const [isOpen, setIsOpen] = React.useState(false);
+  const [mounted, setMounted] = React.useState(false);
+
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Prevent hydration mismatch by only rendering the dynamic UI on the client
+  if (!mounted) return null;
 
   return (
     <div className="fixed top-6 left-0 right-0 z-[100] md:hidden px-6">

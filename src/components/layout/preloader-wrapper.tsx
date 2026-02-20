@@ -16,15 +16,18 @@ export function PreloaderWrapper({ children }: { children: React.ReactNode }) {
   const isAdminPage = pathname?.startsWith('/admin') ?? false;
   const isPortfolioPage = pathname === '/portfolio';
 
-  // Initialize state based on path to prevent preloader showing on pages where it's not wanted
-  const [isLoaded, setIsLoaded] = useState(isAdminPage || isPortfolioPage);
-  const [isPreloaderUnmounted, setIsPreloaderUnmounted] = useState(isAdminPage || isPortfolioPage);
+  // Fix: Default to false to ensure server and client initial render match
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [isPreloaderUnmounted, setIsPreloaderUnmounted] = useState(false);
 
   useEffect(() => {
     // Add custom cursor class to html element
     document.body.parentElement?.classList.add('cursor-none-forced');
 
-    if (!isAdminPage && !isPortfolioPage) {
+    if (isAdminPage || isPortfolioPage) {
+        setIsLoaded(true);
+        setIsPreloaderUnmounted(true);
+    } else {
         // Start timers for standard preloader on the home page
         const loadTimer = setTimeout(() => setIsLoaded(true), 1500);
         const unmountTimer = setTimeout(() => setIsPreloaderUnmounted(true), 2000);
@@ -38,7 +41,7 @@ export function PreloaderWrapper({ children }: { children: React.ReactNode }) {
     return () => {
         document.body.parentElement?.classList.remove('cursor-none-forced');
     }
-  }, [isAdminPage, isPortfolioPage]);
+  }, [isAdminPage, isPortfolioPage, pathname]);
 
   const showPreloader = !isPreloaderUnmounted;
 
