@@ -103,13 +103,14 @@ export function Projects() {
             </p>
           </div>
 
-          {/* Filter & Sort Bar - Optimized Design */}
+          {/* Reference-Based Control Bar */}
           <div className={cn(
-              "flex flex-col md:flex-row items-center justify-between gap-6 mb-16 transition-all duration-700 delay-200 sticky top-4 lg:relative z-30 bg-card/20 backdrop-blur-xl border border-border/20 py-3 px-4 rounded-full",
+              "max-w-fit mx-auto flex flex-col items-center gap-4 mb-20 bg-card/80 backdrop-blur-3xl border border-white/10 p-6 rounded-[3rem] sticky top-4 lg:relative z-30 shadow-2xl transition-all duration-700",
               isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
           )}>
-              <div className="w-full md:w-auto overflow-x-auto no-scrollbar py-1">
-                  <div className="flex flex-nowrap md:flex-wrap items-center justify-start md:justify-start gap-2 min-w-max px-2">
+              {/* Row 1: Categories */}
+              <div className="w-full overflow-x-auto no-scrollbar py-1">
+                  <div className="flex flex-nowrap items-center justify-center gap-2 min-w-max px-2">
                       {categories.map((cat) => (
                           <button
                             key={cat}
@@ -117,8 +118,8 @@ export function Projects() {
                             className={cn(
                                 "px-6 py-2.5 rounded-full text-[10px] font-black uppercase tracking-[0.15em] transition-all duration-300 ease-out active:scale-95 whitespace-nowrap border",
                                 activeCategory === cat 
-                                    ? "bg-primary text-primary-foreground border-primary shadow-lg shadow-primary/20 scale-105" 
-                                    : "bg-background/20 text-foreground/60 border-border/50 hover:text-foreground hover:border-foreground/30 hover:bg-background/40"
+                                    ? "bg-primary text-primary-foreground border-primary shadow-[0_0_20px_rgba(var(--primary),0.3)] scale-105" 
+                                    : "bg-white/5 text-foreground/60 border-white/5 hover:text-foreground hover:border-white/20 hover:bg-white/10"
                             )}
                           >
                               {cat}
@@ -127,15 +128,16 @@ export function Projects() {
                   </div>
               </div>
 
+              {/* Row 2: Sort */}
               <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                      <Button variant="outline" className="rounded-full px-6 h-11 border-border/50 bg-background/20 backdrop-blur-md gap-3 font-black text-[10px] uppercase tracking-widest text-foreground/80 transition-all duration-300 hover:scale-105 hover:bg-background/40 active:scale-95 shrink-0">
-                          <Filter className="h-3.5 w-3.5" />
+                      <Button variant="outline" className="rounded-full px-8 h-12 border-white/10 bg-white/5 backdrop-blur-md gap-4 font-black text-[10px] uppercase tracking-widest text-foreground transition-all duration-300 hover:scale-105 hover:bg-white/10 active:scale-95 shadow-lg shrink-0">
+                          <Filter className="h-4 w-4" />
                           SORT: {sortBy}
                           <ChevronDown className="h-3.5 w-3.5 opacity-50" />
                       </Button>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" className="w-56 rounded-2xl p-2 shadow-2xl border-border/50 bg-card/95 backdrop-blur-xl">
+                  <DropdownMenuContent align="center" className="w-56 rounded-2xl p-2 shadow-2xl border-border/50 bg-card/95 backdrop-blur-xl">
                       <DropdownMenuRadioGroup value={sortBy} onValueChange={(v) => setSortBy(v as SortOption)}>
                           <DropdownMenuRadioItem value="newest" className="rounded-xl py-3 cursor-pointer">Latest Releases</DropdownMenuRadioItem>
                           <DropdownMenuRadioItem value="likes" className="rounded-xl py-3 cursor-pointer">Most Appreciated</DropdownMenuRadioItem>

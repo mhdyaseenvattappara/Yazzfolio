@@ -100,12 +100,12 @@ export default function PortfolioPage() {
             </p>
           </div>
 
-          {/* Persistent Control Bar - Optimized for Mobile Sticky */}
-          <div className="max-w-6xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-6 mb-16 bg-card/40 backdrop-blur-2xl border border-border/30 py-3 px-4 sm:px-6 rounded-full sticky top-8 md:top-12 z-30 shadow-2xl transition-all duration-500">
+          {/* Reference-Based Control Bar */}
+          <div className="max-w-fit mx-auto flex flex-col items-center gap-4 mb-20 bg-card/80 backdrop-blur-3xl border border-white/10 p-6 rounded-[3rem] sticky top-8 md:top-12 z-30 shadow-2xl transition-all duration-500">
               
-              {/* Category Area: Horizontal Scroll on Mobile */}
-              <div className="w-full lg:w-auto overflow-x-auto no-scrollbar py-1">
-                  <div className="flex flex-nowrap lg:flex-wrap items-center justify-start lg:justify-start gap-2 min-w-max px-2">
+              {/* Row 1: Categories */}
+              <div className="w-full overflow-x-auto no-scrollbar py-1">
+                  <div className="flex flex-nowrap items-center justify-center gap-2 min-w-max px-2">
                       {categories.map((cat) => (
                           <button
                             key={cat}
@@ -113,8 +113,8 @@ export default function PortfolioPage() {
                             className={cn(
                                 "px-6 py-2.5 rounded-full text-[10px] font-black uppercase tracking-[0.15em] transition-all duration-300 ease-out active:scale-95 whitespace-nowrap border",
                                 activeCategory === cat 
-                                    ? "bg-primary text-primary-foreground border-primary shadow-lg shadow-primary/20 scale-105" 
-                                    : "bg-background/20 text-foreground/60 border-border/50 hover:text-foreground hover:border-foreground/30 hover:bg-background/40"
+                                    ? "bg-primary text-primary-foreground border-primary shadow-[0_0_20px_rgba(var(--primary),0.3)] scale-105" 
+                                    : "bg-white/5 text-foreground/60 border-white/5 hover:text-foreground hover:border-white/20 hover:bg-white/10"
                             )}
                           >
                               {cat}
@@ -123,16 +123,17 @@ export default function PortfolioPage() {
                   </div>
               </div>
 
+              {/* Row 2: Sort & Home */}
               <div className="flex items-center gap-3 shrink-0">
                   <DropdownMenu>
                       <DropdownMenuTrigger asChild>
-                          <Button variant="outline" className="rounded-full px-6 h-11 border-border/50 bg-background/20 backdrop-blur-md gap-3 font-black text-[10px] uppercase tracking-widest text-foreground/80 transition-all duration-300 hover:scale-105 hover:bg-background/40 active:scale-95">
-                              <Filter className="h-3.5 w-3.5" />
+                          <Button variant="outline" className="rounded-full px-8 h-12 border-white/10 bg-white/5 backdrop-blur-md gap-4 font-black text-[10px] uppercase tracking-widest text-foreground transition-all duration-300 hover:scale-105 hover:bg-white/10 active:scale-95 shadow-lg">
+                              <Filter className="h-4 w-4" />
                               SORT: {sortBy}
                               <ChevronDown className="h-3.5 w-3.5 opacity-50" />
                           </Button>
                       </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end" className="w-56 rounded-2xl p-2 shadow-2xl border-border/50 bg-card/95 backdrop-blur-xl">
+                      <DropdownMenuContent align="center" className="w-56 rounded-2xl p-2 shadow-2xl border-border/50 bg-card/95 backdrop-blur-xl">
                           <DropdownMenuRadioGroup value={sortBy} onValueChange={(v) => setSortBy(v as SortOption)}>
                               <DropdownMenuRadioItem value="newest" className="rounded-xl py-3 cursor-pointer">Most Recent</DropdownMenuRadioItem>
                               <DropdownMenuRadioItem value="oldest" className="rounded-xl py-3 cursor-pointer">Oldest Archive</DropdownMenuRadioItem>
@@ -142,9 +143,9 @@ export default function PortfolioPage() {
                       </DropdownMenuContent>
                   </DropdownMenu>
 
-                  <Button asChild variant="ghost" size="icon" className="h-11 w-11 rounded-full border border-border/50 text-foreground/60 hover:text-foreground hover:scale-110 transition-all duration-300 bg-background/20">
+                  <Button asChild variant="outline" size="icon" className="h-12 w-12 rounded-full border border-white/10 text-foreground hover:text-foreground hover:scale-110 transition-all duration-300 bg-white/5 shadow-lg">
                     <Link href="/">
-                        <Home className="h-4 w-4" />
+                        <Home className="h-5 w-5" />
                     </Link>
                   </Button>
               </div>
