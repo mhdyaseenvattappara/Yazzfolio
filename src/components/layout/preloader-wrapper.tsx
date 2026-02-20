@@ -61,13 +61,13 @@ export function PreloaderWrapper({ children }: { children: React.ReactNode }) {
         {isAdminPage ? (
           children
         ) : (
-          <>
+          <div className="flex-1 flex flex-col md:pl-20">
             <Dock />
             <MobileNav />
             {children}
             <InstagramChat username="_hey_yasii_" />
             <InstallPWA />
-          </>
+          </div>
         )}
       </div>
     </>
