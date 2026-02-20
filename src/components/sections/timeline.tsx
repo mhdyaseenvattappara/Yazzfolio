@@ -38,7 +38,7 @@ export function Timeline() {
   const { data: timelineData, isLoading } = useCollection<TimelineEvent>(timelineCollectionRef);
 
   return (
-    <section id="timeline" ref={ref} className="py-24 sm:py-32 bg-card/50">
+    <section id="timeline" ref={ref} className="py-24 sm:py-32 md:py-0 md:min-h-screen md:flex md:items-center bg-card/50">
       <div className="container mx-auto px-4 md:px-6">
         <div
           className={cn(

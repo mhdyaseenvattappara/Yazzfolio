@@ -38,7 +38,7 @@ export function ToolStack() {
     const { data: toolsData, isLoading } = useCollection<Tool>(toolsCollectionRef);
     
     return (
-        <section id="tool-stack" ref={ref} className="py-24 sm:py-32">
+        <section id="tool-stack" ref={ref} className="py-24 sm:py-32 md:py-0 md:min-h-screen md:flex md:items-center">
             <div className="container mx-auto px-4 md:px-6">
                 <div
                 className={cn(

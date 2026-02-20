@@ -87,7 +87,7 @@ export function Testimonials() {
   );
 
   return (
-    <section id="testimonials" ref={ref} className="py-24 sm:py-32 bg-background overflow-hidden">
+    <section id="testimonials" ref={ref} className="py-24 sm:py-32 md:py-0 md:min-h-screen md:flex md:items-center bg-background overflow-hidden">
         <div className="container mx-auto px-4 md:px-6">
              <div
                 className={cn(

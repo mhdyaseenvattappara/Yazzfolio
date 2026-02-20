@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useMemo, useEffect } from 'react';
@@ -87,7 +88,7 @@ export function Projects() {
 
   return (
     <>
-      <section id="projects" ref={ref} className="py-24 sm:py-32 overflow-hidden">
+      <section id="projects" ref={ref} className="py-24 sm:py-32 md:py-0 md:min-h-screen md:flex md:items-center overflow-hidden">
         <div className="container mx-auto px-4 md:px-6">
           <div
             className={cn(

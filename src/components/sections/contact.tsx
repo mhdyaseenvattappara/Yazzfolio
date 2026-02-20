@@ -96,7 +96,7 @@ export function Contact() {
 
 
   return (
-    <section id="contact" ref={ref} className="py-24 sm:py-32">
+    <section id="contact" ref={ref} className="py-24 sm:py-32 md:py-0 md:min-h-screen md:flex md:items-center">
       <div className="container mx-auto px-4 md:px-6">
         <div className={cn('transition-all duration-1000 ease-out', isInView ? 'animate-blur-reveal' : 'opacity-0')}>
           <div className="max-w-3xl mx-auto text-center">

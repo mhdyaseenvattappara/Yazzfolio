@@ -24,7 +24,7 @@ export function About() {
   const profile = profiles?.[0];
 
   return (
-    <section id="about" ref={ref} className="pt-0 pb-24 sm:pb-32">
+    <section id="about" ref={ref} className="pt-0 pb-24 sm:pb-32 md:py-0 md:min-h-screen md:flex md:items-center">
       <div className="container mx-auto px-4 md:px-6">
         {isLoading && (
           <div className="flex justify-center">
