@@ -61,7 +61,7 @@ export function PreloaderWrapper({ children }: { children: React.ReactNode }) {
         {isAdminPage ? (
           children
         ) : (
-          <div className="flex-1 flex flex-col md:pl-20">
+          <div className="flex-1 flex flex-col">
             <Dock />
             <MobileNav />
             {children}

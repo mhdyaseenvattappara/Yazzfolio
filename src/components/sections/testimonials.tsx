@@ -1,4 +1,3 @@
-
 'use client';
 import { Card } from "@/components/ui/card";
 import Image from "next/image";
@@ -43,7 +42,7 @@ export function Testimonials() {
         <div className="container mx-auto px-4 md:px-6">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start max-w-6xl mx-auto">
                 
-                {/* Left: Narrative (Top Aligned) */}
+                {/* Left: Narrative (Center Aligned) */}
                 <div className={cn(
                     "lg:col-span-4 flex flex-col items-center text-center space-y-6 transition-all duration-1000",
                     isInView ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-10'
@@ -52,7 +51,7 @@ export function Testimonials() {
                         <p className="text-[9px] font-black uppercase tracking-[0.4em] text-primary bg-primary/5 px-3 py-1.5 rounded-full border border-primary/10 w-fit">
                             Endorsements
                         </p>
-                        <h2 className="text-5xl md:text-6xl font-black tracking-tighter leading-none text-center">
+                        <h2 className="text-4xl md:text-6xl font-black tracking-tighter leading-none text-center">
                             Client <br /> Stories
                         </h2>
                     </div>
@@ -62,22 +61,22 @@ export function Testimonials() {
                     </p>
                 </div>
 
-                {/* Right: Carousel */}
+                {/* Right: Carousel (Compact Size) */}
                 <div className={cn(
                     "lg:col-span-8 transition-all duration-1000 delay-300",
                     isInView ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-10'
                 )}>
                     {isLoading ? (
-                        <Skeleton className="h-[350px] w-full rounded-[2.5rem]" />
+                        <Skeleton className="h-[300px] w-full rounded-[2.5rem]" />
                     ) : testimonialsData && testimonialsData.length > 0 ? (
                         <Carousel className="w-full">
                             <CarouselContent className="-ml-4">
                                 {testimonialsData.map((testimonial) => (
                                     <CarouselItem key={testimonial.id} className="pl-4 md:basis-full lg:basis-full">
-                                        <Card className="p-8 md:p-10 rounded-[3rem] bg-card/40 border-border/40 nav-liquid relative overflow-hidden flex flex-col h-full min-h-[320px] shadow-2xl">
-                                            <Quote className="absolute top-6 right-6 w-12 h-12 text-primary/5 -rotate-12 pointer-events-none" />
+                                        <Card className="p-6 md:p-8 rounded-[2.5rem] bg-card/40 border-border/40 nav-liquid relative overflow-hidden flex flex-col h-full min-h-[280px] shadow-2xl">
+                                            <Quote className="absolute top-4 right-6 w-10 h-10 text-primary/5 -rotate-12 pointer-events-none" />
                                             
-                                            <div className="flex gap-1 mb-6 relative z-10">
+                                            <div className="flex gap-1 mb-4 relative z-10">
                                                 {[...Array(5)].map((_, i) => (
                                                     <Star 
                                                         key={i} 
@@ -89,7 +88,7 @@ export function Testimonials() {
                                                 ))}
                                             </div>
                                             
-                                            <blockquote className="text-lg md:text-xl font-medium leading-relaxed tracking-tight italic mb-8 flex-grow relative z-10 text-foreground/90">
+                                            <blockquote className="text-base md:text-lg font-medium leading-relaxed tracking-tight italic mb-6 flex-grow relative z-10 text-foreground/90">
                                                 “{testimonial.quote}”
                                             </blockquote>
 
@@ -103,7 +102,7 @@ export function Testimonials() {
                                                     />
                                                 </div>
                                                 <div className="space-y-0 text-left">
-                                                    <p className="font-black text-base tracking-tighter uppercase">{testimonial.name}</p>
+                                                    <p className="font-black text-sm tracking-tighter uppercase">{testimonial.name}</p>
                                                     <p className="text-[8px] font-black text-primary/40 uppercase tracking-[0.2em]">{testimonial.title}</p>
                                                 </div>
                                             </div>
