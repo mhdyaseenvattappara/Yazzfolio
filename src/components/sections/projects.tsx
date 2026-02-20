@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useMemo, useEffect } from 'react';
@@ -91,7 +92,7 @@ export function Projects() {
         <div className="container mx-auto px-4 md:px-6">
           <div
             className={cn(
-              'max-w-3xl mx-auto text-center mb-12',
+              'max-w-3xl mx-auto text-center mb-16',
               isInView ? 'animate-blur-reveal' : 'opacity-0'
             )}
           >
@@ -102,22 +103,22 @@ export function Projects() {
             </p>
           </div>
 
-          {/* Filter & Sort Bar - Optimized Mobile Scroll */}
+          {/* Filter & Sort Bar - Optimized Design */}
           <div className={cn(
-              "flex flex-col md:flex-row items-center justify-between gap-4 mb-12 transition-all duration-700 delay-200 sticky top-4 lg:relative z-30",
+              "flex flex-col md:flex-row items-center justify-between gap-6 mb-16 transition-all duration-700 delay-200 sticky top-4 lg:relative z-30 bg-card/20 backdrop-blur-xl border border-border/20 py-3 px-4 rounded-full",
               isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
           )}>
-              <div className="w-full md:w-auto overflow-x-auto no-scrollbar py-2">
-                  <div className="flex flex-nowrap md:flex-wrap items-center justify-start md:justify-center gap-1.5 min-w-max px-2 md:px-0">
+              <div className="w-full md:w-auto overflow-x-auto no-scrollbar py-1">
+                  <div className="flex flex-nowrap md:flex-wrap items-center justify-start md:justify-start gap-2 min-w-max px-2">
                       {categories.map((cat) => (
                           <button
                             key={cat}
                             onClick={() => setActiveCategory(cat)}
                             className={cn(
-                                "px-5 py-2 rounded-full text-[10px] font-black uppercase tracking-widest transition-all duration-300 ease-out active:scale-95 whitespace-nowrap",
+                                "px-6 py-2.5 rounded-full text-[10px] font-black uppercase tracking-[0.15em] transition-all duration-300 ease-out active:scale-95 whitespace-nowrap border",
                                 activeCategory === cat 
-                                    ? "bg-primary text-primary-foreground shadow-lg scale-105 ring-2 ring-primary/20" 
-                                    : "bg-card/50 text-foreground/70 hover:bg-accent border border-border/50 hover:text-foreground hover:scale-105"
+                                    ? "bg-primary text-primary-foreground border-primary shadow-lg shadow-primary/20 scale-105" 
+                                    : "bg-background/20 text-foreground/60 border-border/50 hover:text-foreground hover:border-foreground/30 hover:bg-background/40"
                             )}
                           >
                               {cat}
@@ -128,17 +129,17 @@ export function Projects() {
 
               <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                      <Button variant="outline" className="rounded-full px-6 h-10 border-border/50 bg-card/50 gap-2 font-bold text-[10px] uppercase tracking-widest text-foreground transition-all duration-300 hover:scale-105 active:scale-95 shrink-0">
+                      <Button variant="outline" className="rounded-full px-6 h-11 border-border/50 bg-background/20 backdrop-blur-md gap-3 font-black text-[10px] uppercase tracking-widest text-foreground/80 transition-all duration-300 hover:scale-105 hover:bg-background/40 active:scale-95 shrink-0">
                           <Filter className="h-3.5 w-3.5" />
-                          Sort: {sortBy}
+                          SORT: {sortBy}
                           <ChevronDown className="h-3.5 w-3.5 opacity-50" />
                       </Button>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" className="w-48 rounded-xl p-2 shadow-2xl">
+                  <DropdownMenuContent align="end" className="w-56 rounded-2xl p-2 shadow-2xl border-border/50 bg-card/95 backdrop-blur-xl">
                       <DropdownMenuRadioGroup value={sortBy} onValueChange={(v) => setSortBy(v as SortOption)}>
-                          <DropdownMenuRadioItem value="newest" className="rounded-lg py-2">Latest Releases</DropdownMenuRadioItem>
-                          <DropdownMenuRadioItem value="likes" className="rounded-lg py-2">Most Appreciated</DropdownMenuRadioItem>
-                          <DropdownMenuRadioItem value="alphabetical" className="rounded-lg py-2">Alphabetical (A-Z)</DropdownMenuRadioItem>
+                          <DropdownMenuRadioItem value="newest" className="rounded-xl py-3 cursor-pointer">Latest Releases</DropdownMenuRadioItem>
+                          <DropdownMenuRadioItem value="likes" className="rounded-xl py-3 cursor-pointer">Most Appreciated</DropdownMenuRadioItem>
+                          <DropdownMenuRadioItem value="alphabetical" className="rounded-xl py-3 cursor-pointer">Alphabetical (A-Z)</DropdownMenuRadioItem>
                       </DropdownMenuRadioGroup>
                   </DropdownMenuContent>
               </DropdownMenu>
