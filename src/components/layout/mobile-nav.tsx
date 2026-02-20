@@ -2,7 +2,7 @@
 import * as React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, ArrowRight } from 'lucide-react';
 import {
   Sheet,
   SheetContent,
@@ -10,6 +10,7 @@ import {
   SheetTitle,
   SheetDescription,
   SheetTrigger,
+  SheetClose,
 } from '@/components/ui/sheet';
 import { Button } from '../ui/button';
 import { navLinks } from '@/lib/data';
@@ -20,73 +21,102 @@ export function MobileNav() {
 
   return (
     <div className="fixed top-6 left-0 right-0 z-[100] md:hidden px-6">
-      <header className="mx-auto max-w-md bg-[#0a0a0a]/90 backdrop-blur-2xl border border-white/10 h-14 rounded-full flex items-center px-6 justify-between shadow-2xl">
+      <header className="mx-auto max-w-md bg-background/80 backdrop-blur-2xl border border-border/50 h-14 rounded-full flex items-center px-6 justify-between shadow-2xl">
         <Link 
           href="/" 
           className="flex items-center active:scale-95 transition-transform"
           onClick={() => setIsOpen(false)}
         >
-          <span className="text-white font-black text-xl tracking-tighter">
+          <span className="font-black text-xl tracking-tighter">
             Yazzfolio<span className="text-primary">.</span>
           </span>
         </Link>
         
         <Sheet open={isOpen} onOpenChange={setIsOpen}>
           <SheetTrigger asChild>
-            <Button variant="ghost" size="icon" className="text-white hover:bg-white/5 rounded-full h-10 w-10 p-0" aria-label="Open menu">
+            <Button variant="ghost" size="icon" className="rounded-full h-10 w-10 p-0" aria-label="Open menu">
               <Menu className="h-5 w-5" strokeWidth={2.5} />
             </Button>
           </SheetTrigger>
-          <SheetContent side="bottom" className="h-[90vh] rounded-t-[3rem] bg-[#0a0a0a] border-t-white/10 text-white p-0 overflow-hidden outline-none">
+          <SheetContent side="bottom" className="h-full sm:h-full w-full rounded-none border-none bg-background text-foreground p-0 overflow-hidden outline-none flex flex-col">
             <SheetHeader className="sr-only">
               <SheetTitle>Navigation Menu</SheetTitle>
               <SheetDescription>
                 Explore portfolio categories and contact information.
               </SheetDescription>
             </SheetHeader>
-            <div className="flex h-full flex-col p-8 pt-12">
-              {/* Branding Section */}
-              <div className="flex items-center justify-between mb-16">
-                <div className="flex items-center gap-4">
-                  <div className="relative h-14 w-14 overflow-hidden rounded-full ring-2 ring-primary/20">
-                      <Image src="/my-photo.jpg" alt="Mhd Yaseen V" fill className="object-cover" />
-                  </div>
-                  <span className="text-white font-black text-2xl tracking-tighter">
-                    Yazzfolio<span className="text-primary">.</span>
-                  </span>
-                </div>
-                <div className="flex items-center gap-2">
-                    <ThemeToggle />
-                </div>
+
+            {/* Finch-style Header */}
+            <div className="flex items-center justify-between px-8 py-6 border-b border-border/50">
+              <div className="flex items-center gap-3">
+                <span className="font-black text-2xl tracking-tighter">
+                  Yazzfolio<span className="text-primary">.</span>
+                </span>
               </div>
-              
-              {/* Navigation Links */}
-              <nav className="flex-1">
-                <ul className="space-y-6">
-                  {navLinks.map((link) => (
-                    <li key={link.href}>
-                      <Link
-                        href={link.href}
-                        className="flex items-center gap-6 group py-2"
+              <div className="flex items-center gap-4">
+                <ThemeToggle />
+                <SheetClose asChild>
+                  <Button variant="ghost" size="icon" className="rounded-full h-10 w-10 hover:bg-accent">
+                    <X className="h-6 w-6" />
+                  </Button>
+                </SheetClose>
+              </div>
+            </div>
+            
+            {/* Main Navigation - Large Text Links */}
+            <nav className="flex-1 px-8 pt-12 overflow-y-auto no-scrollbar">
+              <ul className="space-y-8">
+                {navLinks.map((link) => (
+                  <li key={link.href}>
+                    <Link
+                      href={link.href}
+                      className="group flex items-center justify-between py-2 transition-all"
+                      onClick={() => setIsOpen(false)}
+                    >
+                      <span className="text-3xl font-bold tracking-tight text-foreground/70 group-hover:text-foreground group-active:scale-95 transition-all">
+                          {link.name}
+                      </span>
+                      <ArrowRight className="h-6 w-6 opacity-0 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-primary" />
+                    </Link>
+                  </li>
+                ))}
+                {/* Extra Links for visual weight like in Finch */}
+                <li>
+                    <Link 
+                        href="/portfolio" 
+                        className="group flex items-center justify-between py-2 transition-all"
                         onClick={() => setIsOpen(false)}
-                      >
-                        <div className="h-14 w-14 rounded-2xl bg-white/5 flex items-center justify-center text-gray-400 group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-500 transform group-hover:scale-110">
-                            <link.icon className="h-7 w-7" strokeWidth={2.5} />
-                        </div>
-                        <span className="text-3xl font-bold tracking-tight text-gray-400 group-hover:text-white transition-colors duration-300">
-                            {link.name}
-                        </span>
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </nav>
-              
-              {/* Bottom Footer */}
-              <div className="mt-auto flex flex-col items-center gap-4 pt-8 border-t border-white/5">
-                <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10">
-                    <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-                    <span className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400">Secure Studio Node v2.0</span>
+                    >
+                        <span className="text-3xl font-bold tracking-tight text-foreground/70 group-hover:text-foreground">Visual Archive</span>
+                        <ArrowRight className="h-6 w-6 opacity-0 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-primary" />
+                    </Link>
+                </li>
+              </ul>
+            </nav>
+            
+            {/* Finch-style Bottom Actions */}
+            <div className="mt-auto p-8 space-y-4 bg-gradient-to-t from-background via-background to-transparent pt-12">
+              <Button 
+                asChild 
+                variant="outline" 
+                className="w-full h-14 rounded-xl border-2 font-bold text-lg hover:bg-accent transition-all active:scale-[0.98]"
+              >
+                <Link href="/admin/login" onClick={() => setIsOpen(false)}>
+                    Admin Access
+                </Link>
+              </Button>
+              <Button 
+                asChild 
+                className="w-full h-14 rounded-xl font-bold text-lg shadow-xl hover:shadow-primary/20 transition-all active:scale-[0.98]"
+              >
+                <Link href="/#contact" onClick={() => setIsOpen(false)}>
+                    Let's Collaborate
+                </Link>
+              </Button>
+              <div className="pt-4 flex justify-center">
+                <div className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-accent/50 border border-border/50">
+                    <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
+                    <span className="text-[9px] font-black uppercase tracking-[0.2em] text-muted-foreground">Secure Node v2.0</span>
                 </div>
               </div>
             </div>
