@@ -1,7 +1,7 @@
 'use client';
 import * as React from 'react';
 import Link from 'next/link';
-import { Menu, X, ChevronRight, ArrowRight } from 'lucide-react';
+import { Menu, ChevronRight, ArrowRight } from 'lucide-react';
 import {
   Sheet,
   SheetContent,
@@ -9,11 +9,11 @@ import {
   SheetTitle,
   SheetDescription,
   SheetTrigger,
-  SheetClose,
 } from '@/components/ui/sheet';
 import { Button } from '../ui/button';
 import { navLinks } from '@/lib/data';
 import { cn } from '@/lib/utils';
+import { ThemeToggle } from '../ui/theme-toggle';
 
 export function MobileNav() {
   const [isOpen, setIsOpen] = React.useState(false);
@@ -23,7 +23,6 @@ export function MobileNav() {
     setMounted(true);
   }, []);
 
-  // Prevent hydration mismatch by only rendering the dynamic UI on the client
   if (!mounted) return null;
 
   return (
@@ -31,8 +30,8 @@ export function MobileNav() {
       {/* Floating Capsule Header - Hidden when menu is open */}
       <header 
         className={cn(
-          "mx-auto max-w-md bg-background/80 backdrop-blur-2xl border border-border/50 h-14 rounded-full flex items-center px-6 justify-between shadow-2xl transition-all duration-300",
-          isOpen ? "opacity-0 pointer-events-none translate-y-[-10px]" : "opacity-100 translate-y-0"
+          "mx-auto max-w-md bg-background/80 backdrop-blur-2xl border border-border/50 h-14 rounded-full flex items-center px-6 justify-between shadow-2xl transition-all duration-500 ease-in-out",
+          isOpen ? "opacity-0 pointer-events-none translate-y-[-10px] scale-95" : "opacity-100 translate-y-0 scale-100"
         )}
       >
         <Link 
@@ -55,18 +54,17 @@ export function MobileNav() {
             side="bottom" 
             className="h-fit w-[95vw] sm:w-full max-w-md mx-auto mb-6 rounded-[2.5rem] border border-white/10 bg-[#0a0a0a] text-white p-6 shadow-2xl outline-none overflow-hidden flex flex-col gap-6 bottom-0"
           >
-            <SheetHeader className="relative flex items-center justify-center pb-2">
-              <SheetTitle className="text-sm font-bold uppercase tracking-[0.2em] text-white/60">Menu</SheetTitle>
+            <SheetHeader className="relative flex items-center justify-between pb-2 pr-8">
+              <div className="flex items-center gap-2">
+                <span className="font-black text-xl tracking-tighter text-white">
+                    Yazzfolio<span className="text-primary">.</span>
+                </span>
+              </div>
+              <div className="flex items-center gap-2">
+                <ThemeToggle />
+              </div>
+              <SheetTitle className="sr-only text-sm font-bold uppercase tracking-[0.2em] text-white/60 text-center flex-1">Menu</SheetTitle>
               <SheetDescription className="sr-only">Navigation and primary actions.</SheetDescription>
-              <SheetClose asChild>
-                <Button 
-                  variant="ghost" 
-                  size="icon" 
-                  className="absolute right-0 top-0 rounded-full h-8 w-8 bg-white/5 hover:bg-white/10 text-white/70"
-                >
-                  <X className="h-4 w-4" />
-                </Button>
-              </SheetClose>
             </SheetHeader>
 
             {/* Navigation List - Optimized spacing */}
