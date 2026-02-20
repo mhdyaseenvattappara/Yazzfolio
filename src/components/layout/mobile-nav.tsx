@@ -20,7 +20,13 @@ export function MobileNav() {
 
   return (
     <div className="fixed top-6 left-0 right-0 z-[100] md:hidden px-6">
-      <header className="mx-auto max-w-md bg-background/80 backdrop-blur-2xl border border-border/50 h-14 rounded-full flex items-center px-6 justify-between shadow-2xl">
+      {/* Floating Capsule Header - Hidden when menu is open */}
+      <header 
+        className={cn(
+          "mx-auto max-w-md bg-background/80 backdrop-blur-2xl border border-border/50 h-14 rounded-full flex items-center px-6 justify-between shadow-2xl transition-all duration-300",
+          isOpen ? "opacity-0 pointer-events-none translate-y-[-10px]" : "opacity-100 translate-y-0"
+        )}
+      >
         <Link 
           href="/" 
           className="flex items-center active:scale-95 transition-transform"
@@ -55,7 +61,7 @@ export function MobileNav() {
               </SheetClose>
             </SheetHeader>
 
-            {/* Navigation List */}
+            {/* Navigation List - Optimized spacing */}
             <nav className="space-y-1">
               {navLinks.map((link) => (
                 <Link
