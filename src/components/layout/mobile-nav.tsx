@@ -55,20 +55,28 @@ export function MobileNav() {
             </SheetTrigger>
             <SheetContent 
               side="bottom" 
-              className="h-fit w-[95vw] sm:w-full max-w-md mx-auto mb-6 rounded-[2.5rem] border border-white/10 bg-[#0a0a0a] text-white p-6 shadow-2xl outline-none overflow-hidden flex flex-col gap-6 bottom-0"
+              className="h-fit w-[95vw] sm:w-full max-w-md mx-auto mb-6 rounded-[2.5rem] border border-white/10 bg-[#0a0a0a] text-white p-6 shadow-2xl outline-none overflow-hidden flex flex-col gap-8 bottom-0 [&>button]:hidden"
             >
-              <SheetHeader className="relative flex items-center justify-between pb-2">
-                <div className="flex items-center gap-2">
-                  <span className="font-black text-xl tracking-tighter text-white">
+              <SheetHeader className="relative flex flex-col items-center gap-6 pb-2">
+                {/* Centered Brand Logo */}
+                <div className="flex items-center">
+                  <span className="font-black text-2xl tracking-tighter text-white">
                       Yazzfolio<span className="text-primary">.</span>
                   </span>
                 </div>
                 
-                <div className="flex items-center gap-2">
-                  <ThemeToggle />
+                {/* Controls Row: Theme + Custom Close Button */}
+                <div className="flex items-center gap-4">
+                  <div className="scale-125">
+                    <ThemeToggle />
+                  </div>
                   <SheetClose asChild>
-                    <Button variant="ghost" size="icon" className="rounded-full h-10 w-10 bg-white/5 hover:bg-white/10 text-white border border-white/10 p-0">
-                        <X className="h-5 w-5" strokeWidth={2.5} />
+                    <Button 
+                      variant="ghost" 
+                      size="icon" 
+                      className="rounded-full h-12 w-12 bg-white/5 hover:bg-white/10 text-white border border-white/10 p-0 flex items-center justify-center transition-all active:scale-90"
+                    >
+                        <X className="h-6 w-6" strokeWidth={2.5} />
                     </Button>
                   </SheetClose>
                 </div>
