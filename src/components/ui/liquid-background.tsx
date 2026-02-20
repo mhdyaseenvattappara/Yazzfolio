@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useTheme } from '@/components/theme-provider';
@@ -20,7 +21,7 @@ export function LiquidBackground() {
   return (
     <div 
       className={cn(
-        "fixed inset-0 -z-10 overflow-hidden pointer-events-none transition-opacity duration-1000",
+        "fixed inset-0 -z-[100] overflow-hidden pointer-events-none transition-opacity duration-1000",
         isActive ? "opacity-100" : "opacity-0"
       )}
       aria-hidden="true"

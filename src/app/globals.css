@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -211,6 +212,7 @@
       inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
     position: relative;
     overflow: hidden !important;
+    isolation: isolate;
   }
 
   /* Universal liquid drift for cards */
