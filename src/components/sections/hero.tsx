@@ -10,7 +10,7 @@ export function Hero() {
     <>
     <section
       id="hero"
-      className="relative w-full min-h-[100svh] flex items-center justify-center text-center overflow-hidden pt-32 pb-16 md:py-20"
+      className="relative w-full h-[100svh] md:h-auto md:min-h-screen flex items-center justify-center text-center overflow-hidden px-6 md:py-20"
     >
       <div className="absolute inset-0 bg-gradient-to-b from-background via-background/80 to-background" />
       
