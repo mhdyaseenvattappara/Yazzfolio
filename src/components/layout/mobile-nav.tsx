@@ -1,4 +1,3 @@
-
 'use client';
 import * as React from 'react';
 import Link from 'next/link';
@@ -74,7 +73,7 @@ export function MobileNav() {
                         <div className="h-14 w-14 rounded-2xl bg-white/5 flex items-center justify-center text-gray-400 group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-500 transform group-hover:scale-110">
                             <link.icon className="h-7 w-7" strokeWidth={2.5} />
                         </div>
-                        <span className="text-3xl font-black tracking-tighter text-gray-500 group-hover:text-white transition-colors duration-300">
+                        <span className="text-3xl font-bold tracking-tight text-gray-400 group-hover:text-white transition-colors duration-300">
                             {link.name}
                         </span>
                       </Link>

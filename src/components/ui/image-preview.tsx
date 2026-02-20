@@ -269,11 +269,7 @@ export function ImagePreview({ project, onClose }: ImagePreviewProps) {
         {/* Details Side */}
         <div className="w-full md:w-[50%] flex flex-col bg-card relative z-20 overflow-visible">
             {/* Header */}
-            <div className="hidden md:flex p-5 border-b border-border/50 justify-between items-center bg-muted/5 shrink-0 overflow-visible">
-                <div className="flex items-center gap-2 text-[10px] font-black text-primary bg-primary/5 px-4 py-1.5 rounded-full border border-primary/10 uppercase tracking-[0.2em]">
-                    <div className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
-                    Project Preview
-                </div>
+            <div className="hidden md:flex p-5 border-b border-border/50 justify-end items-center bg-muted/5 shrink-0 overflow-visible">
                 <button onClick={onClose} className="h-10 w-10 rounded-full border border-border flex items-center justify-center hover:bg-accent transition-all cursor-pointer">
                     <X className="h-5 w-5" />
                 </button>
