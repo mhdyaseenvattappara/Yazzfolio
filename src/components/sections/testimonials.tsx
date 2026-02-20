@@ -1,4 +1,3 @@
-
 'use client';
 import { Card } from "@/components/ui/card";
 import Image from "next/image";
@@ -9,7 +8,7 @@ import { collection, query, orderBy, getDocs, limit } from 'firebase/firestore';
 import type { Testimonial } from '@/lib/data';
 import { useEffect, useState, useRef } from "react";
 import { Skeleton } from '../ui/skeleton';
-import { Star, ChevronLeft, ChevronRight } from "lucide-react";
+import { Star } from "lucide-react";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import Autoplay from "embla-carousel-autoplay";
 
@@ -92,27 +91,20 @@ export function Testimonials() {
         <div className="container mx-auto px-4 md:px-6">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 items-center">
                 
-                {/* Left Side: Brand Narrative */}
+                {/* Left Side: Brand Narrative - Strict Left Alignment */}
                 <div className={cn(
-                    "lg:col-span-4 space-y-6 lg:space-y-8 text-center lg:text-left transition-all duration-1000",
+                    "lg:col-span-4 space-y-6 lg:space-y-8 text-left transition-all duration-1000",
                     isInView ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-10'
                 )}>
                     <div className="space-y-4">
                         <p className="text-[10px] font-black uppercase tracking-[0.4em] text-primary">Social Proof</p>
-                        <h2 className="text-5xl md:text-7xl font-black tracking-tighter text-foreground leading-[0.9]">
+                        <h2 className="text-5xl md:text-8xl font-black tracking-tighter text-foreground leading-[0.85]">
                             Client Stories
                         </h2>
                     </div>
-                    <p className="text-muted-foreground text-lg md:text-xl leading-relaxed max-w-md mx-auto lg:mx-0">
+                    <p className="text-muted-foreground text-lg md:text-xl leading-relaxed max-w-sm">
                         Collaborating with industry leaders to turn visionary ideas into reality.
                     </p>
-                    
-                    {/* Navigation Buttons for Desktop */}
-                    <div className="hidden lg:flex items-center gap-3 pt-4">
-                        <div className="flex items-center gap-2">
-                            {/* These are placeholders to show intent, the actual CarouselNext/Prev will be used inside the carousel */}
-                        </div>
-                    </div>
                 </div>
 
                 {/* Right Side: Carousel of Stories */}
@@ -159,7 +151,7 @@ export function Testimonials() {
                     )}
 
                     {!isLoading && (!testimonialsData || testimonialsData.length === 0) && (
-                        <div className="text-center text-muted-foreground bg-accent/5 p-20 rounded-[3rem] border border-dashed border-white/10">
+                        <div className="text-left text-muted-foreground bg-accent/5 p-20 rounded-[3rem] border border-dashed border-white/10">
                             No stories yet.
                         </div>
                     )}
