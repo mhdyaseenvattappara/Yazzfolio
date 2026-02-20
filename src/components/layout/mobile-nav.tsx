@@ -9,7 +9,6 @@ import {
   SheetTitle,
   SheetDescription,
   SheetTrigger,
-  SheetClose,
 } from '@/components/ui/sheet';
 import { Button } from '../ui/button';
 import { navLinks } from '@/lib/data';
@@ -65,7 +64,7 @@ export function MobileNav() {
               </SheetTrigger>
               <SheetContent 
                 side="bottom" 
-                className="h-fit w-[95vw] sm:w-full max-w-md mx-auto mb-6 rounded-[2.5rem] border border-white/10 bg-[#0a0a0a] text-white p-6 shadow-2xl outline-none overflow-hidden flex flex-col gap-8 bottom-0 [&>button]:hidden"
+                className="h-fit w-[95vw] sm:w-full max-w-md mx-auto mb-6 rounded-[2.5rem] border border-white/10 bg-[#0a0a0a] text-white p-6 shadow-2xl outline-none overflow-hidden flex flex-col gap-8 bottom-0 [&>button]:hidden nav-liquid"
               >
                 <SheetHeader className="relative flex flex-col items-center gap-6 pb-2">
                   <div className="flex items-center">
@@ -78,15 +77,12 @@ export function MobileNav() {
                     <div className="scale-125">
                       <ThemeToggle />
                     </div>
-                    <SheetClose asChild>
-                      <Button 
-                        variant="ghost" 
-                        size="icon" 
-                        className="rounded-full h-12 w-12 bg-white/5 hover:bg-white/10 text-white border border-white/10 p-0 flex items-center justify-center transition-all active:scale-90"
-                      >
-                          <X className="h-6 w-6" strokeWidth={2.5} />
-                      </Button>
-                    </SheetClose>
+                    <button 
+                      onClick={() => setIsOpen(false)}
+                      className="rounded-full h-12 w-12 bg-white/5 hover:bg-white/10 text-white border border-white/10 p-0 flex items-center justify-center transition-all active:scale-90"
+                    >
+                        <X className="h-6 w-6" strokeWidth={2.5} />
+                    </button>
                   </div>
                   <SheetTitle className="sr-only">Menu</SheetTitle>
                   <SheetDescription className="sr-only">Navigation and primary actions.</SheetDescription>

@@ -1,4 +1,3 @@
-
 'use client';
 
 import * as React from 'react';
@@ -19,10 +18,8 @@ type ProjectCardProps = {
 };
 
 export function ProjectCard({ project, index, onPreview, className }: ProjectCardProps) {
-  // threshold: 0.1 means animate when 10% of card is visible
   const { ref, isInView } = useInView({ threshold: 0.1, once: true });
 
-  // Sort tags by character count and show top 3
   const displayedTags = React.useMemo(() => {
     return [...project.tags]
       .sort((a, b) => a.length - b.length)
@@ -46,7 +43,6 @@ export function ProjectCard({ project, index, onPreview, className }: ProjectCar
                 : 'opacity-0 translate-y-20 scale-90 blur-md'
         )}
         style={{ 
-            // Stagger animation based on grid position (assuming 3 columns max)
             transitionDelay: `${(index % 3) * 100}ms`,
         }}
       >
@@ -69,7 +65,7 @@ export function ProjectCard({ project, index, onPreview, className }: ProjectCar
                         <Button 
                             variant="outline" 
                             size="lg" 
-                            className="rounded-full border-2 border-white/50 bg-black/30 backdrop-blur-md text-white hover:bg-white/20 hover:text-white transition-all duration-300 py-7 px-10 flex items-center gap-3 shadow-2xl pointer-events-none"
+                            className="rounded-full border-2 border-white/50 bg-black/30 backdrop-blur-md text-white hover:bg-white/20 hover:text-white transition-all duration-300 py-7 px-10 flex items-center gap-3 shadow-2xl pointer-events-none nav-liquid"
                         >
                             <Eye className="h-6 w-6" />
                             <span className="text-xl font-bold tracking-tight">Preview</span>
