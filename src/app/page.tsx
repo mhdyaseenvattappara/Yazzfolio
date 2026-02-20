@@ -30,7 +30,7 @@ export default function Home() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      <Marquee />
+      {/* Marquee removed from static position as it is now integrated into the fixed MobileNav */}
       <main className="flex-1">
         <Hero />
         <About />
