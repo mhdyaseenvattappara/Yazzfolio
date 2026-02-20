@@ -41,12 +41,31 @@ export function Testimonials() {
   return (
     <section id="testimonials" ref={ref} className="py-24 sm:py-32 md:py-0 md:min-h-screen md:flex md:items-center bg-background overflow-hidden">
         <div className="container mx-auto px-4 md:px-6">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
                 
-                {/* Left: Carousel (Larger col-span for impact) */}
+                {/* Left: Narrative (Left Align / Close to Cards) */}
                 <div className={cn(
-                    "lg:col-span-7 order-2 lg:order-1 transition-all duration-1000 delay-300",
+                    "lg:col-span-4 flex flex-col items-start text-left space-y-8 transition-all duration-1000",
                     isInView ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-10'
+                )}>
+                    <div className="space-y-4">
+                        <p className="text-[10px] font-black uppercase tracking-[0.4em] text-primary bg-primary/5 px-4 py-1.5 rounded-full border border-primary/10 w-fit">
+                            Endorsements
+                        </p>
+                        <h2 className="text-6xl md:text-8xl font-black tracking-tighter leading-[0.85]">
+                            Client <br /> Stories
+                        </h2>
+                    </div>
+                    <div className="w-24 h-1 bg-primary/20 rounded-full" />
+                    <p className="text-muted-foreground text-xl leading-relaxed max-w-sm font-medium">
+                        Crafting digital excellence through meaningful partnerships and visionary design thinking.
+                    </p>
+                </div>
+
+                {/* Right: Carousel (Filling the remaining space) */}
+                <div className={cn(
+                    "lg:col-span-8 transition-all duration-1000 delay-300",
+                    isInView ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-10'
                 )}>
                     {isLoading ? (
                         <Skeleton className="h-[450px] w-full rounded-[3.5rem]" />
@@ -54,7 +73,7 @@ export function Testimonials() {
                         <Carousel className="w-full">
                             <CarouselContent className="-ml-4">
                                 {testimonialsData.map((testimonial) => (
-                                    <CarouselItem key={testimonial.id} className="pl-4">
+                                    <CarouselItem key={testimonial.id} className="pl-4 md:basis-full lg:basis-full">
                                         <Card className="p-10 md:p-16 rounded-[3.5rem] bg-card/40 border-border/40 nav-liquid relative overflow-hidden flex flex-col h-full min-h-[420px] shadow-2xl">
                                             {/* Stylistic Quote Mark */}
                                             <Quote className="absolute top-10 right-10 w-24 h-24 text-primary/5 -rotate-12 pointer-events-none" />
@@ -104,25 +123,6 @@ export function Testimonials() {
                             <p className="font-bold tracking-tight">Your client success stories will appear here.</p>
                         </div>
                     )}
-                </div>
-
-                {/* Right: Narrative (Editorial Right Align) */}
-                <div className={cn(
-                    "lg:col-span-5 order-1 lg:order-2 flex flex-col items-end text-right space-y-8 transition-all duration-1000",
-                    isInView ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-10'
-                )}>
-                    <div className="space-y-4">
-                        <p className="text-[10px] font-black uppercase tracking-[0.4em] text-primary bg-primary/5 px-4 py-1.5 rounded-full border border-primary/10 w-fit ml-auto">
-                            Endorsements
-                        </p>
-                        <h2 className="text-6xl md:text-8xl font-black tracking-tighter leading-[0.85]">
-                            Client <br /> Stories
-                        </h2>
-                    </div>
-                    <div className="w-24 h-1 bg-primary/20 rounded-full ml-auto" />
-                    <p className="text-muted-foreground text-xl leading-relaxed max-w-sm font-medium">
-                        Crafting digital excellence through meaningful partnerships and visionary design thinking.
-                    </p>
                 </div>
 
             </div>
