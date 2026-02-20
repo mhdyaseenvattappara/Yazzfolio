@@ -116,41 +116,41 @@
   }
 
   .ios-dark {
-    --background: 240 10% 4%;
-    --foreground: 0 0% 98%;
+    --background: 240 10% 3%; /* Ultra Deep iOS 26 Black */
+    --foreground: 0 0% 100%;
 
-    --card: 240 10% 8%;
-    --card-foreground: 0 0% 98%;
+    --card: 240 10% 6%; /* Elevated glass base */
+    --card-foreground: 0 0% 100%;
 
-    --popover: 240 10% 4%;
-    --popover-foreground: 0 0% 98%;
+    --popover: 240 10% 3%;
+    --popover-foreground: 0 0% 100%;
 
-    --primary: 210 100% 52%; /* Vivid iOS Blue */
+    --primary: 210 100% 55%; /* Futuristic iOS Blue */
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 240 10% 12%;
-    --secondary-foreground: 0 0% 98%;
+    --secondary: 240 10% 10%;
+    --secondary-foreground: 0 0% 100%;
 
     --muted: 240 10% 15%;
-    --muted-foreground: 240 5% 65%;
+    --muted-foreground: 240 5% 70%;
 
-    --accent: 210 100% 52%;
-    --accent-foreground: 0 0% 98%;
+    --accent: 210 100% 55%;
+    --accent-foreground: 0 0% 100%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
 
-    --border: 240 10% 15%;
-    --input: 240 10% 15%;
-    --ring: 210 100% 52%;
+    --border: 240 10% 18%; /* Subtle edge glow */
+    --input: 240 10% 18%;
+    --ring: 210 100% 55%;
 
     --radius: 1.5rem;
 
-    --chart-1: 210 100% 52%;
-    --chart-2: 240 10% 20%;
+    --chart-1: 210 100% 55%;
+    --chart-2: 240 10% 25%;
     --chart-3: 0 0% 100%;
-    --chart-4: 240 5% 65%;
-    --chart-5: 240 10% 12%;
+    --chart-4: 240 5% 70%;
+    --chart-5: 240 10% 15%;
   }
 }
 

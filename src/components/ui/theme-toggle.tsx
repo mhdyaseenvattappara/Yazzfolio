@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "./dropdown-menu"
 
 export function ThemeToggle() {
-  const { theme, setTheme } = useTheme()
+  const { setTheme } = useTheme()
 
   return (
     <DropdownMenu>
@@ -36,7 +36,7 @@ export function ThemeToggle() {
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => setTheme("ios-dark")}>
           <CloudMoon className="mr-2 h-4 w-4" />
-          <span>iOS Glass Dark</span>
+          <span>iOS 26 Dark</span>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
