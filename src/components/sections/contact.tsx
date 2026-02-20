@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useForm } from 'react-hook-form';
@@ -94,7 +95,7 @@ export function Contact() {
   const { ref, isInView } = useInView({ threshold: 0.1, once: true });
 
   return (
-    <section id="contact" ref={ref} className="py-24 sm:py-32 md:py-0 md:min-h-screen md:flex md:items-center">
+    <section id="contact" ref={ref} className="py-24 sm:py-32">
       <div className="container mx-auto px-4 md:px-6">
         <div className={cn('transition-all duration-1000 ease-out', isInView ? 'animate-blur-reveal' : 'opacity-0')}>
           <div className="max-w-3xl mx-auto text-center mb-16">
@@ -183,7 +184,7 @@ export function Contact() {
               mhdyaseenvattappara@gmail.com
             </a>
             
-            <div className="flex justify-center gap-6 mt-16">
+            <div className="flex justify-center gap-6 mt-16 mb-32">
                 {socialLinks.map((link) => (
                     <Button 
                       asChild 
