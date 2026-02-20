@@ -10,7 +10,6 @@ import { InstagramChat } from './instagram-chat';
 import { CustomCursor } from '../ui/custom-cursor';
 import { InstallPWA } from './install-pwa';
 import { LiquidBackground } from '../ui/liquid-background';
-import { ThemeToggle } from '../ui/theme-toggle';
 
 export function PreloaderWrapper({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -51,13 +50,6 @@ export function PreloaderWrapper({ children }: { children: React.ReactNode }) {
       
       {/* Fluid Liquid Background Layer */}
       {!isAdminPage && <LiquidBackground />}
-
-      {/* Global Absolute Theme Toggle for Desktop */}
-      {!isAdminPage && (
-        <div className="fixed top-6 right-6 z-[110] hidden md:block animate-in fade-in duration-1000 delay-500">
-          <ThemeToggle />
-        </div>
-      )}
 
       <div
         className={cn(

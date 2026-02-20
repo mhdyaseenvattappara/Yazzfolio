@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { navLinks } from '@/lib/data';
 import { cn } from '@/lib/utils';
 import { usePathname, useRouter } from 'next/navigation';
+import { ThemeToggle } from '../ui/theme-toggle';
 
 export function Dock() {
   const [activeSection, setActiveSection] = useState<string>('');
@@ -102,6 +103,8 @@ export function Dock() {
             )} />
           </Link>
         ))}
+        <div className="my-1 h-[1px] w-6 bg-border/50" />
+        <ThemeToggle />
       </div>
     </nav>
   );
