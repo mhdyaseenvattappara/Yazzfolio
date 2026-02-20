@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useForm } from 'react-hook-form';
@@ -184,7 +183,7 @@ export function Contact() {
               mhdyaseenvattappara@gmail.com
             </a>
             
-            <div className="flex justify-center gap-6 mt-16 mb-32">
+            <div className="flex justify-center gap-6 mt-16 mb-12">
                 {socialLinks.map((link) => (
                     <Button 
                       asChild 
