@@ -1,8 +1,7 @@
 'use client';
 import * as React from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
-import { Menu, X, ArrowRight } from 'lucide-react';
+import { Menu, X, ChevronRight, ArrowRight } from 'lucide-react';
 import {
   Sheet,
   SheetContent,
@@ -14,7 +13,7 @@ import {
 } from '@/components/ui/sheet';
 import { Button } from '../ui/button';
 import { navLinks } from '@/lib/data';
-import { ThemeToggle } from '../ui/theme-toggle';
+import { cn } from '@/lib/utils';
 
 export function MobileNav() {
   const [isOpen, setIsOpen] = React.useState(false);
@@ -38,86 +37,66 @@ export function MobileNav() {
               <Menu className="h-5 w-5" strokeWidth={2.5} />
             </Button>
           </SheetTrigger>
-          <SheetContent side="bottom" className="h-full sm:h-full w-full rounded-none border-none bg-background text-foreground p-0 overflow-hidden outline-none flex flex-col">
-            <SheetHeader className="sr-only">
-              <SheetTitle>Navigation Menu</SheetTitle>
-              <SheetDescription>
-                Explore portfolio categories and contact information.
-              </SheetDescription>
+          <SheetContent 
+            side="bottom" 
+            className="h-fit w-[95vw] sm:w-full max-w-md mx-auto mb-6 rounded-[2.5rem] border border-white/10 bg-[#0a0a0a] text-white p-6 shadow-2xl outline-none overflow-hidden flex flex-col gap-6 bottom-0"
+          >
+            <SheetHeader className="relative flex items-center justify-center pb-2">
+              <SheetTitle className="text-sm font-bold uppercase tracking-[0.2em] text-white/60">Menu</SheetTitle>
+              <SheetDescription className="sr-only">Navigation and primary actions.</SheetDescription>
+              <SheetClose asChild>
+                <Button 
+                  variant="ghost" 
+                  size="icon" 
+                  className="absolute right-0 top-0 rounded-full h-8 w-8 bg-white/5 hover:bg-white/10 text-white/70"
+                >
+                  <X className="h-4 w-4" />
+                </Button>
+              </SheetClose>
             </SheetHeader>
 
-            {/* Finch-style Header */}
-            <div className="flex items-center justify-between px-8 py-6 border-b border-border/50">
-              <div className="flex items-center gap-3">
-                <span className="font-black text-2xl tracking-tighter">
-                  Yazzfolio<span className="text-primary">.</span>
-                </span>
-              </div>
-              <div className="flex items-center gap-4">
-                <ThemeToggle />
-                <SheetClose asChild>
-                  <Button variant="ghost" size="icon" className="rounded-full h-10 w-10 hover:bg-accent">
-                    <X className="h-6 w-6" />
-                  </Button>
-                </SheetClose>
-              </div>
-            </div>
-            
-            {/* Main Navigation - Large Text Links */}
-            <nav className="flex-1 px-8 pt-12 overflow-y-auto no-scrollbar">
-              <ul className="space-y-8">
-                {navLinks.map((link) => (
-                  <li key={link.href}>
-                    <Link
-                      href={link.href}
-                      className="group flex items-center justify-between py-2 transition-all"
-                      onClick={() => setIsOpen(false)}
-                    >
-                      <span className="text-3xl font-bold tracking-tight text-foreground/70 group-hover:text-foreground group-active:scale-95 transition-all">
-                          {link.name}
-                      </span>
-                      <ArrowRight className="h-6 w-6 opacity-0 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-primary" />
-                    </Link>
-                  </li>
-                ))}
-                {/* Extra Links for visual weight like in Finch */}
-                <li>
-                    <Link 
-                        href="/portfolio" 
-                        className="group flex items-center justify-between py-2 transition-all"
-                        onClick={() => setIsOpen(false)}
-                    >
-                        <span className="text-3xl font-bold tracking-tight text-foreground/70 group-hover:text-foreground">Visual Archive</span>
-                        <ArrowRight className="h-6 w-6 opacity-0 -translate-x-4 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-primary" />
-                    </Link>
-                </li>
-              </ul>
+            {/* Navigation List */}
+            <nav className="space-y-1">
+              {navLinks.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className="flex items-center justify-between group py-3 px-2 rounded-2xl transition-all active:bg-white/5"
+                  onClick={() => setIsOpen(false)}
+                >
+                  <div className="flex items-center gap-4">
+                    <div className="h-11 w-11 rounded-xl bg-white/5 flex items-center justify-center transition-colors group-active:bg-white/10">
+                      <link.icon className="h-5 w-5 text-white/80" />
+                    </div>
+                    <span className="font-bold text-lg tracking-tight text-white/90">
+                        {link.name}
+                    </span>
+                  </div>
+                  <ChevronRight className="h-4 w-4 text-white/20 group-active:text-white/40 transition-all" />
+                </Link>
+              ))}
             </nav>
             
-            {/* Finch-style Bottom Actions */}
-            <div className="mt-auto p-8 space-y-4 bg-gradient-to-t from-background via-background to-transparent pt-12">
+            {/* Primary Action Button */}
+            <div className="pt-2">
               <Button 
                 asChild 
-                variant="outline" 
-                className="w-full h-14 rounded-xl border-2 font-bold text-lg hover:bg-accent transition-all active:scale-[0.98]"
-              >
-                <Link href="/admin/login" onClick={() => setIsOpen(false)}>
-                    Admin Access
-                </Link>
-              </Button>
-              <Button 
-                asChild 
-                className="w-full h-14 rounded-xl font-bold text-lg shadow-xl hover:shadow-primary/20 transition-all active:scale-[0.98]"
+                className="w-full h-14 rounded-2xl bg-white text-black hover:bg-white/90 font-black text-lg shadow-xl flex items-center justify-between px-6 transition-all active:scale-[0.98]"
               >
                 <Link href="/#contact" onClick={() => setIsOpen(false)}>
-                    Let's Collaborate
+                    <span>Let's Collaborate</span>
+                    <ArrowRight className="h-5 w-5" />
                 </Link>
               </Button>
-              <div className="pt-4 flex justify-center">
-                <div className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-accent/50 border border-border/50">
-                    <div className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
-                    <span className="text-[9px] font-black uppercase tracking-[0.2em] text-muted-foreground">Secure Node v2.0</span>
-                </div>
+              
+              <div className="pt-6 flex justify-center">
+                <Link 
+                  href="/admin/login" 
+                  className="text-[10px] font-black uppercase tracking-[0.2em] text-white/20 hover:text-white/40 transition-colors"
+                  onClick={() => setIsOpen(false)}
+                >
+                  Secure Admin Node v2.0
+                </Link>
               </div>
             </div>
           </SheetContent>
