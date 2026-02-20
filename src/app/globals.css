@@ -212,7 +212,6 @@
       inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
     position: relative;
     overflow: hidden !important;
-    isolation: isolate;
   }
 
   /* Universal liquid drift for cards */
@@ -229,19 +228,6 @@
     animation: nav-liquid-drift 15s infinite alternate ease-in-out;
     pointer-events: none;
     z-index: -1;
-  }
-
-  .ios-dark .bg-card::before,
-  .ios-dark .bg-\[\#141414\]::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-    pointer-events: none;
-    z-index: 1;
   }
 
   @keyframes nav-liquid-drift {
