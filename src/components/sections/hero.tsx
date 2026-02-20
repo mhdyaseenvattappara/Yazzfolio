@@ -10,7 +10,7 @@ export function Hero() {
     <>
     <section
       id="hero"
-      className="relative w-full h-screen min-h-[600px] flex items-center justify-center text-center overflow-hidden"
+      className="relative w-full min-h-[80vh] flex items-center justify-center text-center overflow-hidden py-20"
     >
       <div className="absolute inset-0 bg-gradient-to-b from-background via-background/80 to-background" />
       
@@ -45,10 +45,10 @@ export function Hero() {
         </div>
       </div>
       
-      <div className="absolute bottom-12 md:bottom-24 left-1/2 -translate-x-1/2 z-10 animate-in fade-in duration-1000 delay-1000">
+      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 animate-in fade-in duration-1000 delay-1000">
         <Link href="#about" aria-label="Scroll to about section">
-          <div className="h-12 w-7 md:h-14 md:w-8 border-2 border-muted-foreground/30 rounded-full flex items-center justify-center">
-            <ArrowDown className="h-4 w-4 md:h-6 md:w-6 text-muted-foreground/50 animate-bounce" />
+          <div className="h-10 w-6 border-2 border-muted-foreground/30 rounded-full flex items-center justify-center">
+            <ArrowDown className="h-3 w-3 text-muted-foreground/50 animate-bounce" />
           </div>
         </Link>
       </div>
