@@ -55,8 +55,9 @@ export function ToolForm({ tool, onSuccess }: ToolFormProps) {
 
   const toolName = form.watch('name');
 
+  // Auto-suggest logic: only runs when in preset mode and name changes
   useEffect(() => {
-    if (toolName && iconType === 'preset') {
+    if (toolName && iconType === 'preset' && !tool) {
       const lowerCaseToolName = toolName.toLowerCase();
       const foundIcon = availableIcons.find(icon => 
         lowerCaseToolName.includes(icon.toLowerCase())
@@ -68,7 +69,21 @@ export function ToolForm({ tool, onSuccess }: ToolFormProps) {
         }
       }
     }
-  }, [toolName, form, iconType]);
+  }, [toolName, form, iconType, tool]);
+
+  const handleTabChange = (val: string) => {
+      const newType = val as 'preset' | 'custom';
+      setIconType(newType);
+      
+      // If we switch to custom and don't have a URL, but the tool previously had one, restore it
+      if (newType === 'custom') {
+          const current = form.getValues('icon');
+          const isUrl = current.startsWith('http') || current.startsWith('data:');
+          if (!isUrl && tool?.icon && (tool.icon.startsWith('http') || tool.icon.startsWith('data:'))) {
+              form.setValue('icon', tool.icon);
+          }
+      }
+  }
 
   const onSubmit = async (values: ToolFormValues) => {
     if (!user || !firestore) {
@@ -76,33 +91,33 @@ export function ToolForm({ tool, onSuccess }: ToolFormProps) {
       return;
     }
 
+    // Check if we are in custom mode but have no image or URL
+    if (iconType === 'custom' && !imageFile && !values.icon.startsWith('http')) {
+        form.setError('icon', { message: 'Please upload an image for custom tool icon.' });
+        return;
+    }
+
     setIsSubmitting(true);
     let finalIcon = values.icon;
 
-    if (iconType === 'custom' && imageFile) {
-        try {
+    try {
+        if (iconType === 'custom' && imageFile) {
             setUploadProgress(20);
             finalIcon = await uploadToImgBB(imageFile, (p) => setUploadProgress(20 + (p * 0.8)));
-        } catch (error: any) {
-            toast({ variant: 'destructive', title: 'Upload Failed', description: error.message });
-            setIsSubmitting(false);
-            return;
         }
-    }
 
-    const toolId = tool?.id || doc(collection(firestore, `admin_users/${user.uid}/tools`)).id;
-    const docRef = doc(firestore, `admin_users/${user.uid}/tools`, toolId);
-    
-    const dataToSave = {
-      id: toolId,
-      adminUserId: user.uid,
-      name: values.name,
-      icon: finalIcon,
-      updatedAt: serverTimestamp(),
-      createdAt: tool?.createdAt || serverTimestamp(),
-    };
+        const toolId = tool?.id || doc(collection(firestore, `admin_users/${user.uid}/tools`)).id;
+        const docRef = doc(firestore, `admin_users/${user.uid}/tools`, toolId);
+        
+        const dataToSave = {
+          id: toolId,
+          adminUserId: user.uid,
+          name: values.name,
+          icon: finalIcon,
+          updatedAt: serverTimestamp(),
+          createdAt: tool?.createdAt || serverTimestamp(),
+        };
 
-    try {
         await setDoc(docRef, dataToSave, { merge: true });
         toast({
           title: 'Success!',
@@ -110,6 +125,7 @@ export function ToolForm({ tool, onSuccess }: ToolFormProps) {
         });
         onSuccess();
     } catch (error: any) {
+        console.error("Tool Save Error:", error);
         toast({
           variant: 'destructive',
           title: 'Error',
@@ -139,7 +155,7 @@ export function ToolForm({ tool, onSuccess }: ToolFormProps) {
 
         <div className="space-y-3">
             <FormLabel>Software Icon</FormLabel>
-            <Tabs value={iconType} onValueChange={(v) => setIconType(v as 'preset' | 'custom')} className="w-full">
+            <Tabs value={iconType} onValueChange={handleTabChange} className="w-full">
                 <TabsList className="grid w-full grid-cols-2 rounded-xl h-12 mb-4">
                     <TabsTrigger value="preset" className="rounded-lg gap-2">
                         <Palette className="w-4 h-4" /> Library
@@ -187,20 +203,35 @@ export function ToolForm({ tool, onSuccess }: ToolFormProps) {
 
                 <TabsContent value="custom" className="mt-0">
                     <ImageUpload
-                        initialImageUrl={iconType === 'custom' ? form.getValues('icon') : null}
+                        initialImageUrl={iconType === 'custom' && form.getValues('icon').startsWith('http') ? form.getValues('icon') : null}
                         onFileChange={setImageFile}
                         onUrlChange={(url) => form.setValue('icon', url)}
                         uploadProgress={uploadProgress}
                         isUploading={isSubmitting && !!imageFile}
                         aspectRatio={1}
                     />
+                    <FormField
+                        control={form.control}
+                        name="icon"
+                        render={() => (
+                            <FormItem>
+                                <FormMessage />
+                            </FormItem>
+                        )}
+                    />
                 </TabsContent>
             </Tabs>
         </div>
 
         <Button type="submit" disabled={isSubmitting} className="h-12 rounded-xl text-lg font-bold shadow-lg">
-          {isSubmitting ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : null}
-          {tool ? 'Update Tool' : 'Add to Stack'}
+          {isSubmitting ? (
+              <>
+                <Loader2 className="mr-2 h-5 w-5 animate-spin" />
+                Updating...
+              </>
+          ) : (
+              tool ? 'Update Tool' : 'Add to Stack'
+          )}
         </Button>
       </form>
     </Form>
