@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState, useMemo, useEffect } from 'react';
@@ -105,7 +104,7 @@ export function Projects() {
 
           {/* Reference-Based Control Bar */}
           <div className={cn(
-              "max-w-fit mx-auto flex flex-col items-center gap-4 mb-20 bg-card/80 backdrop-blur-3xl border border-white/10 p-6 rounded-[3rem] sticky top-4 lg:relative z-30 shadow-2xl transition-all duration-700",
+              "max-w-fit mx-auto flex flex-col items-center gap-4 mb-20 bg-card/80 backdrop-blur-3xl border border-white/10 p-6 rounded-[3rem] sticky top-24 md:top-12 lg:relative z-30 shadow-2xl transition-all duration-700",
               isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4'
           )}>
               {/* Row 1: Categories */}

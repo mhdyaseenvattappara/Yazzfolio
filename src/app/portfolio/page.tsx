@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useState, useEffect, useMemo } from 'react';
@@ -101,7 +100,7 @@ export default function PortfolioPage() {
           </div>
 
           {/* Reference-Based Control Bar */}
-          <div className="max-w-fit mx-auto flex flex-col items-center gap-4 mb-20 bg-card/80 backdrop-blur-3xl border border-white/10 p-6 rounded-[3rem] sticky top-8 md:top-12 z-30 shadow-2xl transition-all duration-500">
+          <div className="max-w-fit mx-auto flex flex-col items-center gap-4 mb-20 bg-card/80 backdrop-blur-3xl border border-white/10 p-6 rounded-[3rem] sticky top-24 md:top-12 z-30 shadow-2xl transition-all duration-500">
               
               {/* Row 1: Categories */}
               <div className="w-full overflow-x-auto no-scrollbar py-1">
