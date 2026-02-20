@@ -1,3 +1,4 @@
+
 'use client';
 import { Card } from "@/components/ui/card";
 import Image from "next/image";
@@ -94,7 +95,7 @@ export function Testimonials() {
                                             </blockquote>
 
                                             <div className="flex items-center gap-5 mt-auto relative z-10">
-                                                <div className="relative w-16 h-16 rounded-2xl overflow-hidden border-2 border-primary/5 shadow-lg">
+                                                <div className="relative w-16 h-16 rounded-full overflow-hidden border-2 border-primary/5 shadow-lg">
                                                     <Image 
                                                         src={testimonial.imageUrl || '/my-photo.jpg'} 
                                                         alt={testimonial.name}
