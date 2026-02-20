@@ -1,4 +1,3 @@
-
 'use client';
 
 import { useTheme } from '@/components/theme-provider';
@@ -28,10 +27,10 @@ export function LiquidBackground() {
     >
       <div className="absolute inset-0 bg-background" />
       
-      {/* Liquid Blobs */}
-      <div className="absolute top-[-20%] left-[-10%] w-[70%] h-[70%] bg-primary/20 rounded-full blur-[120px] animate-liquid-1" />
-      <div className="absolute bottom-[-15%] right-[-10%] w-[60%] h-[60%] bg-blue-600/10 rounded-full blur-[140px] animate-liquid-2" />
-      <div className="absolute top-[20%] right-[-5%] w-[50%] h-[50%] bg-indigo-500/10 rounded-full blur-[100px] animate-liquid-3" />
+      {/* Liquid Blobs - Higher blur and lower opacity for better blending */}
+      <div className="absolute top-[-20%] left-[-10%] w-[80%] h-[80%] bg-primary/10 rounded-full blur-[150px] animate-liquid-1" />
+      <div className="absolute bottom-[-15%] right-[-10%] w-[70%] h-[70%] bg-blue-600/5 rounded-full blur-[180px] animate-liquid-2" />
+      <div className="absolute top-[20%] right-[-5%] w-[60%] h-[60%] bg-indigo-500/5 rounded-full blur-[130px] animate-liquid-3" />
     </div>
   );
 }

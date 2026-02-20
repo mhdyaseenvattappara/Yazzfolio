@@ -40,7 +40,7 @@ export function ProjectCard({ project, index, onPreview, className }: ProjectCar
             'w-full h-full transition-all duration-1000 ease-[cubic-bezier(0.23,1,0.32,1)] will-change-[transform,opacity,filter]',
             isInView 
                 ? 'opacity-100 translate-y-0 scale-100 blur-0' 
-                : 'opacity-0 translate-y-20 scale-90 blur-md'
+                : 'opacity-0 translate-y-20 scale-95 blur-md'
         )}
         style={{ 
             transitionDelay: `${(index % 3) * 100}ms`,
@@ -77,7 +77,7 @@ export function ProjectCard({ project, index, onPreview, className }: ProjectCar
 
             <div className="p-8 md:p-10 flex-grow flex flex-col relative">
             <div className="flex justify-between items-start gap-4 mb-6">
-                <h3 className="text-2xl md:text-3xl font-black text-white tracking-tighter leading-none">{project.title}</h3>
+                <h3 className="text-2xl md:text-3xl font-black text-white tracking-tighter leading-tight">{project.title}</h3>
             </div>
             
             <div className="flex flex-wrap items-center gap-2 mt-auto">

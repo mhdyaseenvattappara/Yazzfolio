@@ -1,4 +1,3 @@
-
 'use client';
 
 import { z } from 'zod';
@@ -21,7 +20,7 @@ import { uploadToImgBB } from '@/lib/imgbb';
 
 const formSchema = z.object({
   name: z.string().min(1, 'Tool name is required'),
-  icon: z.string().optional(), // Allow optional during transition/upload
+  icon: z.string().optional(),
 });
 
 type ToolFormValues = z.infer<typeof formSchema>;
@@ -55,7 +54,6 @@ export function ToolForm({ tool, onSuccess }: ToolFormProps) {
 
   const toolName = form.watch('name');
 
-  // Auto-suggest logic: only runs when in preset mode and name changes
   useEffect(() => {
     if (toolName && iconType === 'preset' && !tool) {
       const lowerCaseToolName = toolName.toLowerCase();
@@ -74,17 +72,12 @@ export function ToolForm({ tool, onSuccess }: ToolFormProps) {
   const handleTabChange = (val: string) => {
       const newType = val as 'preset' | 'custom';
       setIconType(newType);
-      
-      // Clear validation errors when switching
       form.clearErrors('icon');
 
       if (newType === 'custom') {
           const current = form.getValues('icon') || '';
           const isUrl = current.startsWith('http') || current.startsWith('data:');
-          
-          // If the current icon is a library preset name, clear it when moving to custom
           if (!isUrl) {
-              // Try to see if the tool previously had a custom URL to restore
               if (tool?.icon && (tool.icon.startsWith('http') || tool.icon.startsWith('data:'))) {
                   form.setValue('icon', tool.icon);
               } else {
@@ -92,9 +85,7 @@ export function ToolForm({ tool, onSuccess }: ToolFormProps) {
               }
           }
       } else {
-          // If switching back to preset, reset the image file
           setImageFile(null);
-          // If the current icon is a URL, reset it to something from the library or blank
           const current = form.getValues('icon') || '';
           if (current.startsWith('http')) {
               form.setValue('icon', '');
@@ -108,7 +99,6 @@ export function ToolForm({ tool, onSuccess }: ToolFormProps) {
       return;
     }
 
-    // Logic to determine if we have a valid icon selection
     const currentIconValue = values.icon || '';
     const hasCustomUrl = currentIconValue.startsWith('http') || currentIconValue.startsWith('data:');
     
