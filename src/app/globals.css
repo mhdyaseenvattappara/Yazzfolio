@@ -197,71 +197,40 @@
 }
 
 @layer components {
-  /* Specific requested glass card style */
-  .glass-card {
-    width: 240px;
-    height: 360px;
-    background: rgba(255, 255, 255, 0.1); 
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border-radius: 20px;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    box-shadow: 
-      0 8px 32px rgba(0, 0, 0, 0.3),
-      inset 0 1px 0 rgba(255, 255, 255, 0.2),
-      inset 0 -1px 0 rgba(255, 255, 255, 0.05);
-    position: relative;
-    overflow: hidden;
-  }
-
-  .glass-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 1px;
-    background: linear-gradient(
-      90deg,
-      transparent,
-      rgba(255, 255, 255, 0.4),
-      transparent
-    );
-    z-index: 1;
-  }
-
-  .glass-card::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 1px;
-    height: 100%;
-    background: linear-gradient(
-      180deg,
-      rgba(255, 255, 255, 0.4),
-      transparent,
-      rgba(255, 255, 255, 0.1)
-    );
-    z-index: 1;
-  }
-
-  /* Apply glassmorphism systemically to iOS Dark cards */
-  .ios-dark .rounded-lg.border.bg-card,
-  .ios-dark .rounded-2xl.border.bg-card,
-  .ios-dark .rounded-\[2\.5rem\].bg-card,
-  .ios-dark .rounded-\[2\.5rem\].bg-\[\#141414\] {
+  /* Apply glassmorphism and liquid logic systemically to iOS Dark components */
+  .ios-dark .bg-card,
+  .ios-dark .bg-\[\#141414\],
+  .ios-dark .bg-\[\#0a0a0a\],
+  .ios-dark .nav-liquid {
     background: rgba(255, 255, 255, 0.03) !important;
-    backdrop-filter: blur(20px) saturate(180%);
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    backdrop-filter: blur(25px) saturate(190%) !important;
+    -webkit-backdrop-filter: blur(25px) saturate(190%) !important;
     border: 1px solid rgba(255, 255, 255, 0.1) !important;
     box-shadow: 
       0 10px 40px rgba(0, 0, 0, 0.4),
       inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
     position: relative;
+    overflow: hidden !important;
   }
 
-  .ios-dark .bg-card::before {
+  /* Universal liquid drift for cards */
+  .ios-dark .bg-card::after,
+  .ios-dark .bg-\[\#141414\]::after,
+  .ios-dark .nav-liquid::after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle at center, rgba(255, 255, 255, 0.04) 0%, transparent 60%);
+    animation: nav-liquid-drift 15s infinite alternate ease-in-out;
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  .ios-dark .bg-card::before,
+  .ios-dark .bg-\[\#141414\]::before {
     content: '';
     position: absolute;
     top: 0;
@@ -270,29 +239,7 @@
     height: 1px;
     background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
     pointer-events: none;
-  }
-
-  /* Liquid Navigation Specifics for iOS 26 */
-  .ios-dark .nav-liquid {
-    position: relative;
-    background: rgba(255, 255, 255, 0.04) !important;
-    backdrop-filter: blur(30px) saturate(210%) !important;
-    -webkit-backdrop-filter: blur(30px) saturate(210%) !important;
-    border: 1px solid rgba(255, 255, 255, 0.15) !important;
-    overflow: hidden !important;
-  }
-
-  .ios-dark .nav-liquid::after {
-    content: '';
-    position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: radial-gradient(circle at center, rgba(var(--primary), 0.15) 0%, transparent 60%);
-    animation: nav-liquid-drift 12s infinite alternate ease-in-out;
-    pointer-events: none;
-    z-index: -1;
+    z-index: 1;
   }
 
   @keyframes nav-liquid-drift {

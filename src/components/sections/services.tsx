@@ -1,4 +1,3 @@
-
 'use client';
 import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { useInView } from "@/hooks/use-in-view";
@@ -55,7 +54,7 @@ export function Services() {
                 <div
                 className={cn(
                     'grid grid-cols-1 md:grid-cols-2 gap-8 justify-center max-w-4xl mx-auto',
-                    isInView ? 'animate-blur-reveal style-[]' : 'opacity-0'
+                    isInView ? 'animate-blur-reveal' : 'opacity-0'
                 )}
                 style={{animationDelay: '200ms'}}
                 >
@@ -65,9 +64,9 @@ export function Services() {
                     return (
                         <Card
                             key={service.id}
-                            className="bg-background/50 border-border/50 hover:border-border hover:bg-accent/50 transition-all duration-300"
+                            className="bg-background/50 border-border/50 hover:border-border hover:bg-accent/50 transition-all duration-300 nav-liquid rounded-3xl"
                         >
-                            <CardHeader className="p-6 flex flex-row items-center gap-4">
+                            <CardHeader className="p-6 flex flex-row items-center gap-4 relative z-10">
                                 <div className="h-12 w-12 flex-shrink-0 bg-primary/10 rounded-lg flex items-center justify-center">
                                     <Icon className="h-6 w-6 text-primary" />
                                 </div>

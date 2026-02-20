@@ -1,4 +1,3 @@
-
 'use client';
 import { Card } from "@/components/ui/card";
 import Image from "next/image";
@@ -45,10 +44,10 @@ export function Testimonials() {
   const { data: testimonialsData, isLoading } = useCollection<Testimonial>(testimonialsCollectionRef);
   
   const TestimonialCard = ({ testimonial }: { testimonial: Testimonial }) => (
-    <Card className="h-full rounded-[2.5rem] flex flex-col justify-between p-10 bg-card/50 border-border/50 hover:border-primary/30 hover:bg-accent/50 transition-all duration-500 group select-none cursor-grab active:cursor-grabbing relative overflow-hidden">
-        <Quote className="absolute top-8 right-10 w-12 h-12 text-primary/5 opacity-20 pointer-events-none group-hover:scale-110 transition-transform duration-500" />
+    <Card className="h-full rounded-[2.5rem] flex flex-col justify-between p-10 bg-card/50 border-border/50 hover:border-primary/30 hover:bg-accent/50 transition-all duration-500 group select-none cursor-grab active:cursor-grabbing relative overflow-hidden nav-liquid">
+        <Quote className="absolute top-8 right-10 w-12 h-12 text-primary/5 opacity-20 pointer-events-none group-hover:scale-110 transition-transform duration-500 z-10" />
         
-        <div>
+        <div className="relative z-10">
             <div className="flex items-center gap-1 mb-6">
                 {[...Array(5)].map((_, i) => (
                     <Star
@@ -65,7 +64,7 @@ export function Testimonials() {
             </blockquote>
         </div>
 
-        <div className="flex items-center gap-4 mt-auto">
+        <div className="flex items-center gap-4 mt-auto relative z-10">
             <div className="relative h-14 w-14 flex-shrink-0">
                 <Image 
                     src={testimonial.imageUrl} 

@@ -1,4 +1,3 @@
-
 'use client';
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { useInView } from "@/hooks/use-in-view";
@@ -67,9 +66,9 @@ export function ToolStack() {
                     return (
                         <Card
                             key={tool.id}
-                            className="bg-card/50 border-border/50 hover:border-primary/20 hover:bg-accent/50 transition-all duration-500 rounded-2xl group cursor-default"
+                            className="bg-card/50 border-border/50 hover:border-primary/20 hover:bg-accent/50 transition-all duration-500 rounded-2xl group cursor-default nav-liquid"
                         >
-                            <CardHeader className="p-5 flex flex-row items-center gap-4">
+                            <CardHeader className="p-5 flex flex-row items-center gap-4 relative z-10">
                                 <div className="h-10 w-10 flex-shrink-0 flex items-center justify-center relative overflow-hidden">
                                     {isCustom ? (
                                         <Image 
