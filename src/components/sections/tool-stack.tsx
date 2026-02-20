@@ -1,6 +1,6 @@
 
 'use client';
-import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { useInView } from "@/hooks/use-in-view";
 import { cn } from "@/lib/utils";
 import { useCollection, useFirestore, useMemoFirebase } from '@/firebase';
@@ -10,6 +10,7 @@ import { toolIconMap } from '@/components/tool-icons';
 import { Skeleton } from '../ui/skeleton';
 import { useEffect, useState } from "react";
 import { Code } from "lucide-react";
+import Image from 'next/image';
 
 export function ToolStack() {
     const { ref, isInView } = useInView({ threshold: 0.1, once: true });
@@ -46,38 +47,49 @@ export function ToolStack() {
                     isInView ? 'animate-blur-reveal' : 'opacity-0'
                 )}
                 >
-                    <h2 className="text-3xl md:text-4xl font-bold tracking-tighter mb-4">Tool Stack</h2>
-                    <p className="text-muted-foreground text-base md:text-lg">
-                        A collection of tools and technologies I use to bring ideas to life.
+                    <p className="text-xs font-black uppercase tracking-[0.3em] text-primary mb-4">My Arsenal</p>
+                    <h2 className="text-4xl md:text-5xl font-black tracking-tighter mb-4">Software Stack</h2>
+                    <p className="text-muted-foreground text-lg leading-relaxed max-w-2xl mx-auto">
+                        A curated collection of specialized tools and technologies I use to bring complex creative visions to life.
                     </p>
                 </div>
                 <div
                 className={cn(
-                    'flex flex-wrap gap-4 justify-center max-w-4xl mx-auto',
-                    isInView ? 'animate-blur-reveal style-[]' : 'opacity-0'
+                    'flex flex-wrap gap-4 justify-center max-w-5xl mx-auto transition-all duration-1000 delay-300',
+                    isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
                 )}
-                style={{animationDelay: '200ms'}}
                 >
-                {(isLoading || !adminUserId) && Array.from({ length: 6 }).map((_, index) => <Skeleton key={index} className="h-20 w-full rounded-2xl" />)}
+                {(isLoading || !adminUserId) && Array.from({ length: 8 }).map((_, index) => <Skeleton key={index} className="h-20 w-48 rounded-2xl" />)}
                 {toolsData && toolsData.map((tool) => {
-                    const Icon = toolIconMap[tool.icon] || Code;
+                    const isCustom = tool.icon.startsWith('http') || tool.icon.startsWith('data:');
+                    const Icon = !isCustom ? (toolIconMap[tool.icon] || Code) : null;
+                    
                     return (
                         <Card
                             key={tool.id}
-                            className="bg-card/50 border-border/50 hover:border-border hover:bg-accent/50 transition-all duration-300 rounded-2xl"
+                            className="bg-card/50 border-border/50 hover:border-primary/20 hover:bg-accent/50 transition-all duration-500 rounded-2xl group cursor-default"
                         >
-                            <CardHeader className="p-4 flex flex-row items-center gap-4">
-                                <div className="h-8 w-8 flex-shrink-0 text-muted-foreground">
-                                    <Icon className="h-full w-full" />
+                            <CardHeader className="p-5 flex flex-row items-center gap-4">
+                                <div className="h-10 w-10 flex-shrink-0 flex items-center justify-center relative overflow-hidden">
+                                    {isCustom ? (
+                                        <Image 
+                                            src={tool.icon} 
+                                            alt={tool.name} 
+                                            fill 
+                                            className="object-contain transition-transform duration-500 group-hover:scale-110" 
+                                        />
+                                    ) : Icon ? (
+                                        <Icon className="h-full w-full text-muted-foreground group-hover:text-primary transition-colors duration-500" />
+                                    ) : null}
                                 </div>
-                                <CardTitle className="text-base font-semibold">{tool.name}</CardTitle>
+                                <CardTitle className="text-base font-black tracking-tight group-hover:text-foreground transition-colors">{tool.name}</CardTitle>
                             </CardHeader>
                         </Card>
                     );
                 })}
                  {!isLoading && toolsData?.length === 0 && (
-                    <div className="col-span-2 md:col-span-3 text-center text-muted-foreground">
-                        Tools not available. Please add them in the admin dashboard.
+                    <div className="w-full text-center text-muted-foreground py-20 border-2 border-dashed rounded-[2.5rem]">
+                        Tools not available. Connect with the admin node to populate the stack.
                     </div>
                  )}
                 </div>

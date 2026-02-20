@@ -25,6 +25,7 @@ import {
 } from '@/components/ui/dialog';
 import { ToolForm } from './tool-form';
 import { toolIconMap } from '@/components/tool-icons';
+import Image from 'next/image';
 
 export function ToolStackManager() {
   const { user } = useUser();
@@ -73,19 +74,22 @@ export function ToolStackManager() {
   };
 
   return (
-    <div>
-        <div className="mb-6 flex items-center justify-between">
-            <h2 className="text-xl font-bold">Manage Tool Stack</h2>
+    <div className="space-y-6">
+        <div className="flex items-center justify-between">
+            <div>
+                <h2 className="text-2xl font-black tracking-tight">Software Stack</h2>
+                <p className="text-muted-foreground text-sm">Curate the tools you use for your workflow.</p>
+            </div>
             <Dialog open={isFormOpen} onOpenChange={setIsFormOpen}>
             <DialogTrigger asChild>
-                <Button onClick={handleAddNew}>
+                <Button onClick={handleAddNew} className="rounded-full shadow-lg">
                 <PlusCircle className="mr-2 h-4 w-4" />
                 Add New Tool
                 </Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
-                <DialogTitle>{editingTool ? 'Edit Tool' : 'Add New Tool'}</DialogTitle>
+                <DialogTitle className="text-2xl font-black">{editingTool ? 'Edit Tool' : 'Add New Tool'}</DialogTitle>
                 </DialogHeader>
                 <ToolForm
                     tool={editingTool}
@@ -95,49 +99,62 @@ export function ToolStackManager() {
             </Dialog>
         </div>
         
-        <div className="rounded-lg border bg-card">
+        <div className="rounded-2xl border border-border/50 bg-card overflow-hidden shadow-sm">
             <Table>
-            <TableHeader>
+            <TableHeader className="bg-muted/30">
                 <TableRow>
-                    <TableHead>Icon</TableHead>
-                    <TableHead>Name</TableHead>
-                    <TableHead className="text-right">Actions</TableHead>
+                    <TableHead className="font-bold w-[100px]">Visual</TableHead>
+                    <TableHead className="font-bold">Software Name</TableHead>
+                    <TableHead className="text-right font-bold">Actions</TableHead>
                 </TableRow>
             </TableHeader>
             <TableBody>
                 {isLoadingTools ? (
                 <TableRow>
-                    <TableCell colSpan={3} className="text-center">
-                    <Loader2 className="mx-auto my-4 h-6 w-6 animate-spin" />
+                    <TableCell colSpan={3} className="text-center h-32">
+                    <Loader2 className="mx-auto h-8 w-8 animate-spin text-primary" />
                     </TableCell>
                 </TableRow>
                 ) : tools && tools.length > 0 ? (
                 tools.map((tool) => {
-                    const Icon = toolIconMap[tool.icon] || 'div';
+                    const isCustom = tool.icon.startsWith('http') || tool.icon.startsWith('data:');
+                    const Icon = !isCustom ? toolIconMap[tool.icon] : null;
+                    
                     return (
-                        <TableRow key={tool.id}>
+                        <TableRow key={tool.id} className="hover:bg-muted/20 transition-colors">
                         <TableCell>
-                            <div className="flex items-center gap-2">
-                                <Icon className="h-5 w-5 text-muted-foreground" />
-                                {tool.icon}
+                            <div className="h-10 w-10 flex items-center justify-center bg-background rounded-lg border border-border/50 overflow-hidden relative">
+                                {isCustom ? (
+                                    <Image src={tool.icon} alt={tool.name} fill className="object-contain p-1.5" />
+                                ) : Icon ? (
+                                    <Icon className="h-6 w-6 text-muted-foreground" />
+                                ) : (
+                                    <div className="text-[10px] font-black uppercase opacity-20">NA</div>
+                                )}
                             </div>
                         </TableCell>
-                        <TableCell className="font-medium">{tool.name}</TableCell>
+                        <TableCell className="font-bold text-base">{tool.name}</TableCell>
                         <TableCell className="text-right">
-                            <Button variant="ghost" size="icon" onClick={() => handleEdit(tool)}>
-                            <Edit className="h-4 w-4" />
-                            </Button>
-                            <Button variant="ghost" size="icon" className="text-destructive" onClick={() => handleDelete(tool.id)}>
-                            <Trash2 className="h-4 w-4" />
-                            </Button>
+                            <div className="flex justify-end gap-1">
+                                <Button variant="ghost" size="icon" onClick={() => handleEdit(tool)} className="h-8 w-8 rounded-full">
+                                    <Edit className="h-4 w-4" />
+                                </Button>
+                                <Button variant="ghost" size="icon" className="h-8 w-8 text-destructive rounded-full hover:bg-destructive/10" onClick={() => handleDelete(tool.id)}>
+                                    <Trash2 className="h-4 w-4" />
+                                </Button>
+                            </div>
                         </TableCell>
                         </TableRow>
                     );
                 })
                 ) : (
                 <TableRow>
-                    <TableCell colSpan={3} className="text-center">
-                    No tools found. Add one to get started.
+                    <TableCell colSpan={3} className="text-center h-48 text-muted-foreground">
+                        <div className="flex flex-col items-center gap-2">
+                            <PlusCircle className="h-10 w-10 opacity-20" />
+                            <p className="font-medium">Your stack is empty.</p>
+                            <Button variant="outline" size="sm" onClick={handleAddNew} className="mt-2 rounded-full">Register Your Tools</Button>
+                        </div>
                     </TableCell>
                 </TableRow>
                 )}
