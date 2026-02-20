@@ -5,7 +5,7 @@ import { Toaster } from '@/components/ui/toaster';
 import { PreloaderWrapper } from '@/components/layout/preloader-wrapper';
 import { FirebaseClientProvider } from '@/firebase';
 
-const siteUrl = 'https://your-domain.com'; // Replace with your actual domain
+const siteUrl = 'https://yazzfolio.com'; // Replace with your actual domain
 
 export const metadata: Metadata = {
   title: {
@@ -13,7 +13,7 @@ export const metadata: Metadata = {
     template: '%s | Mhd Yaseen V',
   },
   description:
-    'Creative portfolio of Mhd Yaseen V, a graphic and UI/UX designer specializing in creating compelling visual experiences.',
+    'Creative portfolio of Mhd Yaseen V, a high-end graphic and UI/UX designer specializing in creating compelling, futuristic visual experiences.',
   keywords: [
     'Mhd Yaseen V',
     'Graphic Designer',
@@ -21,7 +21,9 @@ export const metadata: Metadata = {
     'Portfolio',
     'Visual Design',
     'Figma',
-    'Adobe Creative Suite'
+    'Adobe Creative Suite',
+    'iOS 26 Design',
+    'Glassmorphism'
   ],
   authors: [{ name: 'Mhd Yaseen V', url: siteUrl }],
   creator: 'Mhd Yaseen V',
@@ -33,10 +35,9 @@ export const metadata: Metadata = {
   icons: {
     icon: [
       {
-        url: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><clipPath id='c'><circle cx='50' cy='50' r='50'/></clipPath><image href='/my-photo.jpg' width='100' height='100' clip-path='url(#c)'/></svg>",
-        type: "image/svg+xml",
-      },
-      { url: "/my-photo.jpg" }
+        url: "/my-photo.jpg",
+        type: "image/jpeg",
+      }
     ],
     shortcut: '/my-photo.jpg',
     apple: '/my-photo.jpg',
@@ -44,15 +45,15 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'Mhd Yaseen V | Graphic & UI/UX Designer',
     description:
-      'Explore the creative portfolio of Mhd Yaseen V, a passionate graphic and UI/UX designer.',
+      'Explore the creative portfolio of Mhd Yaseen V, showcasing premium UI/UX and graphic design projects.',
     url: siteUrl,
     siteName: 'Mhd Yaseen V Portfolio',
     images: [
       {
-        url: '/og-image.png', // It's good practice to have an open graph image
+        url: '/my-photo.jpg',
         width: 1200,
         height: 630,
-        alt: 'Mhd Yaseen V Portfolio',
+        alt: 'Mhd Yaseen V Portfolio Preview',
       },
     ],
     locale: 'en_US',
@@ -62,8 +63,8 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Mhd Yaseen V | Graphic & UI/UX Designer',
     description:
-      'Explore the creative portfolio of Mhd Yaseen V, a passionate graphic and UI/UX designer.',
-    images: ['/og-image.png'],
+      'High-end UI/UX and graphic design portfolio by Mhd Yaseen V.',
+    images: ['/my-photo.jpg'],
     creator: '@_hey_yasii_',
   },
   robots: {
@@ -82,6 +83,10 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: '#ffffff' },
+    { media: '(prefers-color-scheme: dark)', color: '#0a0a0a' },
+  ],
 }
 
 export default function RootLayout({

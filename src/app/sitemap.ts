@@ -1,7 +1,7 @@
 import { MetadataRoute } from 'next';
  
 export default function sitemap(): MetadataRoute.Sitemap {
-  const siteUrl = 'https://your-domain.com'; // Replace with your actual domain
+  const siteUrl = 'https://yazzfolio.com'; // Replace with actual domain
 
   return [
     {
@@ -11,22 +11,22 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 1,
     },
     {
-      url: `${siteUrl}/#projects`,
+      url: `${siteUrl}/portfolio`,
       lastModified: new Date(),
-      changeFrequency: 'monthly',
+      changeFrequency: 'weekly',
       priority: 0.8,
     },
     {
       url: `${siteUrl}/#about`,
       lastModified: new Date(),
       changeFrequency: 'monthly',
-      priority: 0.8,
+      priority: 0.5,
     },
     {
       url: `${siteUrl}/#contact`,
       lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.5,
+      changeFrequency: 'yearly',
+      priority: 0.3,
     },
   ];
 }

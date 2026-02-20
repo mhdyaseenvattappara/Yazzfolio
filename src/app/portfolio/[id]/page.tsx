@@ -48,6 +48,18 @@ export default function ProjectPage() {
   // Determine the final project data: prefer DB, then check fallback list
   const project = projectFromDb || (adminId === 'fallback' || (!isLoading && !projectFromDb) ? fallbackProjects.find(p => p.id === id) : null);
 
+  const jsonLd = project ? {
+    '@context': 'https://schema.org',
+    '@type': 'CreativeWork',
+    name: (project as PortfolioItem).title,
+    description: (project as PortfolioItem).description,
+    image: (project as PortfolioItem).imageUrl,
+    author: {
+      '@type': 'Person',
+      name: 'Mhd Yaseen V'
+    }
+  } : null;
+
   if (isSearching || (isLoading && adminId !== 'fallback')) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-background">
@@ -65,5 +77,15 @@ export default function ProjectPage() {
     );
   }
 
-  return <PortfolioItemView project={project as PortfolioItem} />;
+  return (
+    <>
+      {jsonLd && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+      )}
+      <PortfolioItemView project={project as PortfolioItem} />
+    </>
+  );
 }
