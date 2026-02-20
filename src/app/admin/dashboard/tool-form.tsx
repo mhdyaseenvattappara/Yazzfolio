@@ -21,7 +21,7 @@ import { uploadToImgBB } from '@/lib/imgbb';
 
 const formSchema = z.object({
   name: z.string().min(1, 'Tool name is required'),
-  icon: z.string().min(1, 'An icon is required'),
+  icon: z.string().optional(), // Allow optional during transition/upload
 });
 
 type ToolFormValues = z.infer<typeof formSchema>;
@@ -75,12 +75,29 @@ export function ToolForm({ tool, onSuccess }: ToolFormProps) {
       const newType = val as 'preset' | 'custom';
       setIconType(newType);
       
-      // If we switch to custom and don't have a URL, but the tool previously had one, restore it
+      // Clear validation errors when switching
+      form.clearErrors('icon');
+
       if (newType === 'custom') {
-          const current = form.getValues('icon');
+          const current = form.getValues('icon') || '';
           const isUrl = current.startsWith('http') || current.startsWith('data:');
-          if (!isUrl && tool?.icon && (tool.icon.startsWith('http') || tool.icon.startsWith('data:'))) {
-              form.setValue('icon', tool.icon);
+          
+          // If the current icon is a library preset name, clear it when moving to custom
+          if (!isUrl) {
+              // Try to see if the tool previously had a custom URL to restore
+              if (tool?.icon && (tool.icon.startsWith('http') || tool.icon.startsWith('data:'))) {
+                  form.setValue('icon', tool.icon);
+              } else {
+                  form.setValue('icon', '');
+              }
+          }
+      } else {
+          // If switching back to preset, reset the image file
+          setImageFile(null);
+          // If the current icon is a URL, reset it to something from the library or blank
+          const current = form.getValues('icon') || '';
+          if (current.startsWith('http')) {
+              form.setValue('icon', '');
           }
       }
   }
@@ -91,19 +108,28 @@ export function ToolForm({ tool, onSuccess }: ToolFormProps) {
       return;
     }
 
-    // Check if we are in custom mode but have no image or URL
-    if (iconType === 'custom' && !imageFile && !values.icon.startsWith('http')) {
+    // Logic to determine if we have a valid icon selection
+    const currentIconValue = values.icon || '';
+    const hasCustomUrl = currentIconValue.startsWith('http') || currentIconValue.startsWith('data:');
+    
+    if (iconType === 'custom' && !imageFile && !hasCustomUrl) {
         form.setError('icon', { message: 'Please upload an image for custom tool icon.' });
         return;
     }
 
+    if (iconType === 'preset' && !currentIconValue) {
+        form.setError('icon', { message: 'Please select an icon from the library.' });
+        return;
+    }
+
     setIsSubmitting(true);
-    let finalIcon = values.icon;
+    let finalIcon = currentIconValue;
 
     try {
         if (iconType === 'custom' && imageFile) {
             setUploadProgress(20);
-            finalIcon = await uploadToImgBB(imageFile, (p) => setUploadProgress(20 + (p * 0.8)));
+            const uploadedUrl = await uploadToImgBB(imageFile, (p) => setUploadProgress(20 + (p * 0.8)));
+            finalIcon = uploadedUrl;
         }
 
         const toolId = tool?.id || doc(collection(firestore, `admin_users/${user.uid}/tools`)).id;
@@ -121,15 +147,15 @@ export function ToolForm({ tool, onSuccess }: ToolFormProps) {
         await setDoc(docRef, dataToSave, { merge: true });
         toast({
           title: 'Success!',
-          description: `Tool has been ${tool ? 'updated' : 'created'}.`,
+          description: `"${values.name}" has been ${tool ? 'updated' : 'added'} successfully.`,
         });
         onSuccess();
     } catch (error: any) {
         console.error("Tool Save Error:", error);
         toast({
           variant: 'destructive',
-          title: 'Error',
-          description: error.message || 'Could not save the tool.',
+          title: 'Update Failed',
+          description: error.message || 'Could not write to database.',
         });
     } finally {
         setIsSubmitting(false);
@@ -144,9 +170,9 @@ export function ToolForm({ tool, onSuccess }: ToolFormProps) {
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Tool Name</FormLabel>
+              <FormLabel className="text-sm font-bold uppercase tracking-widest text-muted-foreground/60">Tool Name</FormLabel>
               <FormControl>
-                <Input placeholder="e.g. Figma, Webflow..." {...field} className="h-12 rounded-xl" />
+                <Input placeholder="e.g. Adobe Illustrator" {...field} className="h-12 rounded-xl bg-muted/20 border-border/50" />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -154,13 +180,13 @@ export function ToolForm({ tool, onSuccess }: ToolFormProps) {
         />
 
         <div className="space-y-3">
-            <FormLabel>Software Icon</FormLabel>
+            <FormLabel className="text-sm font-bold uppercase tracking-widest text-muted-foreground/60">Software Icon</FormLabel>
             <Tabs value={iconType} onValueChange={handleTabChange} className="w-full">
-                <TabsList className="grid w-full grid-cols-2 rounded-xl h-12 mb-4">
-                    <TabsTrigger value="preset" className="rounded-lg gap-2">
+                <TabsList className="grid w-full grid-cols-2 rounded-xl h-12 mb-4 bg-muted/30">
+                    <TabsTrigger value="preset" className="rounded-lg gap-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
                         <Palette className="w-4 h-4" /> Library
                     </TabsTrigger>
-                    <TabsTrigger value="custom" className="rounded-lg gap-2">
+                    <TabsTrigger value="custom" className="rounded-lg gap-2 data-[state=active]:bg-primary data-[state=active]:text-primary-foreground">
                         <Upload className="w-4 h-4" /> Custom Upload
                     </TabsTrigger>
                 </TabsList>
@@ -173,19 +199,18 @@ export function ToolForm({ tool, onSuccess }: ToolFormProps) {
                             <FormItem>
                             <Select 
                                 onValueChange={field.onChange} 
-                                defaultValue={field.value} 
-                                value={availableIcons.includes(field.value) ? field.value : ''}
+                                value={field.value && availableIcons.includes(field.value) ? field.value : ''}
                             >
                                 <FormControl>
-                                <SelectTrigger className="h-12 rounded-xl">
+                                <SelectTrigger className="h-12 rounded-xl bg-muted/20 border-border/50">
                                     <SelectValue placeholder="Select from library..." />
                                 </SelectTrigger>
                                 </FormControl>
-                                <SelectContent className="max-h-[300px]">
+                                <SelectContent className="max-h-[300px] rounded-xl">
                                 {availableIcons.map(iconName => {
                                     const IconComponent = toolIconMap[iconName];
                                     return (
-                                        <SelectItem key={iconName} value={iconName}>
+                                        <SelectItem key={iconName} value={iconName} className="rounded-lg py-3">
                                             <div className="flex items-center gap-3">
                                                 <IconComponent className="h-5 w-5" />
                                                 <span className="font-medium">{iconName}</span>
@@ -203,9 +228,12 @@ export function ToolForm({ tool, onSuccess }: ToolFormProps) {
 
                 <TabsContent value="custom" className="mt-0">
                     <ImageUpload
-                        initialImageUrl={iconType === 'custom' && form.getValues('icon').startsWith('http') ? form.getValues('icon') : null}
+                        initialImageUrl={iconType === 'custom' && form.getValues('icon')?.startsWith('http') ? form.getValues('icon') : null}
                         onFileChange={setImageFile}
-                        onUrlChange={(url) => form.setValue('icon', url)}
+                        onUrlChange={(url) => {
+                            form.setValue('icon', url);
+                            form.clearErrors('icon');
+                        }}
                         uploadProgress={uploadProgress}
                         isUploading={isSubmitting && !!imageFile}
                         aspectRatio={1}
@@ -223,11 +251,11 @@ export function ToolForm({ tool, onSuccess }: ToolFormProps) {
             </Tabs>
         </div>
 
-        <Button type="submit" disabled={isSubmitting} className="h-12 rounded-xl text-lg font-bold shadow-lg">
+        <Button type="submit" disabled={isSubmitting} className="h-14 rounded-2xl text-lg font-black tracking-tight shadow-xl bg-primary text-primary-foreground hover:scale-[1.02] active:scale-[0.98] transition-all">
           {isSubmitting ? (
               <>
                 <Loader2 className="mr-2 h-5 w-5 animate-spin" />
-                Updating...
+                Processing...
               </>
           ) : (
               tool ? 'Update Tool' : 'Add to Stack'
