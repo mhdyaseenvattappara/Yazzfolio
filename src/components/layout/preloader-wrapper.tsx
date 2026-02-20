@@ -9,6 +9,7 @@ import { Dock } from './dock';
 import { InstagramChat } from './instagram-chat';
 import { CustomCursor } from '../ui/custom-cursor';
 import { InstallPWA } from './install-pwa';
+import { LiquidBackground } from '../ui/liquid-background';
 
 export function PreloaderWrapper({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -45,6 +46,10 @@ export function PreloaderWrapper({ children }: { children: React.ReactNode }) {
     <>
       <CustomCursor />
       {showPreloader && <Preloader isLoaded={isLoaded} />}
+      
+      {/* Fluid Liquid Background Layer */}
+      {!isAdminPage && <LiquidBackground />}
+
       <div
         className={cn(
           'transition-opacity duration-500 min-h-screen flex flex-col',

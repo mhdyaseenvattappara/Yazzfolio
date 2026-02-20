@@ -201,7 +201,7 @@
   .glass-card {
     width: 240px;
     height: 360px;
-    background: rgba(255, 255, 255, 0.1); /* Dark mode compatible adjustment */
+    background: rgba(255, 255, 255, 0.1); 
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     border-radius: 20px;
@@ -290,6 +290,28 @@
   .animate-float-up {
     animation: float-up 1s ease-out forwards;
   }
+
+  @keyframes liquid-1 {
+    0%, 100% { transform: translate(0, 0) scale(1) rotate(0deg); }
+    33% { transform: translate(15%, 10%) scale(1.2) rotate(10deg); }
+    66% { transform: translate(-10%, 20%) scale(0.9) rotate(-15deg); }
+  }
+  
+  @keyframes liquid-2 {
+    0%, 100% { transform: translate(0, 0) scale(1) rotate(0deg); }
+    33% { transform: translate(-15%, -15%) scale(1.3) rotate(-10deg); }
+    66% { transform: translate(20%, -10%) scale(0.8) rotate(15deg); }
+  }
+  
+  @keyframes liquid-3 {
+    0%, 100% { transform: translate(0, 0) scale(1) rotate(0deg); }
+    33% { transform: translate(10%, -20%) scale(1.1) rotate(20deg); }
+    66% { transform: translate(-20%, 15%) scale(0.9) rotate(-20deg); }
+  }
+
+  .animate-liquid-1 { animation: liquid-1 25s ease-in-out infinite; }
+  .animate-liquid-2 { animation: liquid-2 30s ease-in-out infinite; }
+  .animate-liquid-3 { animation: liquid-3 20s ease-in-out infinite; }
 
   @media print {
     @page { size: A4; margin: 0; }
