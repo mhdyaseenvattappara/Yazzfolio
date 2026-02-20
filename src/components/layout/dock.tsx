@@ -1,11 +1,9 @@
-
 'use client';
 
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { navLinks } from '@/lib/data';
 import { cn } from '@/lib/utils';
-import { ThemeToggle } from '../ui/theme-toggle';
 import { usePathname, useRouter } from 'next/navigation';
 
 export function Dock() {
@@ -77,9 +75,6 @@ export function Dock() {
           if (targetElement) {
               targetElement.scrollIntoView({ behavior: 'smooth' });
           }
-      } else {
-          // If on another page, just let the standard Link navigation handle it.
-          // The browser will navigate to the homepage and jump to the hash.
       }
   };
 
@@ -108,10 +103,6 @@ export function Dock() {
           </Link>
         ))}
       </div>
-      <div className="mt-2">
-        <ThemeToggle />
-      </div>
     </nav>
   );
 }
-

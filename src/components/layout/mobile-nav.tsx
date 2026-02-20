@@ -44,75 +44,78 @@ export function MobileNav() {
           </span>
         </Link>
         
-        <Sheet open={isOpen} onOpenChange={setIsOpen}>
-          <SheetTrigger asChild>
-            <Button variant="ghost" size="icon" className="rounded-full h-10 w-10 p-0" aria-label="Open menu">
-              <Menu className="h-5 w-5" strokeWidth={2.5} />
-            </Button>
-          </SheetTrigger>
-          <SheetContent 
-            side="bottom" 
-            className="h-fit w-[95vw] sm:w-full max-w-md mx-auto mb-6 rounded-[2.5rem] border border-white/10 bg-[#0a0a0a] text-white p-6 shadow-2xl outline-none overflow-hidden flex flex-col gap-6 bottom-0"
-          >
-            <SheetHeader className="relative flex items-center justify-between pb-2 pr-8">
-              <div className="flex items-center gap-2">
-                <span className="font-black text-xl tracking-tighter text-white">
-                    Yazzfolio<span className="text-primary">.</span>
-                </span>
-              </div>
-              <div className="flex items-center gap-2">
-                <ThemeToggle />
-              </div>
-              <SheetTitle className="sr-only text-sm font-bold uppercase tracking-[0.2em] text-white/60 text-center flex-1">Menu</SheetTitle>
-              <SheetDescription className="sr-only">Navigation and primary actions.</SheetDescription>
-            </SheetHeader>
-
-            {/* Navigation List - Optimized spacing */}
-            <nav className="space-y-1">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className="flex items-center justify-between group py-3 px-2 rounded-2xl transition-all active:bg-white/5"
-                  onClick={() => setIsOpen(false)}
-                >
-                  <div className="flex items-center gap-4">
-                    <div className="h-11 w-11 rounded-xl bg-white/5 flex items-center justify-center transition-colors group-active:bg-white/10">
-                      <link.icon className="h-5 w-5 text-white/80" />
-                    </div>
-                    <span className="font-bold text-lg tracking-tight text-white/90">
-                        {link.name}
-                    </span>
-                  </div>
-                  <ChevronRight className="h-4 w-4 text-white/20 group-active:text-white/40 transition-all" />
-                </Link>
-              ))}
-            </nav>
-            
-            {/* Primary Action Button */}
-            <div className="pt-2">
-              <Button 
-                asChild 
-                className="w-full h-14 rounded-2xl bg-white text-black hover:bg-white/90 font-black text-lg shadow-xl flex items-center justify-between px-6 transition-all active:scale-[0.98]"
-              >
-                <Link href="/#contact" onClick={() => setIsOpen(false)}>
-                    <span>Let's Collaborate</span>
-                    <ArrowRight className="h-5 w-5" />
-                </Link>
+        <div className="flex items-center gap-1">
+          <ThemeToggle />
+          <Sheet open={isOpen} onOpenChange={setIsOpen}>
+            <SheetTrigger asChild>
+              <Button variant="ghost" size="icon" className="rounded-full h-10 w-10 p-0" aria-label="Open menu">
+                <Menu className="h-5 w-5" strokeWidth={2.5} />
               </Button>
+            </SheetTrigger>
+            <SheetContent 
+              side="bottom" 
+              className="h-fit w-[95vw] sm:w-full max-w-md mx-auto mb-6 rounded-[2.5rem] border border-white/10 bg-[#0a0a0a] text-white p-6 shadow-2xl outline-none overflow-hidden flex flex-col gap-6 bottom-0"
+            >
+              <SheetHeader className="relative flex items-center justify-between pb-2 pr-8">
+                <div className="flex items-center gap-2">
+                  <span className="font-black text-xl tracking-tighter text-white">
+                      Yazzfolio<span className="text-primary">.</span>
+                  </span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <ThemeToggle />
+                </div>
+                <SheetTitle className="sr-only text-sm font-bold uppercase tracking-[0.2em] text-white/60 text-center flex-1">Menu</SheetTitle>
+                <SheetDescription className="sr-only">Navigation and primary actions.</SheetDescription>
+              </SheetHeader>
+
+              {/* Navigation List */}
+              <nav className="space-y-1">
+                {navLinks.map((link) => (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    className="flex items-center justify-between group py-3 px-2 rounded-2xl transition-all active:bg-white/5"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    <div className="flex items-center gap-4">
+                      <div className="h-11 w-11 rounded-xl bg-white/5 flex items-center justify-center transition-colors group-active:bg-white/10">
+                        <link.icon className="h-5 w-5 text-white/80" />
+                      </div>
+                      <span className="font-bold text-lg tracking-tight text-white/90">
+                          {link.name}
+                      </span>
+                    </div>
+                    <ChevronRight className="h-4 w-4 text-white/20 group-active:text-white/40 transition-all" />
+                  </Link>
+                ))}
+              </nav>
               
-              <div className="pt-6 flex justify-center">
-                <Link 
-                  href="/admin/login" 
-                  className="text-[10px] font-black uppercase tracking-[0.2em] text-white/20 hover:text-white/40 transition-colors"
-                  onClick={() => setIsOpen(false)}
+              {/* Primary Action Button */}
+              <div className="pt-2">
+                <Button 
+                  asChild 
+                  className="w-full h-14 rounded-2xl bg-white text-black hover:bg-white/90 font-black text-lg shadow-xl flex items-center justify-between px-6 transition-all active:scale-[0.98]"
                 >
-                  Secure Admin Node v2.0
-                </Link>
+                  <Link href="/#contact" onClick={() => setIsOpen(false)}>
+                      <span>Let's Collaborate</span>
+                      <ArrowRight className="h-5 w-5" />
+                  </Link>
+                </Button>
+                
+                <div className="pt-6 flex justify-center">
+                  <Link 
+                    href="/admin/login" 
+                    className="text-[10px] font-black uppercase tracking-[0.2em] text-white/20 hover:text-white/40 transition-colors"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    Secure Admin Node v2.0
+                  </Link>
+                </div>
               </div>
-            </div>
-          </SheetContent>
-        </Sheet>
+            </SheetContent>
+          </Sheet>
+        </div>
       </header>
     </div>
   );

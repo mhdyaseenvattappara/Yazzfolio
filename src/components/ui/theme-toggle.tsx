@@ -13,7 +13,7 @@ export function ThemeToggle() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="icon" className="w-12 h-12 justify-center relative">
+        <Button variant="ghost" size="icon" className="w-10 h-10 justify-center relative rounded-full hover:bg-accent/50 transition-all">
           <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0 ios-dark:-rotate-90 ios-dark:scale-0" />
           <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100 [.cosmic_&]:-rotate-90 [.cosmic_&]:scale-0 [.ios-dark_&]:-rotate-90 [.ios-dark_&]:scale-0" />
           <Sparkles className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all cosmic:rotate-0 cosmic:scale-100 [.ios-dark_&]:-rotate-90 [.ios-dark_&]:scale-0" />
@@ -21,20 +21,20 @@ export function ThemeToggle() {
           <span className="sr-only">Toggle theme</span>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
-        <DropdownMenuItem onClick={() => setTheme("light")}>
+      <DropdownMenuContent align="end" className="rounded-2xl p-2 shadow-2xl border-border/50 bg-card/95 backdrop-blur-xl">
+        <DropdownMenuItem onClick={() => setTheme("light")} className="rounded-xl py-2 cursor-pointer">
           <Sun className="mr-2 h-4 w-4" />
           <span>Light</span>
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme("dark")}>
+        <DropdownMenuItem onClick={() => setTheme("dark")} className="rounded-xl py-2 cursor-pointer">
           <Moon className="mr-2 h-4 w-4" />
           <span>Dark</span>
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme("cosmic")}>
+        <DropdownMenuItem onClick={() => setTheme("cosmic")} className="rounded-xl py-2 cursor-pointer">
           <Sparkles className="mr-2 h-4 w-4" />
           <span>Cosmic</span>
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme("ios-dark")}>
+        <DropdownMenuItem onClick={() => setTheme("ios-dark")} className="rounded-xl py-2 cursor-pointer">
           <CloudMoon className="mr-2 h-4 w-4" />
           <span>iOS 26 Dark</span>
         </DropdownMenuItem>
