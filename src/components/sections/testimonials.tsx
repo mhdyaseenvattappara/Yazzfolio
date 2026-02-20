@@ -1,4 +1,3 @@
-
 'use client';
 import { Card } from "@/components/ui/card";
 import Image from "next/image";
@@ -41,9 +40,9 @@ export function Testimonials() {
   return (
     <section id="testimonials" ref={ref} className="py-24 sm:py-32 md:py-0 md:min-h-screen md:flex md:items-center bg-background overflow-hidden">
         <div className="container mx-auto px-4 md:px-6">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
                 
-                {/* Left: Narrative (Left Align / Close to Cards) */}
+                {/* Left: Narrative (Top Aligned) */}
                 <div className={cn(
                     "lg:col-span-4 flex flex-col items-start text-left space-y-8 transition-all duration-1000",
                     isInView ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-10'
@@ -62,7 +61,7 @@ export function Testimonials() {
                     </p>
                 </div>
 
-                {/* Right: Carousel (Filling the remaining space) */}
+                {/* Right: Carousel */}
                 <div className={cn(
                     "lg:col-span-8 transition-all duration-1000 delay-300",
                     isInView ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-10'
