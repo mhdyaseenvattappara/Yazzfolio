@@ -54,7 +54,6 @@ export function PreloaderWrapper({ children }: { children: React.ReactNode }) {
       <div
         className={cn(
           'transition-opacity duration-500 min-h-screen flex flex-col',
-          !isAdminPage && 'md:pl-20', // Padding for the fixed side dock
            isLoaded ? 'opacity-100' : 'opacity-0'
         )}
         aria-hidden={!isLoaded}
