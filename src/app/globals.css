@@ -152,6 +152,44 @@
     --chart-4: 215.4 16.3% 46.9%;
     --chart-5: 210 40% 96.1%;
   }
+
+  .ios-dark {
+    --background: 240 10% 4%;
+    --foreground: 0 0% 98%;
+
+    --card: 240 10% 8%;
+    --card-foreground: 0 0% 98%;
+
+    --popover: 240 10% 4%;
+    --popover-foreground: 0 0% 98%;
+
+    --primary: 210 100% 52%; /* Vivid iOS Blue */
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 240 10% 12%;
+    --secondary-foreground: 0 0% 98%;
+
+    --muted: 240 10% 15%;
+    --muted-foreground: 240 5% 65%;
+
+    --accent: 210 100% 52%;
+    --accent-foreground: 0 0% 98%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 240 10% 15%;
+    --input: 240 10% 15%;
+    --ring: 210 100% 52%;
+
+    --radius: 1.5rem;
+
+    --chart-1: 210 100% 52%;
+    --chart-2: 240 10% 20%;
+    --chart-3: 0 0% 100%;
+    --chart-4: 240 5% 65%;
+    --chart-5: 240 10% 12%;
+  }
 }
 
 @layer base {
