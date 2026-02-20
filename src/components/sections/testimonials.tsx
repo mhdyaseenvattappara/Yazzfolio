@@ -1,3 +1,4 @@
+
 'use client';
 import { Card } from "@/components/ui/card";
 import Image from "next/image";
@@ -38,25 +39,25 @@ export function Testimonials() {
   const { data: testimonialsData, isLoading } = useCollection<Testimonial>(testimonialsCollectionRef);
 
   return (
-    <section id="testimonials" ref={ref} className="py-20 sm:py-24 md:py-0 md:min-h-screen md:flex md:items-center bg-background overflow-hidden">
+    <section id="testimonials" ref={ref} className="py-24 sm:py-32 md:py-0 md:min-h-screen md:flex md:items-center bg-background overflow-hidden">
         <div className="container mx-auto px-4 md:px-6">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start max-w-6xl mx-auto">
                 
                 {/* Left: Narrative (Top Aligned) */}
                 <div className={cn(
-                    "lg:col-span-4 flex flex-col items-start text-left space-y-6 transition-all duration-1000",
+                    "lg:col-span-4 flex flex-col items-center text-center space-y-6 transition-all duration-1000",
                     isInView ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-10'
                 )}>
-                    <div className="space-y-3">
+                    <div className="space-y-3 flex flex-col items-center">
                         <p className="text-[9px] font-black uppercase tracking-[0.4em] text-primary bg-primary/5 px-3 py-1.5 rounded-full border border-primary/10 w-fit">
                             Endorsements
                         </p>
-                        <h2 className="text-5xl md:text-6xl font-black tracking-tighter leading-none">
+                        <h2 className="text-5xl md:text-6xl font-black tracking-tighter leading-none text-center">
                             Client <br /> Stories
                         </h2>
                     </div>
                     <div className="w-16 h-1 bg-primary/20 rounded-full" />
-                    <p className="text-muted-foreground text-lg leading-relaxed max-w-xs font-medium opacity-80">
+                    <p className="text-muted-foreground text-lg leading-relaxed max-w-xs font-medium opacity-80 text-center">
                         Crafting digital excellence through meaningful partnerships and visionary design thinking.
                     </p>
                 </div>
@@ -73,28 +74,27 @@ export function Testimonials() {
                             <CarouselContent className="-ml-4">
                                 {testimonialsData.map((testimonial) => (
                                     <CarouselItem key={testimonial.id} className="pl-4 md:basis-full lg:basis-full">
-                                        <Card className="p-8 md:p-12 rounded-[2.5rem] bg-card/40 border-border/40 nav-liquid relative overflow-hidden flex flex-col h-full min-h-[350px] shadow-2xl">
-                                            {/* Stylistic Quote Mark */}
-                                            <Quote className="absolute top-8 right-8 w-16 h-16 text-primary/5 -rotate-12 pointer-events-none" />
+                                        <Card className="p-8 md:p-10 rounded-[3rem] bg-card/40 border-border/40 nav-liquid relative overflow-hidden flex flex-col h-full min-h-[320px] shadow-2xl">
+                                            <Quote className="absolute top-6 right-6 w-12 h-12 text-primary/5 -rotate-12 pointer-events-none" />
                                             
-                                            <div className="flex gap-1 mb-8 relative z-10">
+                                            <div className="flex gap-1 mb-6 relative z-10">
                                                 {[...Array(5)].map((_, i) => (
                                                     <Star 
                                                         key={i} 
                                                         className={cn(
-                                                            "w-3.5 h-3.5",
+                                                            "w-3 h-3",
                                                             i < testimonial.rating ? "text-primary fill-primary" : "text-primary/10"
                                                         )} 
                                                     />
                                                 ))}
                                             </div>
                                             
-                                            <blockquote className="text-xl md:text-2xl font-medium leading-tight tracking-tight italic mb-10 flex-grow relative z-10 text-foreground/90">
+                                            <blockquote className="text-lg md:text-xl font-medium leading-relaxed tracking-tight italic mb-8 flex-grow relative z-10 text-foreground/90">
                                                 “{testimonial.quote}”
                                             </blockquote>
 
                                             <div className="flex items-center gap-4 mt-auto relative z-10">
-                                                <div className="relative w-12 h-12 rounded-full overflow-hidden border border-primary/10 shadow-lg">
+                                                <div className="relative w-10 h-10 rounded-full overflow-hidden border border-primary/10 shadow-lg">
                                                     <Image 
                                                         src={testimonial.imageUrl || '/my-photo.jpg'} 
                                                         alt={testimonial.name}
@@ -102,9 +102,9 @@ export function Testimonials() {
                                                         className="object-cover grayscale hover:grayscale-0 transition-all duration-700"
                                                     />
                                                 </div>
-                                                <div className="space-y-0">
-                                                    <p className="font-black text-lg tracking-tighter uppercase">{testimonial.name}</p>
-                                                    <p className="text-[9px] font-black text-primary/40 uppercase tracking-[0.2em]">{testimonial.title}</p>
+                                                <div className="space-y-0 text-left">
+                                                    <p className="font-black text-base tracking-tighter uppercase">{testimonial.name}</p>
+                                                    <p className="text-[8px] font-black text-primary/40 uppercase tracking-[0.2em]">{testimonial.title}</p>
                                                 </div>
                                             </div>
                                         </Card>
@@ -112,8 +112,8 @@ export function Testimonials() {
                                 ))}
                             </CarouselContent>
                             <div className="flex justify-center gap-4 mt-8">
-                                <CarouselPrevious className="static translate-y-0 h-12 w-12 rounded-full border-border/50 bg-card/50 backdrop-blur-xl hover:bg-primary hover:text-primary-foreground transition-all shadow-xl" />
-                                <CarouselNext className="static translate-y-0 h-12 w-12 rounded-full border-border/50 bg-card/50 backdrop-blur-xl hover:bg-primary hover:text-primary-foreground transition-all shadow-xl" />
+                                <CarouselPrevious className="static translate-y-0 h-10 w-10 rounded-full border-border/50 bg-card/50 backdrop-blur-xl hover:bg-primary hover:text-primary-foreground transition-all shadow-xl" />
+                                <CarouselNext className="static translate-y-0 h-10 w-10 rounded-full border-border/50 bg-card/50 backdrop-blur-xl hover:bg-primary hover:text-primary-foreground transition-all shadow-xl" />
                             </div>
                         </Carousel>
                     ) : (

@@ -1,3 +1,4 @@
+
 'use client';
 
 import Image from 'next/image';
@@ -37,7 +38,7 @@ export function About() {
               isInView ? 'animate-blur-reveal' : 'opacity-0'
             )}
           >
-            <div className="relative w-32 h-32 rounded-full overflow-hidden shadow-2xl mb-8 group">
+            <div className="relative w-32 h-32 rounded-full overflow-hidden shadow-2xl mb-8 group mx-auto">
                 <Image
                   src={profile.profileImageUrl || '/my-photo.jpg'}
                   alt={profile.name}
@@ -46,11 +47,11 @@ export function About() {
                   className="object-cover transition-all duration-500 grayscale group-hover:grayscale-0"
                 />
             </div>
-            <div className="space-y-6">
+            <div className="space-y-6 flex flex-col items-center">
               <div className="space-y-2">
-                  <h2 className="text-4xl md:text-6xl font-bold tracking-tighter">Hey, I'm {profile.name}</h2>
+                  <h2 className="text-4xl md:text-6xl font-bold tracking-tighter text-center">Hey, I'm {profile.name}</h2>
               </div>
-              <div className="max-w-2xl mx-auto text-muted-foreground text-base md:text-xl leading-relaxed" dangerouslySetInnerHTML={{ __html: profile.bio.replace(/\n/g, '<br />') }} />
+              <div className="max-w-2xl mx-auto text-muted-foreground text-base md:text-xl leading-relaxed text-center" dangerouslySetInnerHTML={{ __html: profile.bio.replace(/\n/g, '<br />') }} />
                <div className="pt-6">
                   <Button asChild size="lg" className="group text-lg py-7 px-8">
                       <Link href="#contact">
