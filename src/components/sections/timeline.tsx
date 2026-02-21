@@ -32,7 +32,8 @@ export function Timeline() {
 
   const timelineCollectionRef = useMemoFirebase(() => {
     if (!firestore || !adminUserId) return null;
-    return query(collection(firestore, `admin_users/${adminUserId}/timeline_events`), orderBy('year', 'asc'));
+    // Changed sorting to 'desc' to show the latest years first
+    return query(collection(firestore, `admin_users/${adminUserId}/timeline_events`), orderBy('year', 'desc'));
   }, [firestore, adminUserId]);
 
   const { data: timelineData, isLoading } = useCollection<TimelineEvent>(timelineCollectionRef);
