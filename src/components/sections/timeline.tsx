@@ -64,7 +64,7 @@ export function Timeline() {
 
             {timelineData && timelineData.map((item, index) => (
               <div key={item.id} className={cn(
-                  "relative flex items-center mb-12 md:mb-20"
+                  "relative flex items-center mb-8 md:mb-12"
               )}>
                 {/* Content Container */}
                 <div className={cn(
