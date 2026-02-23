@@ -1,4 +1,3 @@
-
 'use client';
 
 import { z } from 'zod';
@@ -18,6 +17,9 @@ import { ImageUpload } from '@/components/ui/image-upload';
 import { useState, useRef } from 'react';
 import { uploadToImgBB } from '@/lib/imgbb';
 import { uploadToCloudinary } from '@/lib/cloudinary';
+
+// Support long-running video uploads
+export const maxDuration = 120;
 
 const formSchema = z.object({
   title: z.string().min(2, 'Title is required'),
@@ -101,6 +103,7 @@ export function VideoForm({ video, onSuccess }: VideoFormProps) {
                 reader.onload = (e) => resolve(e.target?.result as string);
                 reader.readAsDataURL(videoFile);
             });
+            // Calling server action with potentially large base64 string
             finalVideoUrl = await uploadToCloudinary(base64, 'video');
             setUploadProgress(90);
         }
@@ -132,7 +135,12 @@ export function VideoForm({ video, onSuccess }: VideoFormProps) {
         });
         onSuccess();
     } catch (err: any) {
-        toast({ variant: 'destructive', title: 'Upload Failed', description: err.message });
+        console.error("Upload Error:", err);
+        toast({ 
+            variant: 'destructive', 
+            title: 'Upload Failed', 
+            description: err.message || 'Check your file size (Max 50MB) and connection.' 
+        });
     } finally {
         setIsSubmitting(false);
     }
@@ -178,12 +186,20 @@ export function VideoForm({ video, onSuccess }: VideoFormProps) {
                     <div className="flex items-center gap-3 text-primary font-bold">
                         <Video className="h-6 w-6" />
                         <span className="truncate max-w-[200px]">{videoFile.name}</span>
-                        <X className="h-4 w-4 text-muted-foreground hover:text-destructive" onClick={(e) => { e.stopPropagation(); setVideoFile(null); }} />
+                        <Button 
+                            type="button" 
+                            variant="ghost" 
+                            size="icon" 
+                            className="h-8 w-8 hover:bg-destructive/10" 
+                            onClick={(e) => { e.stopPropagation(); setVideoFile(null); }}
+                        >
+                            <X className="h-4 w-4 text-muted-foreground hover:text-destructive" />
+                        </Button>
                     </div>
                 ) : (
                     <>
                         <UploadCloud className="h-8 w-8 text-muted-foreground mb-2 group-hover:scale-110 transition-transform" />
-                        <p className="text-xs font-medium text-muted-foreground">Click to upload .mp4 or .mov</p>
+                        <p className="text-xs font-medium text-muted-foreground">Click to upload .mp4 or .mov (Max 50MB)</p>
                     </>
                 )}
             </div>
