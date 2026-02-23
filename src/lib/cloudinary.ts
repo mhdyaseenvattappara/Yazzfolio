@@ -5,7 +5,7 @@
  * Specifically used for high-performance video reels.
  */
 
-import { crypto } from 'node:crypto';
+import { createHash } from 'node:crypto';
 
 /**
  * Uploads a base64 encoded file to Cloudinary.
@@ -30,7 +30,7 @@ export async function uploadToCloudinary(
   
   // Create signature for signed upload
   const signatureStr = `folder=${folder}&timestamp=${timestamp}${apiSecret}`;
-  const signature = crypto.createHash('sha1').update(signatureStr).digest('hex');
+  const signature = createHash('sha1').update(signatureStr).digest('hex');
 
   const formData = new FormData();
   formData.append('file', base64Data);
