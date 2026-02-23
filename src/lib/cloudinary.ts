@@ -3,7 +3,7 @@
 
 /**
  * @fileOverview Server-side utility for uploading assets to Cloudinary.
- * Supports both images and videos.
+ * Specifically used for high-performance video reels.
  */
 
 import { crypto } from 'node:crypto';
@@ -22,14 +22,14 @@ export async function uploadToCloudinary(
   const apiKey = process.env.CLOUDINARY_API_KEY;
   const apiSecret = process.env.CLOUDINARY_API_SECRET;
 
-  if (!cloudName || !apiSecret || !apiKey || apiKey.includes('YOUR_')) {
-    throw new Error('Cloudinary is not fully configured. Please ensure CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, and CLOUDINARY_API_SECRET are set in your .env file.');
+  if (!cloudName || !apiSecret || !apiKey) {
+    throw new Error('Cloudinary credentials are missing from the environment.');
   }
 
   const timestamp = Math.round(new Date().getTime() / 1000);
   const folder = 'yazzfolio_motion';
   
-  // Create signature
+  // Create signature for signed upload
   const signatureStr = `folder=${folder}&timestamp=${timestamp}${apiSecret}`;
   const signature = crypto.createHash('sha1').update(signatureStr).digest('hex');
 
