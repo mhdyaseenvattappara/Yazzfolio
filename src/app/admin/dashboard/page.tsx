@@ -1,11 +1,10 @@
-
 'use client';
 
 import { useUser, useAuth, useFirestore, useMemoFirebase, useDoc } from '@/firebase';
 import { useRouter } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { Loader2, LogOut, Home, FileText, LayoutDashboard, Inbox, Briefcase, Star, Sparkles, Milestone, Code, User as UserIcon } from 'lucide-react';
+import { Loader2, LogOut, Home, FileText, LayoutDashboard, Inbox, Briefcase, Star, Sparkles, Milestone, Code, Video, User as UserIcon } from 'lucide-react';
 import { doc } from 'firebase/firestore';
 import { PortfolioManager } from './portfolio-manager';
 import { TestimonialsManager } from './testimonials-manager';
@@ -15,6 +14,7 @@ import { ProfileManager } from './profile-manager';
 import { InboxManager } from './inbox-manager';
 import { ToolStackManager } from './tool-stack-manager';
 import { InvoiceManager } from './invoice-manager';
+import { VideoManager } from './video-manager';
 import type { AdminProfile } from '@/lib/data';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -28,6 +28,7 @@ const dashboardTabs = [
   { id: 'inbox', label: 'Inbox', icon: Inbox },
   { id: 'invoices', label: 'Invoices', icon: FileText },
   { id: 'portfolio', label: 'Projects', icon: Briefcase },
+  { id: 'videos', label: 'Videos', icon: Video },
   { id: 'testimonials', label: 'Reviews', icon: Star },
   { id: 'services', label: 'Services', icon: Sparkles },
   { id: 'timeline', label: 'Timeline', icon: Milestone },
@@ -77,17 +78,13 @@ function AdminDashboard() {
 
   return (
     <div className="flex flex-col md:flex-row h-screen w-full overflow-hidden bg-muted/40">
-      {/* Sidebar - Adaptive: Vertical Dock on Desktop, Bottom Bar on Mobile */}
       <TooltipProvider delayDuration={0}>
         <nav className={cn(
           'z-50 flex transition-all duration-500 ease-in-out',
-          // Desktop Styles
           'md:fixed md:left-4 md:top-1/2 md:-translate-y-1/2 md:flex-col md:p-2 md:rounded-full md:border md:bg-card/80 md:shadow-lg md:backdrop-blur-sm',
-          // Mobile Styles
           'fixed bottom-4 left-4 right-4 h-16 flex-row items-center justify-around px-4 rounded-3xl border bg-card/90 shadow-2xl backdrop-blur-xl md:h-auto md:w-auto md:bottom-auto md:right-auto',
            isMounted ? 'translate-y-0 opacity-100' : 'translate-y-20 opacity-0 md:translate-y-0 md:-translate-x-full'
         )}>
-          {/* Admin Avatar - Desktop Only */}
           <Link href="/" className="mb-2 hidden md:block transition-transform duration-300 hover:scale-110">
             <div className="relative h-10 w-10 flex-shrink-0 overflow-hidden rounded-full ring-2 ring-primary/10">
               <Image src={profileData?.profileImageUrl || "/my-photo.jpg"} alt="Admin" fill className="object-cover" />
@@ -146,9 +143,7 @@ function AdminDashboard() {
         </nav>
       </TooltipProvider>
 
-      {/* Main Content Area - Locked to Viewport */}
       <div className="flex-1 flex flex-col h-full overflow-hidden md:pl-24">
-        {/* Mobile Header */}
         <header className="md:hidden flex items-center justify-between px-6 py-4 bg-background/50 backdrop-blur-sm border-b shrink-0">
             <div className="flex items-center gap-3">
                 <div className="relative h-8 w-8 overflow-hidden rounded-full ring-2 ring-primary/10">
@@ -172,6 +167,7 @@ function AdminDashboard() {
                 {activeTab === 'inbox' && <InboxManager />}
                 {activeTab === 'invoices' && <InvoiceManager />}
                 {activeTab === 'portfolio' && <PortfolioManager />}
+                {activeTab === 'videos' && <VideoManager />}
                 {activeTab === 'testimonials' && <TestimonialsManager />}
                 {activeTab === 'services' && <ServicesManager />}
                 {activeTab === 'timeline' && <TimelineManager />}

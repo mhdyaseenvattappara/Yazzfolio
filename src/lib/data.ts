@@ -1,5 +1,4 @@
-
-import { LayoutGrid, Mail, User, Briefcase, Star, PenTool, Code, Palette, Github, Linkedin, Twitter, Calendar, MessageSquare, Cog, Pencil, Clapperboard, Brush, MousePointerClick, Server, Home, Instagram, Facebook, Sparkles, Milestone } from 'lucide-react';
+import { LayoutGrid, Mail, User, Briefcase, Star, PenTool, Code, Palette, Github, Linkedin, Twitter, Calendar, MessageSquare, Cog, Pencil, Clapperboard, Brush, MousePointerClick, Server, Home, Instagram, Facebook, Sparkles, Milestone, Video as VideoIcon } from 'lucide-react';
 import { Timestamp } from 'firebase/firestore';
 import { PhotoshopIcon, IllustratorIcon, PremiereProIcon, InDesignIcon, AfterEffectsIcon } from '@/components/tool-icons';
 import { WhatsAppIcon } from '@/components/icons';
@@ -22,6 +21,19 @@ export interface PortfolioItem {
   updatedAt: Timestamp;
 }
 
+export interface Video {
+  id: string;
+  adminUserId: string;
+  title: string;
+  description: string;
+  videoUrl: string;
+  thumbnailUrl: string;
+  isFeatured: boolean;
+  order: number;
+  createdAt: Timestamp;
+  updatedAt: Timestamp;
+}
+
 export interface Testimonial {
     id: string;
     adminUserId: string;
@@ -39,7 +51,7 @@ export interface Service {
     adminUserId: string;
     title: string;
     description: string;
-    icon: string; // Storing icon name as string
+    icon: string;
     createdAt: Timestamp;
     updatedAt: Timestamp;
 }
@@ -140,6 +152,7 @@ export const navLinks = [
   { name: 'Timeline', href: '/#timeline', icon: Milestone },
   { name: 'Services', href: '/#services', icon: Sparkles },
   { name: 'Portfolio', href: '/#projects', icon: LayoutGrid },
+  { name: 'Reel', href: '/videos', icon: VideoIcon },
   { name: 'Contact', href: '/#contact', icon: Mail },
 ];
 

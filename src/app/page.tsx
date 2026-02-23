@@ -6,8 +6,8 @@ import { Projects } from '@/components/sections/projects';
 import { Testimonials } from '@/components/sections/testimonials';
 import { Contact } from '@/components/sections/contact';
 import { Timeline } from '@/components/sections/timeline';
-import { Marquee } from '@/components/layout/marquee';
 import { ToolStack } from '@/components/sections/tool-stack';
+import { FeaturedVideo } from '@/components/sections/featured-video';
 
 export default function Home() {
   const jsonLd = {
@@ -30,11 +30,11 @@ export default function Home() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
-      {/* Marquee removed from static position as it is now integrated into the fixed MobileNav */}
       <main className="flex-1">
         <Hero />
         <About />
         <Timeline />
+        <FeaturedVideo />
         <Services />
         <ToolStack />
         <Projects />
