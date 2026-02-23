@@ -1,244 +1,93 @@
-
 {
   "entities": {
-    "AdminUser": {
+    "Video": {
       "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "AdminUser",
+      "title": "Video",
       "type": "object",
-      "description": "Represents an administrator user with access to site control and settings.",
+      "description": "Represents a video entry in the portfolio's video gallery, showcasing creative work or presentations.",
       "properties": {
         "id": {
           "type": "string",
-          "description": "Unique identifier for the AdminUser entity."
-        },
-        "username": {
-          "type": "string",
-          "description": "Username for the administrator user."
-        },
-        "email": {
-          "type": "string",
-          "description": "Email address for the administrator user.",
-          "format": "email"
-        },
-        "name": {
-          "type": "string",
-          "description": "The full name of the admin user."
-        },
-        "bio": {
-            "type": "string",
-            "description": "A short biography of the admin user."
-        },
-        "address": {
-            "type": "string",
-            "description": "The business address of the admin user."
-        },
-        "profileImageUrl": {
-            "type": "string",
-            "format": "uri",
-            "description": "URL to the admin user's profile picture."
-        }
-      },
-      "required": [
-        "id",
-        "username",
-        "email",
-        "name"
-      ]
-    },
-    "PortfolioItem": {
-      "$schema": "http://json-schema.org/draft-07/schema#",
-      "title": "PortfolioItem",
-      "type": "object",
-      "description": "Represents an item in the portfolio, controlled by the admin user.",
-      "properties": {
-        "id": {
-          "type": "string",
-          "description": "Unique identifier for the PortfolioItem entity."
+          "description": "Unique identifier for the Video entity."
         },
         "title": {
           "type": "string",
-          "description": "Title of the portfolio item."
+          "description": "The title of the video, displayed prominently in the gallery."
         },
         "description": {
           "type": "string",
-          "description": "Description of the portfolio item."
+          "description": "A brief description or summary of the video content, providing context to viewers."
         },
-        "imageUrl": {
+        "videoUrl": {
           "type": "string",
-          "description": "URL to the primary image for the portfolio item.",
+          "description": "The URL where the video is hosted (e.g., YouTube, Vimeo, or a direct link to the video file).",
           "format": "uri"
         },
-        "gallery": {
-          "type": "array",
-          "description": "A collection of secondary images for the project carousel.",
-          "items": {
-            "type": "object",
-            "properties": {
-              "imageUrl": { "type": "string", "format": "uri" }
-            }
-          }
+        "thumbnailUrl": {
+          "type": "string",
+          "description": "The URL for the video's thumbnail image, used for previewing the video in the gallery.",
+          "format": "uri"
         },
-        "tags": {
+        "durationInSeconds": {
+          "type": "number",
+          "description": "The duration of the video in seconds."
+        },
+        "isFeatured": {
+          "type": "boolean",
+          "description": "A boolean flag indicating if this video should be prominently featured on the landing page. Only one video should be marked as featured at a time."
+        },
+        "order": {
+          "type": "number",
+          "description": "An optional numeric value to define the display order of the video within its gallery or list."
+        },
+        "tagIds": {
           "type": "array",
-          "description": "Tags for the portfolio item.",
+          "description": "References to Tags. (Relationship: Tag N:N Video)",
           "items": {
             "type": "string"
           }
         },
-        "likes": {
-          "type": "number",
-          "description": "Total number of likes for this project."
-        },
-        "adminUserId": {
+        "createdAt": {
           "type": "string",
-          "description": "Reference to AdminUser. (Relationship: AdminUser 1:N PortfolioItem)"
+          "description": "The date and time when the video record was created.",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "description": "The date and time when the video record was last updated.",
+          "format": "date-time"
         }
       },
       "required": [
         "id",
         "title",
-        "description",
-        "imageUrl",
-        "adminUserId"
+        "videoUrl",
+        "thumbnailUrl",
+        "isFeatured"
       ]
     },
-    "ProjectLike": {
-      "title": "ProjectLike",
+    "Tag": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "Tag",
       "type": "object",
-      "description": "Tracks a unique like from an IP address for a project.",
+      "description": "Represents a categorization tag used for filtering projects, videos, or other content within the portfolio.",
       "properties": {
-        "projectId": { "type": "string" },
-        "ipAddress": { "type": "string" },
-        "createdAt": { "type": "string", "format": "date-time" }
-      },
-      "required": ["projectId", "ipAddress", "createdAt"]
-    },
-    "Testimonial": {
-        "title": "Testimonial",
-        "type": "object",
-        "description": "Represents a client testimonial.",
-        "properties": {
-            "id": { "type": "string", "description": "Unique identifier for the testimonial." },
-            "name": { "type": "string", "description": "Name of the person giving the testimonial." },
-            "title": { "type": "string", "description": "Title or company of the person." },
-            "quote": { "type": "string", "description": "The content of the testimonial." },
-            "imageUrl": { "type": "string", "format": "uri", "description": "URL to the person's image." },
-            "rating": { "type": "number", "description": "Star rating from 1 to 5." },
-            "adminUserId": { "type": "string", "description": "Reference to the AdminUser." }
-        },
-        "required": ["id", "name", "title", "quote", "imageUrl", "rating", "adminUserId"]
-    },
-    "Service": {
-        "title": "Service",
-        "type": "object",
-        "description": "Represents a service offered.",
-        "properties": {
-            "id": { "type": "string", "description": "Unique identifier for the service." },
-            "title": { "type": "string", "description": "Title of the service." },
-            "description": { "type": "string", "description": "Description of the service." },
-            "icon": { "type": "string", "description": "Name of the Lucide icon for the service." },
-            "adminUserId": { "type": "string", "description": "Reference to the AdminUser." }
-        },
-        "required": ["id", "title", "description", "icon", "adminUserId"]
-    },
-    "TimelineEvent": {
-        "title": "TimelineEvent",
-        "type": "object",
-        "description": "Represents an event in the career timeline.",
-        "properties": {
-            "id": { "type": "string", "description": "Unique identifier for the timeline event." },
-            "year": { "type": "string", "description": "The year of the event." },
-            "event": { "type": "string", "description": "Description of the event." },
-            "adminUserId": { "type": "string", "description": "Reference to the AdminUser." }
-        },
-        "required": ["id", "year", "event", "adminUserId"]
-    },
-    "ContactMessage": {
-      "title": "ContactMessage",
-      "type": "object",
-      "description": "Represents a message sent through the contact form.",
-      "properties": {
-        "id": { "type": "string", "description": "Unique identifier for the message." },
-        "name": { "type": "string", "description": "Name of the sender." },
-        "email": { "type": "string", "format": "email", "description": "Email of the sender." },
-        "message": { "type": "string", "description": "The content of the message." },
-        "createdAt": { "type": "string", "format": "date-time", "description": "Timestamp when the message was sent." },
-        "isRead": { "type": "boolean", "description": "Whether the admin has read the message." },
-        "adminUserId": { "type": "string", "description": "Reference to the AdminUser." }
-      },
-      "required": ["id", "name", "email", "message", "createdAt", "adminUserId"]
-    },
-     "Tool": {
-      "title": "Tool",
-      "type": "object",
-      "description": "Represents a tool in the tool stack.",
-      "properties": {
-        "id": { "type": "string", "description": "Unique identifier for the tool." },
-        "name": { "type": "string", "description": "Name of the tool." },
-        "icon": { "type": "string", "description": "Name of the custom icon for the tool." },
-        "adminUserId": { "type": "string", "description": "Reference to the AdminUser." }
-      },
-      "required": ["id", "name", "icon", "adminUserId"]
-    },
-    "Invoice": {
-      "title": "Invoice",
-      "type": "object",
-      "description": "Represents a single invoice.",
-      "properties": {
-        "id": { "type": "string", "description": "Unique identifier for the invoice." },
-        "invoiceNumber": { "type": "string", "description": "The unique number for this invoice." },
-        "clientName": { "type": "string", "description": "Name of the client." },
-        "clientAddress": { "type": "string", "description": "Address of the client." },
-        "invoiceDate": { "type": "string", "format": "date-time", "description": "Date the invoice was issued." },
-        "dueDate": { "type": "string", "format": "date-time", "description": "Date the invoice is due." },
-        "templateId": { "type": "string", "description": "The visual template ID used for this invoice." },
-        "lineItems": {
-          "type": "array",
-          "description": "List of items or services being billed.",
-          "items": {
-            "type": "object",
-            "properties": {
-              "id": { "type": "number" },
-              "description": { "type": "string" },
-              "quantity": { "type": "number" },
-              "price": { "type": "number" }
-            },
-            "required": ["id", "description", "quantity", "price"]
-          }
-        },
-        "tax": { "type": "number", "description": "Tax rate in percentage." },
-        "notes": { "type": "string", "description": "Additional notes or terms." },
-        "currency": {
-          "type": "object",
-          "properties": {
-            "value": { "type": "string" },
-            "label": { "type": "string" },
-            "symbol": { "type": "string" }
-          },
-          "required": ["value", "label", "symbol"]
-        },
-        "status": {
+        "id": {
           "type": "string",
-          "enum": ["Draft", "Pending", "Paid"],
-          "description": "The current status of the invoice."
+          "description": "Unique identifier for the Tag entity."
         },
-        "total": { "type": "number", "description": "The total amount of the invoice." },
-        "yourName": { "type": "string", "description": "The name of the issuer." },
-        "yourAddress": { "type": "string", "description": "The address of the issuer." },
-        "yourEmail": { "type": "string", "format": "email", "description": "The email of the issuer." },
-        "logoUrl": { "type": "string", "format": "uri", "description": "URL to the issuer's logo." },
-        "adminUserId": { "type": "string", "description": "Reference to the AdminUser." }
+        "name": {
+          "type": "string",
+          "description": "The name of the tag (e.g., 'React', 'Design', 'Animation', 'Web Development')."
+        },
+        "description": {
+          "type": "string",
+          "description": "A brief description of what this tag represents, providing clarity on its use."
+        }
       },
       "required": [
         "id",
-        "invoiceNumber",
-        "clientName",
-        "invoiceDate",
-        "dueDate",
-        "lineItems",
-        "status",
-        "total",
-        "adminUserId"
+        "name"
       ]
     }
   },
@@ -251,89 +100,38 @@
   "firestore": {
     "structure": [
       {
-        "path": "/admin_users/{adminUserId}",
+        "path": "/videos/{videoId}",
         "definition": {
-          "entityName": "AdminUser",
+          "entityName": "Video",
           "schema": {
-            "$ref": "#/entities/AdminUser"
+            "$ref": "#/backend/entities/Video"
           },
-          "description": "Stores administrator user information.",
+          "description": "Stores all video entries for the portfolio's video gallery. Each document is publicly readable and can be filtered by the 'isFeatured' flag to distinguish between landing page content and the full gallery. Write access is restricted to the administrator. Includes the 'isFeatured' field for presentation logic, and 'tagIds' for categorization.",
           "params": [
             {
-              "name": "adminUserId",
-              "description": "Unique identifier for the administrator user."
+              "name": "videoId",
+              "description": "Unique identifier for a specific video."
             }
           ]
         }
       },
       {
-        "path": "/admin_users/{adminUserId}/portfolio_items/{portfolioItemId}",
+        "path": "/tags/{tagId}",
         "definition": {
-          "entityName": "PortfolioItem",
+          "entityName": "Tag",
           "schema": {
-            "$ref": "#/entities/PortfolioItem"
+            "$ref": "#/backend/entities/Tag"
           },
-          "description": "Stores portfolio items for an admin user."
-        }
-      },
-      {
-        "path": "/project_likes/{likeId}",
-        "definition": {
-          "entityName": "ProjectLike",
-          "schema": { "$ref": "#/entities/ProjectLike" },
-          "description": "Tracks unique likes by IP address."
-        }
-      },
-      {
-        "path": "/admin_users/{adminUserId}/testimonials/{testimonialId}",
-        "definition": {
-            "entityName": "Testimonial",
-            "schema": { "$ref": "#/entities/Testimonial" },
-            "description": "Stores testimonials for an admin user."
-        }
-      },
-      {
-        "path": "/admin_users/{adminUserId}/services/{serviceId}",
-        "definition": {
-            "entityName": "Service",
-            "schema": { "$ref": "#/entities/Service" },
-            "description": "Stores services offered by an admin user."
-        }
-      },
-      {
-        "path": "/admin_users/{adminUserId}/timeline_events/{timelineEventId}",
-        "definition": {
-            "entityName": "TimelineEvent",
-            "schema": { "$ref": "#/entities/TimelineEvent" },
-            "description": "Stores career timeline events for an admin user."
-        }
-      },
-      {
-        "path": "/admin_users/{adminUserId}/contact_messages/{messageId}",
-        "definition": {
-            "entityName": "ContactMessage",
-            "schema": { "$ref": "#/entities/ContactMessage" },
-            "description": "Stores contact form messages for an admin user."
-        }
-      },
-      {
-        "path": "/admin_users/{adminUserId}/tools/{toolId}",
-        "definition": {
-            "entityName": "Tool",
-            "schema": { "$ref": "#/entities/Tool" },
-            "description": "Stores tools for the admin's tool stack."
-        }
-      },
-       {
-        "path": "/admin_users/{adminUserId}/invoices/{invoiceId}",
-        "definition": {
-          "entityName": "Invoice",
-          "schema": {
-            "$ref": "#/entities/Invoice"
-          },
-          "description": "Stores invoices created by the admin user."
+          "description": "Stores categorization tags used across the portfolio, such as for filtering videos or other content. Each document is publicly readable. Write access is restricted to the administrator.",
+          "params": [
+            {
+              "name": "tagId",
+              "description": "Unique identifier for a specific tag."
+            }
+          ]
         }
       }
-    ]
+    ],
+    "reasoning": "The Firestore structure is designed to support a minimalist, modern portfolio site with a video gallery, prioritizing security, scalability, and debuggability. All videos and tags are stored in top-level collections, `/videos` and `/tags`, respectively. This approach simplifies access control and querying for a single-owner portfolio. Authorization Independence is achieved because all documents are self-contained for read access, eliminating the need for `get()` calls in security rules. Public read access to all videos and tags is granted, while write access is restricted to an administrator (the portfolio owner) via a global role check (e.g., against an `/admin_uids/{uid}` collection, though this specific collection isn't part of the data model entities, it's a common security pattern). This ensures that rules are simple and atomic.\n\nRegarding Query Ability and Predictability (QAPs), the structure supports efficient querying:\n1.  **Landing Page Video:** The `isFeatured` boolean flag in the `Video` document allows for a direct query to retrieve the single featured video for the landing page (`/videos.where('isFeatured', '==', true).limit(1)`). This is a highly efficient and predictable query, directly addressing the requirement without filtering on the client side or needing complex rule logic.\n2.  **Video Gallery:** The remaining videos for the full gallery view can be retrieved by querying for `isFeatured == false` (`/videos.where('isFeatured', '==', false).orderBy('order')`) or simply retrieving all videos and filtering for non-featured ones on the client, depending on specific display logic. Using `orderBy('order')` ensures a predictable display sequence. The `tagIds` array in the `Video` document also allows for client-side filtering by tags, or potential `array-contains` queries if more advanced server-side filtering is required in the future.\n\nStructural Segregation is maintained as all documents within `/videos` share the same security posture (public read, admin write). The `isFeatured` flag is a data attribute for content presentation, not an access control attribute, thus not requiring separate collections. The `Tag` collection follows the same principle, serving as a global lookup for categorization."
   }
 }

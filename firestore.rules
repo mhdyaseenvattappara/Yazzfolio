@@ -1,68 +1,104 @@
-
 /**
- * @fileoverview Firestore Security Rules for Vanguard Folio.
+ * Portfolio Video Gallery Security Rules
+ *
+ * Core Philosophy:
+ * This ruleset implements a public-read, admin-write model suitable for a professional portfolio. 
+ * Content consumption is unrestricted to maximize reach, while content management is strictly 
+ * gated behind an administrator role check.
+ *
+ * Data Structure:
+ * - /videos/{videoId}: Flat collection for all video entries. Used for both the featured 
+ *   landing page video and the full gallery.
+ * - /tags/{tagId}: Flat collection for categorization metadata used to filter videos.
+ * - /admin_uids/{uid}: A dedicated collection (referenced in reasoning) used to identify 
+ *   authenticated users with administrative privileges.
+ *
+ * Key Security Decisions:
+ * - Public Accessibility: All portfolio content (videos and tags) is readable by any user, 
+ *   including unauthenticated guests, to support SEO and site accessibility.
+ * - Role-Based Access Control (RBAC): Writes are restricted to users whose UIDs exist in the 
+ *   '/admin_uids' collection. This allows for simple management of portfolio owners.
+ * - ID Integrity: Rules enforce that the 'id' field within a document matches its Firestore 
+ *   document ID to ensure data consistency.
+ *
+ * Denormalization for Authorization:
+ * - Admin roles are checked via an 'exists' query to a central admin collection. While 
+ *   ordinarily 'exists' counts as a read, for a single-owner portfolio, this check is 
+ *   efficient and provides a clean separation between content and authorization logic.
+ *
+ * Structural Segregation:
+ * - Featured content is distinguished from gallery content via a boolean flag ('isFeatured') 
+ *   rather than separate collections. This simplifies the management of the 'featured' status 
+ *   through a single update operation.
  */
-rules_version = '2';
 
+rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
+    // --- Helper Functions ---
+
+    /**
+     * @description Checks if the request is made by an authenticated user.
+     */
     function isSignedIn() {
       return request.auth != null;
     }
 
-    function isOwner(userId) {
-      return isSignedIn() && request.auth.uid == userId;
+    /**
+     * @description Verifies if the authenticated user has administrative privileges 
+     * by checking for their UID in the designated admin collection.
+     */
+    function isAdmin() {
+      return isSignedIn() && exists(/databases/$(database)/documents/admin_uids/$(request.auth.uid));
     }
-    
-    match /project_likes/{likeId} {
-      allow read: if true;
-      allow create, delete: if true; // Open for prototyping IP-based uniqueness
+
+    /**
+     * @description Combines admin check with a verify-existence check for updates and deletes.
+     */
+    function isExistingAdmin() {
+      return isAdmin() && resource != null;
     }
 
-    match /admin_users/{adminUserId} {
-      allow read: if true;
-      allow create: if isOwner(adminUserId) && request.resource.data.id == adminUserId;
-      allow update: if isOwner(adminUserId) && request.resource.data.id == resource.data.id;
-      allow delete: if false;
+    // --- Collection Rules ---
 
-      match /portfolio_items/{portfolioItemId} {
-        allow read: if true;
-        // Allow anyone to update the 'likes' field, but restrict all other writes to the owner
-        allow update: if isOwner(adminUserId) || (request.resource.data.diff(resource.data).affectedKeys().hasOnly(['likes']));
-        allow create, delete: if isOwner(adminUserId);
-      }
-      
-      match /testimonials/{testimonialId} {
-        allow read: if true;
-        allow write: if isOwner(adminUserId);
-      }
+    /**
+     * @description Rules for the Video collection. Public read access; Admin-only writes.
+     * @path /videos/{videoId}
+     * @allow (get) Publicly view a specific video.
+     * @allow (create) Authenticated admin creates a new video entry.
+     * @deny (create) Unauthenticated user or non-admin attempts to upload a video.
+     * @principle Role-based write access with public read-only consumption.
+     */
+    match /videos/{videoId} {
+      allow get, list: if true;
+      allow create: if isAdmin() && request.resource.data.id == videoId;
+      allow update: if isExistingAdmin() && request.resource.data.id == resource.data.id;
+      allow delete: if isExistingAdmin();
+    }
 
-      match /services/{serviceId} {
-        allow read: if true;
-        allow write: if isOwner(adminUserId);
-      }
+    /**
+     * @description Rules for categorization Tags. Public read access; Admin-only management.
+     * @path /tags/{tagId}
+     * @allow (list) Publicly list all available category tags.
+     * @allow (update) Authenticated admin renames a tag.
+     * @deny (delete) Anyone other than an admin attempts to remove a tag.
+     * @principle Ensures metadata integrity by restricting modification to authorized owners.
+     */
+    match /tags/{tagId} {
+      allow get, list: if true;
+      allow create: if isAdmin() && request.resource.data.id == tagId;
+      allow update: if isExistingAdmin() && request.resource.data.id == resource.data.id;
+      allow delete: if isExistingAdmin();
+    }
 
-      match /timeline_events/{timelineEventId} {
-        allow read: if true;
-        allow write: if isOwner(adminUserId);
-      }
-
-      match /contact_messages/{messageId} {
-        allow create: if true;
-        allow read, update, delete: if isOwner(adminUserId);
-      }
-
-      match /tools/{toolId} {
-        allow get, list: if true;
-        allow write: if isOwner(adminUserId);
-      }
-
-      match /invoices/{invoiceId} {
-        allow write: if isOwner(adminUserId);
-        allow list: if isOwner(adminUserId);
-        allow get: if true;
-      }
+    /**
+     * @description Placeholder for the admin roles collection. 
+     * This collection should not be readable or writable by anyone via client SDKs 
+     * except for potentially a root admin, or managed via the Firebase Console.
+     */
+    match /admin_uids/{uid} {
+      allow read, write: if false;
     }
   }
 }
