@@ -1,3 +1,4 @@
+
 'use client';
 
 import { z } from 'zod';
@@ -17,7 +18,7 @@ import { ImageUpload } from '@/components/ui/image-upload';
 import { useState } from 'react';
 import { suggestTags } from '@/ai/flows/suggest-tags-flow';
 import { analyzeProjectImage } from '@/ai/flows/analyze-project-image-flow';
-import { uploadToImgBB } from '@/lib/imgbb';
+import { uploadToCloudinary } from '@/lib/cloudinary';
 import { Card, CardContent } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
@@ -195,8 +196,14 @@ export function PortfolioItemForm({ project, onSuccess }: PortfolioItemFormProps
 
     if (mainImageFile) {
         try {
-            setUploadProgress(10);
-            const url = await uploadToImgBB(mainImageFile, (p) => setUploadProgress(10 + (p * 0.9)));
+            setUploadProgress(20);
+            const reader = new FileReader();
+            const base64 = await new Promise<string>((resolve) => {
+                reader.onload = (e) => resolve(e.target?.result as string);
+                reader.readAsDataURL(mainImageFile);
+            });
+            setUploadProgress(50);
+            const url = await uploadToCloudinary(base64);
             setUploadProgress(100);
             finishSubmission(url);
         } catch (error: any) {
@@ -204,7 +211,7 @@ export function PortfolioItemForm({ project, onSuccess }: PortfolioItemFormProps
             toast({
                 variant: 'destructive',
                 title: 'Upload Failed',
-                description: error.message || 'Image host returned an error. Try again.',
+                description: error.message || 'Cloudinary host returned an error. Check your credentials.',
             });
         }
     } else if (values.imageUrl) {
@@ -217,7 +224,12 @@ export function PortfolioItemForm({ project, onSuccess }: PortfolioItemFormProps
 
   const handleGalleryImageUpload = async (index: number, file: File) => {
       try {
-          const url = await uploadToImgBB(file);
+          const reader = new FileReader();
+          const base64 = await new Promise<string>((resolve) => {
+              reader.onload = (e) => resolve(e.target?.result as string);
+              reader.readAsDataURL(file);
+          });
+          const url = await uploadToCloudinary(base64);
           form.setValue(`gallery.${index}.imageUrl`, url, { shouldValidate: true });
           toast({ title: 'Gallery Image Uploaded', description: 'Item added to carousel.' });
       } catch (error: any) {

@@ -1,3 +1,4 @@
+
 'use client';
 
 import { z } from 'zod';
@@ -16,7 +17,7 @@ import { toolIconMap } from '@/components/tool-icons';
 import { useEffect, useState } from 'react';
 import { ImageUpload } from '@/components/ui/image-upload';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { uploadToImgBB } from '@/lib/imgbb';
+import { uploadToCloudinary } from '@/lib/cloudinary';
 
 const formSchema = z.object({
   name: z.string().min(1, 'Tool name is required'),
@@ -118,7 +119,13 @@ export function ToolForm({ tool, onSuccess }: ToolFormProps) {
     try {
         if (iconType === 'custom' && imageFile) {
             setUploadProgress(20);
-            const uploadedUrl = await uploadToImgBB(imageFile, (p) => setUploadProgress(20 + (p * 0.8)));
+            const reader = new FileReader();
+            const base64 = await new Promise<string>((resolve) => {
+                reader.onload = (e) => resolve(e.target?.result as string);
+                reader.readAsDataURL(imageFile);
+            });
+            setUploadProgress(60);
+            const uploadedUrl = await uploadToCloudinary(base64);
             finalIcon = uploadedUrl;
         }
 

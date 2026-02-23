@@ -16,7 +16,7 @@ import type { Testimonial } from '@/lib/data';
 import { ImageUpload } from '@/components/ui/image-upload';
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
-import { uploadToImgBB } from '@/lib/imgbb';
+import { uploadToCloudinary } from '@/lib/cloudinary';
 
 const formSchema = z.object({
   name: z.string().min(2, 'Name is required'),
@@ -91,8 +91,14 @@ export function TestimonialForm({ testimonial, onSuccess }: TestimonialFormProps
     
     if (imageFile) {
         try {
-            setUploadProgress(50);
-            const url = await uploadToImgBB(imageFile);
+            setUploadProgress(20);
+            const reader = new FileReader();
+            const base64 = await new Promise<string>((resolve) => {
+                reader.onload = (e) => resolve(e.target?.result as string);
+                reader.readAsDataURL(imageFile);
+            });
+            setUploadProgress(60);
+            const url = await uploadToCloudinary(base64);
             setUploadProgress(100);
             finishSubmission(url);
         } catch (error: any) {
@@ -100,7 +106,7 @@ export function TestimonialForm({ testimonial, onSuccess }: TestimonialFormProps
             toast({
                 variant: 'destructive',
                 title: 'Upload Failed',
-                description: error.message || 'Could not upload image to ImgBB.',
+                description: error.message || 'Could not upload image to Cloudinary.',
             });
         }
     } else if (values.imageUrl) {
