@@ -5,7 +5,7 @@
  * Specifically used for high-performance video reels.
  */
 
-import { createHash } from 'crypto';
+import { createHash } from 'node:crypto';
 
 /**
  * Uploads a base64 encoded file to Cloudinary.
@@ -33,20 +33,22 @@ export async function uploadToCloudinary(
   // 2. Sort parameters alphabetically
   // 3. String to sign: 'parameter1=value1&parameter2=value2<API_SECRET>'
   // 4. Hash the resulting string using SHA-1
-  const signatureData: Record<string, string> = {
+  
+  const parameters: Record<string, string> = {
     folder: folder,
     timestamp: timestamp.toString()
   };
 
-  const sortedParams = Object.keys(signatureData)
-    .sort()
-    .map(key => `${key}=${signatureData[key]}`)
-    .join('&');
-
-  const stringToSign = `${sortedParams}${apiSecret}`;
+  // Sort keys alphabetically
+  const sortedKeys = Object.keys(parameters).sort();
   
+  // Create signature string
+  const signatureParts = sortedKeys.map(key => `${key}=${parameters[key]}`);
+  const signatureString = `${signatureParts.join('&')}${apiSecret}`;
+  
+  // Generate SHA-1 hash
   const signature = createHash('sha1')
-    .update(stringToSign)
+    .update(signatureString)
     .digest('hex');
 
   const formData = new FormData();

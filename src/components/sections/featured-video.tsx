@@ -45,7 +45,12 @@ export function FeaturedVideo() {
   useEffect(() => {
     if (videoRef.current) {
       if (isInView) {
-        videoRef.current.play().catch(err => console.log("Auto-play prevented:", err));
+        const playPromise = videoRef.current.play();
+        if (playPromise !== undefined) {
+            playPromise.catch(error => {
+                console.log("Autoplay was prevented by browser policy", error);
+            });
+        }
       } else {
         videoRef.current.pause();
       }
@@ -54,7 +59,10 @@ export function FeaturedVideo() {
 
   if (!isLoading && !featured) return null;
 
-  const isDirectVideo = featured?.videoUrl?.match(/\.(mp4|webm|ogg|mov)$|^https:\/\/res\.cloudinary\.com/);
+  // Broaden check: if it has common video extension or comes from cloudinary video delivery
+  const isDirectVideo = featured?.videoUrl?.match(/\.(mp4|webm|ogg|mov|m4v)($|\?)/i) || 
+                        featured?.videoUrl?.includes('cloudinary.com') ||
+                        featured?.videoUrl?.includes('video/upload');
 
   return (
     <section ref={ref} className="py-12 md:py-20 overflow-hidden bg-background">
@@ -64,7 +72,7 @@ export function FeaturedVideo() {
             isInView ? "opacity-100 translate-y-0 scale-100" : "opacity-0 translate-y-10 scale-95"
         )}>
           {isLoading ? (
-            <Skeleton className="w-full aspect-video h-[50vh] md:h-[80vh]" />
+            <Skeleton className="w-full h-[50vh] md:h-[80vh]" />
           ) : (
             <div className="relative w-full h-[50vh] sm:h-[60vh] md:h-[80vh] group bg-[#0a0a0a]">
               
@@ -75,6 +83,7 @@ export function FeaturedVideo() {
                   poster={featured.thumbnailUrl}
                   muted={isMuted}
                   loop
+                  autoPlay
                   playsInline
                   className="absolute inset-0 w-full h-full object-cover transition-transform duration-[2s] group-hover:scale-105"
                 />
@@ -93,7 +102,10 @@ export function FeaturedVideo() {
                     variant="outline" 
                     size="icon" 
                     className="rounded-full bg-black/20 backdrop-blur-xl border-white/10 text-white hover:bg-white/10 h-10 w-10 md:h-12 md:w-12"
-                    onClick={() => setIsMuted(!isMuted)}
+                    onClick={(e) => {
+                        e.stopPropagation();
+                        setIsMuted(!isMuted);
+                    }}
                   >
                     {isMuted ? <VolumeX className="h-4 w-4 md:h-5 md:w-5" /> : <Volume2 className="h-4 w-4 md:h-5 md:w-5" />}
                   </Button>
