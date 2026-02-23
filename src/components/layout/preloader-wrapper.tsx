@@ -10,6 +10,7 @@ import { InstagramChat } from './instagram-chat';
 import { CustomCursor } from '../ui/custom-cursor';
 import { InstallPWA } from './install-pwa';
 import { LiquidBackground } from '../ui/liquid-background';
+import { ScrollToTop } from '../ui/scroll-to-top';
 
 export function PreloaderWrapper({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -65,6 +66,7 @@ export function PreloaderWrapper({ children }: { children: React.ReactNode }) {
             <Dock />
             <MobileNav />
             {children}
+            <ScrollToTop />
             <InstagramChat username="_hey_yasii_" />
             <InstallPWA />
           </div>
