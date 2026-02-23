@@ -34,10 +34,10 @@ export default function Home() {
         <Hero />
         <About />
         <Timeline />
-        <FeaturedVideo />
         <Services />
         <ToolStack />
         <Projects />
+        <FeaturedVideo />
         <Testimonials />
         <Contact />
       </main>

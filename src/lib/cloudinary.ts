@@ -22,20 +22,20 @@ export async function uploadToCloudinary(
   const apiSecret = (process.env.CLOUDINARY_API_SECRET || '').trim();
 
   if (!cloudName || !apiSecret || !apiKey) {
-    throw new Error('Cloudinary credentials (Cloud Name, API Key, or Secret) are missing from the environment.');
+    throw new Error('Cloudinary credentials (Cloud Name, API Key, or Secret) are missing. Please check your environment variables.');
   }
 
   const timestamp = Math.round(new Date().getTime() / 1000);
   const folder = 'yazzfolio_motion';
   
   // Cloudinary Signature Logic:
-  // 1. Sort parameters alphabetically (excluding file, api_key, etc.)
+  // 1. Sort parameters alphabetically
   // 2. Join with & 
   // 3. Append Secret (no separator)
   // 4. SHA-1 Hash
-  const paramsToSign = `folder=${folder}&timestamp=${timestamp}`;
+  const paramsToSign = `folder=${folder}&timestamp=${timestamp}${apiSecret}`;
   const signature = createHash('sha1')
-    .update(`${paramsToSign}${apiSecret}`)
+    .update(paramsToSign)
     .digest('hex');
 
   const formData = new FormData();
@@ -55,7 +55,7 @@ export async function uploadToCloudinary(
 
     if (result.error) {
       console.error('Cloudinary API Error:', result.error);
-      throw new Error(result.error.message || 'Cloudinary upload failed');
+      throw new Error(`Cloudinary Error: ${result.error.message}. (String used: folder=${folder}&timestamp=${timestamp})`);
     }
 
     return result.secure_url;
