@@ -5,7 +5,7 @@
  * Specifically used for high-performance video reels.
  */
 
-import { createHash } from 'node:crypto';
+import { createHash } from 'crypto';
 
 /**
  * Uploads a base64 encoded file to Cloudinary.
@@ -22,14 +22,17 @@ export async function uploadToCloudinary(
   const apiSecret = (process.env.CLOUDINARY_API_SECRET || '').trim();
 
   if (!cloudName || !apiSecret || !apiKey) {
-    throw new Error('Cloudinary credentials are missing from the environment.');
+    throw new Error('Cloudinary credentials (Cloud Name, API Key, or Secret) are missing from the environment.');
   }
 
   const timestamp = Math.round(new Date().getTime() / 1000);
   const folder = 'yazzfolio_motion';
   
-  // Create signature for signed upload
-  // Parameters must be sorted alphabetically
+  // Cloudinary Signature Logic:
+  // 1. Sort parameters alphabetically (excluding file, api_key, etc.)
+  // 2. Join with & 
+  // 3. Append Secret (no separator)
+  // 4. SHA-1 Hash
   const paramsToSign = `folder=${folder}&timestamp=${timestamp}`;
   const signature = createHash('sha1')
     .update(`${paramsToSign}${apiSecret}`)
