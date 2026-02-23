@@ -18,9 +18,6 @@ import { useState, useRef } from 'react';
 import { uploadToImgBB } from '@/lib/imgbb';
 import { uploadToCloudinary } from '@/lib/cloudinary';
 
-// Support long-running video uploads
-export const maxDuration = 120;
-
 const formSchema = z.object({
   title: z.string().min(2, 'Title is required'),
   description: z.string().min(10, 'Description is required'),
@@ -65,7 +62,6 @@ export function VideoForm({ video, onSuccess }: VideoFormProps) {
       const file = e.target.files?.[0];
       if (file) {
           setVideoFile(file);
-          // Auto-fill title if empty
           if (!form.getValues('title')) {
               form.setValue('title', file.name.split('.')[0]);
           }
@@ -83,7 +79,6 @@ export function VideoForm({ video, onSuccess }: VideoFormProps) {
         let finalThumbUrl = values.thumbnailUrl || '';
         let finalVideoUrl = values.videoUrl || '';
 
-        // 1. Handle Thumbnail Upload (ImgBB)
         if (thumbFile) {
             setUploadProgress(10);
             const reader = new FileReader();
@@ -95,7 +90,6 @@ export function VideoForm({ video, onSuccess }: VideoFormProps) {
             setUploadProgress(40);
         }
 
-        // 2. Handle Video File Upload (Cloudinary)
         if (videoFile) {
             setUploadProgress(50);
             const reader = new FileReader();
@@ -103,7 +97,6 @@ export function VideoForm({ video, onSuccess }: VideoFormProps) {
                 reader.onload = (e) => resolve(e.target?.result as string);
                 reader.readAsDataURL(videoFile);
             });
-            // Calling server action with potentially large base64 string
             finalVideoUrl = await uploadToCloudinary(base64, 'video');
             setUploadProgress(90);
         }
@@ -112,7 +105,6 @@ export function VideoForm({ video, onSuccess }: VideoFormProps) {
             throw new Error('Please upload a video or provide an external URL.');
         }
 
-        // 3. Final Firestore Save
         const dataToSave = {
             id: videoId,
             adminUserId: user.uid,

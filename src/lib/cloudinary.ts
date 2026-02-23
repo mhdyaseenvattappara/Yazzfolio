@@ -1,4 +1,3 @@
-
 'use server';
 
 /**
@@ -7,6 +6,8 @@
  */
 
 import { crypto } from 'node:crypto';
+
+export const maxDuration = 120;
 
 /**
  * Uploads a base64 encoded file to Cloudinary.

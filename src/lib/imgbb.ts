@@ -1,9 +1,10 @@
-
 'use server';
 
 /**
  * @fileOverview Server-side utility for uploading images to ImgBB.
  */
+
+export const maxDuration = 120;
 
 /**
  * Uploads a base64 encoded image to ImgBB.
