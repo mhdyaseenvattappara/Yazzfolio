@@ -39,14 +39,14 @@ export async function uploadToCloudinary(
     timestamp: timestamp.toString()
   };
 
-  // Sort keys alphabetically
+  // Sort keys alphabetically to ensure deterministic signature
   const sortedKeys = Object.keys(parameters).sort();
   
-  // Create signature string
+  // Create signature string using exact sorting requirements
   const signatureParts = sortedKeys.map(key => `${key}=${parameters[key]}`);
   const signatureString = `${signatureParts.join('&')}${apiSecret}`;
   
-  // Generate SHA-1 hash
+  // Generate SHA-1 hash via crypto.createHash
   const signature = createHash('sha1')
     .update(signatureString)
     .digest('hex');

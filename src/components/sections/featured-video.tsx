@@ -65,7 +65,7 @@ export function FeaturedVideo() {
                         featured?.videoUrl?.includes('video/upload');
 
   return (
-    <section ref={ref} className="py-12 md:py-20 overflow-hidden bg-background">
+    <section id="videos" ref={ref} className="py-12 md:py-20 overflow-hidden bg-background">
       <div className="w-full max-w-[1600px] mx-auto px-4 md:px-8">
         <div className={cn(
             "w-full rounded-[2rem] md:rounded-[3.5rem] overflow-hidden border border-border/50 shadow-2xl relative transition-all duration-1000",

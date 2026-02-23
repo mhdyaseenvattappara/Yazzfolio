@@ -1,4 +1,4 @@
-import { LayoutGrid, Mail, User, Briefcase, Star, PenTool, Code, Palette, Github, Linkedin, Twitter, Calendar, MessageSquare, Cog, Pencil, Clapperboard, Brush, MousePointerClick, Server, Home, Instagram, Facebook, Sparkles, Milestone, Video as VideoIcon } from 'lucide-react';
+import { LayoutGrid, Mail, User, Briefcase, Star, PenTool, Code, Palette, Github, Linkedin, Twitter, Calendar, MessageSquare, Cog, Pencil, Clapperboard, Brush, MousePointerClick, Server, Home, Instagram, Facebook, Sparkles, Milestone, Video } from 'lucide-react';
 import { Timestamp } from 'firebase/firestore';
 import { PhotoshopIcon, IllustratorIcon, PremiereProIcon, InDesignIcon, AfterEffectsIcon } from '@/components/tool-icons';
 import { WhatsAppIcon } from '@/components/icons';
@@ -152,7 +152,7 @@ export const navLinks = [
   { name: 'Timeline', href: '/#timeline', icon: Milestone },
   { name: 'Services', href: '/#services', icon: Sparkles },
   { name: 'Portfolio', href: '/#projects', icon: LayoutGrid },
-  { name: 'Reel', href: '/videos', icon: VideoIcon },
+  { name: 'Reel', href: '/#videos', icon: Video },
   { name: 'Contact', href: '/#contact', icon: Mail },
 ];
 
