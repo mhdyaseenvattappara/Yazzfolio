@@ -7,8 +7,9 @@ service cloud.firestore {
       return request.auth != null;
     }
 
+    // isAdmin check: checks if user is the owner of the document path OR in the admin whitelist
     function isAdmin(uid) {
-      return isSignedIn() && exists(/databases/$(database)/documents/admin_uids/$(request.auth.uid));
+      return isSignedIn() && (request.auth.uid == uid || exists(/databases/$(database)/documents/admin_uids/$(request.auth.uid)));
     }
 
     // --- Collection Rules ---
