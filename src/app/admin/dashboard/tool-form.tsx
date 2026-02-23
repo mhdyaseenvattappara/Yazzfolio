@@ -17,7 +17,7 @@ import { toolIconMap } from '@/components/tool-icons';
 import { useEffect, useState } from 'react';
 import { ImageUpload } from '@/components/ui/image-upload';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { uploadToCloudinary } from '@/lib/cloudinary';
+import { uploadToImgBB } from '@/lib/imgbb';
 
 const formSchema = z.object({
   name: z.string().min(1, 'Tool name is required'),
@@ -125,7 +125,7 @@ export function ToolForm({ tool, onSuccess }: ToolFormProps) {
                 reader.readAsDataURL(imageFile);
             });
             setUploadProgress(60);
-            const uploadedUrl = await uploadToCloudinary(base64);
+            const uploadedUrl = await uploadToImgBB(base64);
             finalIcon = uploadedUrl;
         }
 

@@ -18,7 +18,7 @@ import { ImageUpload } from '@/components/ui/image-upload';
 import { useState } from 'react';
 import { suggestTags } from '@/ai/flows/suggest-tags-flow';
 import { analyzeProjectImage } from '@/ai/flows/analyze-project-image-flow';
-import { uploadToCloudinary } from '@/lib/cloudinary';
+import { uploadToImgBB } from '@/lib/imgbb';
 import { Card, CardContent } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
@@ -203,7 +203,7 @@ export function PortfolioItemForm({ project, onSuccess }: PortfolioItemFormProps
                 reader.readAsDataURL(mainImageFile);
             });
             setUploadProgress(50);
-            const url = await uploadToCloudinary(base64);
+            const url = await uploadToImgBB(base64);
             setUploadProgress(100);
             finishSubmission(url);
         } catch (error: any) {
@@ -211,7 +211,7 @@ export function PortfolioItemForm({ project, onSuccess }: PortfolioItemFormProps
             toast({
                 variant: 'destructive',
                 title: 'Upload Failed',
-                description: error.message || 'Cloudinary host returned an error. Check your credentials.',
+                description: error.message || 'ImgBB host returned an error. Check your credentials.',
             });
         }
     } else if (values.imageUrl) {
@@ -229,7 +229,7 @@ export function PortfolioItemForm({ project, onSuccess }: PortfolioItemFormProps
               reader.onload = (e) => resolve(e.target?.result as string);
               reader.readAsDataURL(file);
           });
-          const url = await uploadToCloudinary(base64);
+          const url = await uploadToImgBB(base64);
           form.setValue(`gallery.${index}.imageUrl`, url, { shouldValidate: true });
           toast({ title: 'Gallery Image Uploaded', description: 'Item added to carousel.' });
       } catch (error: any) {

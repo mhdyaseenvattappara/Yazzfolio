@@ -17,7 +17,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { ImageUpload } from '@/components/ui/image-upload';
 import { useState } from 'react';
 import { cn } from '@/lib/utils';
-import { uploadToCloudinary } from '@/lib/cloudinary';
+import { uploadToImgBB } from '@/lib/imgbb';
 
 const MAX_BIO_LENGTH = 500;
 
@@ -100,7 +100,7 @@ export function ProfileManager({ profile }: ProfileManagerProps) {
                 reader.readAsDataURL(imageFile);
             });
             setUploadProgress(60);
-            const url = await uploadToCloudinary(base64);
+            const url = await uploadToImgBB(base64);
             setUploadProgress(100);
             finishSubmission(url);
         } catch (error: any) {
@@ -108,7 +108,7 @@ export function ProfileManager({ profile }: ProfileManagerProps) {
             toast({
                 variant: 'destructive',
                 title: 'Upload Failed',
-                description: error.message || 'Could not upload image to Cloudinary.',
+                description: error.message || 'Could not upload image to ImgBB.',
             });
         }
     } else if (values.profileImageUrl) {

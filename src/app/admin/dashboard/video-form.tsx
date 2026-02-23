@@ -1,3 +1,4 @@
+
 'use client';
 
 import { z } from 'zod';
@@ -11,10 +12,11 @@ import { Textarea } from '@/components/ui/textarea';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, FormDescription } from '@/components/ui/form';
 import { Switch } from '@/components/ui/switch';
 import { useToast } from '@/hooks/use-toast';
-import { Loader2, CheckCircle2 } from 'lucide-react';
-import type { Video } from '@/lib/data';
+import { Loader2, CheckCircle2, Video, UploadCloud } from 'lucide-react';
+import type { Video as VideoType } from '@/lib/data';
 import { ImageUpload } from '@/components/ui/image-upload';
-import { useState } from 'react';
+import { useState, useRef } from 'react';
+import { uploadToImgBB } from '@/lib/imgbb';
 import { uploadToCloudinary } from '@/lib/cloudinary';
 
 const formSchema = z.object({
@@ -29,7 +31,7 @@ const formSchema = z.object({
 type VideoFormValues = z.infer<typeof formSchema>;
 
 interface VideoFormProps {
-  video: Video | null;
+  video: VideoType | null;
   onSuccess: () => void;
 }
 
@@ -39,8 +41,11 @@ export function VideoForm({ video, onSuccess }: VideoFormProps) {
   const { toast } = useToast();
 
   const [thumbFile, setThumbFile] = useState<File | null>(null);
+  const [videoFile, setVideoFile] = useState<File | null>(null);
   const [uploadProgress, setUploadProgress] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  
+  const videoInputRef = useRef<HTMLInputElement>(null);
 
   const form = useForm<VideoFormValues>({
     resolver: zodResolver(formSchema),
@@ -54,6 +59,17 @@ export function VideoForm({ video, onSuccess }: VideoFormProps) {
     },
   });
 
+  const handleVideoFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+      const file = e.target.files?.[0];
+      if (file) {
+          setVideoFile(file);
+          // Auto-fill title if empty
+          if (!form.getValues('title')) {
+              form.setValue('title', file.name.split('.')[0]);
+          }
+      }
+  }
+
   const onSubmit = async (values: VideoFormValues) => {
     if (!user || !firestore) return;
     setIsSubmitting(true);
@@ -61,48 +77,57 @@ export function VideoForm({ video, onSuccess }: VideoFormProps) {
     const videoId = video?.id || doc(collection(firestore, `admin_users/${user.uid}/videos`)).id;
     const docRef = doc(firestore, `admin_users/${user.uid}/videos`, videoId);
 
-    const finishSubmission = (finalThumbUrl: string) => {
-        const dataToSave = {
-            id: videoId,
-            adminUserId: user.uid,
-            ...values,
-            thumbnailUrl: finalThumbUrl,
-            updatedAt: serverTimestamp(),
-            createdAt: video?.createdAt || serverTimestamp(),
-        };
+    try {
+        let finalThumbUrl = values.thumbnailUrl || '';
+        let finalVideoUrl = values.videoUrl;
 
-        try {
-            setDocumentNonBlocking(docRef, dataToSave, { merge: true });
-            toast({
-                title: video ? 'Video Updated' : 'Video Added',
-                description: `"${values.title}" has been saved.`,
-            });
-            onSuccess();
-        } catch (err: any) {
-            toast({ variant: 'destructive', title: 'Save Failed', description: err.message });
-        } finally {
-            setIsSubmitting(false);
-        }
-    };
-
-    if (thumbFile) {
-        try {
-            setUploadProgress(20);
+        // 1. Handle Thumbnail Upload (ImgBB)
+        if (thumbFile) {
+            setUploadProgress(10);
             const reader = new FileReader();
             const base64 = await new Promise<string>((resolve) => {
                 reader.onload = (e) => resolve(e.target?.result as string);
                 reader.readAsDataURL(thumbFile);
             });
-            setUploadProgress(50);
-            const url = await uploadToCloudinary(base64);
-            setUploadProgress(100);
-            finishSubmission(url);
-        } catch (error: any) {
-            setIsSubmitting(false);
-            toast({ variant: 'destructive', title: 'Upload Failed', description: error.message });
+            finalThumbUrl = await uploadToImgBB(base64);
+            setUploadProgress(40);
         }
-    } else {
-        finishSubmission(values.thumbnailUrl || '');
+
+        // 2. Handle Video File Upload (Cloudinary)
+        if (videoFile) {
+            setUploadProgress(50);
+            const reader = new FileReader();
+            const base64 = await new Promise<string>((resolve) => {
+                reader.onload = (e) => resolve(e.target?.result as string);
+                reader.readAsDataURL(videoFile);
+            });
+            finalVideoUrl = await uploadToCloudinary(base64, 'video');
+            setUploadProgress(90);
+        }
+
+        // 3. Final Firestore Save
+        const dataToSave = {
+            id: videoId,
+            adminUserId: user.uid,
+            ...values,
+            videoUrl: finalVideoUrl,
+            thumbnailUrl: finalThumbUrl,
+            updatedAt: serverTimestamp(),
+            createdAt: video?.createdAt || serverTimestamp(),
+        };
+
+        setDocumentNonBlocking(docRef, dataToSave, { merge: true });
+        setUploadProgress(100);
+        
+        toast({
+            title: video ? 'Video Updated' : 'Motion Reel Added',
+            description: `"${values.title}" has been saved.`,
+        });
+        onSuccess();
+    } catch (err: any) {
+        toast({ variant: 'destructive', title: 'Upload Failed', description: err.message });
+    } finally {
+        setIsSubmitting(false);
     }
   };
 
@@ -114,7 +139,7 @@ export function VideoForm({ video, onSuccess }: VideoFormProps) {
           name="thumbnailUrl"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Video Thumbnail</FormLabel>
+              <FormLabel className="text-xs font-black uppercase tracking-widest opacity-60">Thumbnail (ImgBB)</FormLabel>
               <FormControl>
                 <ImageUpload
                   initialImageUrl={field.value}
@@ -129,12 +154,52 @@ export function VideoForm({ video, onSuccess }: VideoFormProps) {
           )}
         />
 
+        <div className="space-y-3">
+            <FormLabel className="text-xs font-black uppercase tracking-widest opacity-60">Video Asset (Cloudinary)</FormLabel>
+            <div 
+                className="w-full h-32 border-2 border-dashed rounded-2xl flex flex-col items-center justify-center bg-muted/20 hover:bg-accent/10 transition-all cursor-pointer group"
+                onClick={() => videoInputRef.current?.click()}
+            >
+                <input 
+                    type="file" 
+                    className="hidden" 
+                    ref={videoInputRef} 
+                    accept="video/*" 
+                    onChange={handleVideoFileChange} 
+                />
+                {videoFile ? (
+                    <div className="flex items-center gap-3 text-primary font-bold">
+                        <Video className="h-6 w-6" />
+                        <span className="truncate max-w-[200px]">{videoFile.name}</span>
+                        <X className="h-4 w-4 text-muted-foreground hover:text-destructive" onClick={(e) => { e.stopPropagation(); setVideoFile(null); }} />
+                    </div>
+                ) : (
+                    <>
+                        <UploadCloud className="h-8 w-8 text-muted-foreground mb-2 group-hover:scale-110 transition-transform" />
+                        <p className="text-xs font-medium text-muted-foreground">Click to upload .mp4 or .mov</p>
+                    </>
+                )}
+            </div>
+            <FormField
+                control={form.control}
+                name="videoUrl"
+                render={({ field }) => (
+                    <FormItem>
+                        <FormControl>
+                            <Input placeholder="Or paste external URL (YT/Vimeo)..." {...field} className="h-10 rounded-xl bg-muted/30" />
+                        </FormControl>
+                        <FormMessage />
+                    </FormItem>
+                )}
+            />
+        </div>
+
         <FormField
           control={form.control}
           name="title"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Title</FormLabel>
+              <FormLabel className="text-xs font-black uppercase tracking-widest opacity-60">Title</FormLabel>
               <FormControl>
                 <Input placeholder="Reel 2024 / Product Promo..." {...field} className="h-12 rounded-xl" />
               </FormControl>
@@ -145,25 +210,10 @@ export function VideoForm({ video, onSuccess }: VideoFormProps) {
 
         <FormField
           control={form.control}
-          name="videoUrl"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Direct Video URL (MP4 / YT / Vimeo)</FormLabel>
-              <FormControl>
-                <Input placeholder="https://..." {...field} className="h-12 rounded-xl" />
-              </FormControl>
-              <FormDescription>Link to your video file or host.</FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
-        <FormField
-          control={form.control}
           name="description"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Brief Description</FormLabel>
+              <FormLabel className="text-xs font-black uppercase tracking-widest opacity-60">Brief Description</FormLabel>
               <FormControl>
                 <Textarea placeholder="What is this video about?" {...field} className="min-h-[100px] rounded-xl" />
               </FormControl>
@@ -172,10 +222,10 @@ export function VideoForm({ video, onSuccess }: VideoFormProps) {
           )}
         />
 
-        <div className="flex items-center justify-between p-4 bg-muted/30 rounded-2xl border">
+        <div className="flex items-center justify-between p-4 bg-muted/30 rounded-2xl border border-border/50">
             <div className="space-y-0.5">
-                <FormLabel className="text-base">Featured on Landing Page</FormLabel>
-                <FormDescription>Show this video prominently on the main site.</FormDescription>
+                <FormLabel className="text-sm font-bold">Featured Status</FormLabel>
+                <FormDescription className="text-[10px] uppercase tracking-wider font-medium">Show prominently on landing page</FormDescription>
             </div>
             <FormField
                 control={form.control}
@@ -190,9 +240,21 @@ export function VideoForm({ video, onSuccess }: VideoFormProps) {
             />
         </div>
 
-        <Button type="submit" disabled={isSubmitting} className="h-12 rounded-full">
+        {isSubmitting && (
+            <div className="space-y-2">
+                <div className="flex justify-between text-[10px] font-black uppercase text-primary">
+                    <span>Processing & Synchronizing...</span>
+                    <span>{uploadProgress}%</span>
+                </div>
+                <div className="h-1 w-full bg-muted rounded-full overflow-hidden">
+                    <div className="h-full bg-primary transition-all duration-500" style={{ width: `${uploadProgress}%` }} />
+                </div>
+            </div>
+        )}
+
+        <Button type="submit" disabled={isSubmitting} className="h-14 rounded-2xl text-lg font-black tracking-tight shadow-xl">
           {isSubmitting ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : <CheckCircle2 className="mr-2 h-5 w-5" />}
-          {video ? 'Update Video' : 'Add to Gallery'}
+          {video ? 'Update Visual Reel' : 'Publish to Motion Archive'}
         </Button>
       </form>
     </Form>
