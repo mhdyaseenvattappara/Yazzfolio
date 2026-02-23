@@ -131,7 +131,7 @@ export function VideoForm({ video, onSuccess }: VideoFormProps) {
         toast({ 
             variant: 'destructive', 
             title: 'Upload Failed', 
-            description: err.message || 'Check your file size (Max 50MB) and connection.' 
+            description: err.message || 'Check your file size (Max 64MB) and connection.' 
         });
     } finally {
         setIsSubmitting(false);
@@ -191,7 +191,7 @@ export function VideoForm({ video, onSuccess }: VideoFormProps) {
                 ) : (
                     <>
                         <UploadCloud className="h-8 w-8 text-muted-foreground mb-2 group-hover:scale-110 transition-transform" />
-                        <p className="text-xs font-medium text-muted-foreground">Click to upload .mp4 or .mov (Max 50MB)</p>
+                        <p className="text-xs font-medium text-muted-foreground">Click to upload .mp4 or .mov (Max 64MB)</p>
                     </>
                 )}
             </div>

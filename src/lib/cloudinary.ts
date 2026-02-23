@@ -7,8 +7,6 @@
 
 import { crypto } from 'node:crypto';
 
-export const maxDuration = 120;
-
 /**
  * Uploads a base64 encoded file to Cloudinary.
  * @param base64Data The file data URI.
