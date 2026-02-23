@@ -29,13 +29,14 @@ export async function uploadToCloudinary(
   const folder = 'yazzfolio_motion';
   
   // Cloudinary Signature Logic:
-  // 1. Sort parameters alphabetically
-  // 2. Join with & 
-  // 3. Append Secret (no separator)
-  // 4. SHA-1 Hash
-  const paramsToSign = `folder=${folder}&timestamp=${timestamp}${apiSecret}`;
+  // 1. Collect and sort parameters alphabetically
+  // 2. String to sign: 'parameter1=value1&parameter2=value2<API_SECRET>'
+  // 3. Hash the resulting string using SHA-1
+  const sortedParams = `folder=${folder}&timestamp=${timestamp}`;
+  const stringToSign = `${sortedParams}${apiSecret}`;
+  
   const signature = createHash('sha1')
-    .update(paramsToSign)
+    .update(stringToSign)
     .digest('hex');
 
   const formData = new FormData();
@@ -55,7 +56,7 @@ export async function uploadToCloudinary(
 
     if (result.error) {
       console.error('Cloudinary API Error:', result.error);
-      throw new Error(`Cloudinary Error: ${result.error.message}. (String used: folder=${folder}&timestamp=${timestamp})`);
+      throw new Error(`Cloudinary Error: ${result.error.message}`);
     }
 
     return result.secure_url;
