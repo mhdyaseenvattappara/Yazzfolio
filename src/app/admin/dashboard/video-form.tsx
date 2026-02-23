@@ -12,7 +12,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage, FormDescription } from '@/components/ui/form';
 import { Switch } from '@/components/ui/switch';
 import { useToast } from '@/hooks/use-toast';
-import { Loader2, CheckCircle2, Video, UploadCloud, X } from 'lucide-react';
+import { Loader2, CheckCircle2, Video, UploadCloud, X, Star } from 'lucide-react';
 import type { Video as VideoType } from '@/lib/data';
 import { ImageUpload } from '@/components/ui/image-upload';
 import { useState, useRef } from 'react';
@@ -22,7 +22,7 @@ import { uploadToCloudinary } from '@/lib/cloudinary';
 const formSchema = z.object({
   title: z.string().min(2, 'Title is required'),
   description: z.string().min(10, 'Description is required'),
-  videoUrl: z.string().url('A valid video URL is required'),
+  videoUrl: z.string().url('A valid video URL is required').optional().or(z.literal('')),
   thumbnailUrl: z.string().url('A valid thumbnail URL is required').optional().or(z.literal('')),
   isFeatured: z.boolean().default(false),
   order: z.number().default(0),
@@ -79,7 +79,7 @@ export function VideoForm({ video, onSuccess }: VideoFormProps) {
 
     try {
         let finalThumbUrl = values.thumbnailUrl || '';
-        let finalVideoUrl = values.videoUrl;
+        let finalVideoUrl = values.videoUrl || '';
 
         // 1. Handle Thumbnail Upload (ImgBB)
         if (thumbFile) {
@@ -105,13 +105,20 @@ export function VideoForm({ video, onSuccess }: VideoFormProps) {
             setUploadProgress(90);
         }
 
+        if (!finalVideoUrl) {
+            throw new Error('Please upload a video or provide an external URL.');
+        }
+
         // 3. Final Firestore Save
         const dataToSave = {
             id: videoId,
             adminUserId: user.uid,
-            ...values,
+            title: values.title,
+            description: values.description,
             videoUrl: finalVideoUrl,
             thumbnailUrl: finalThumbUrl,
+            isFeatured: values.isFeatured,
+            order: values.order,
             updatedAt: serverTimestamp(),
             createdAt: video?.createdAt || serverTimestamp(),
         };
