@@ -17,22 +17,32 @@ export async function uploadToCloudinary(
   base64Data: string, 
   resourceType: 'image' | 'video' | 'auto' = 'auto'
 ): Promise<string> {
-  const cloudName = (process.env.CLOUDINARY_CLOUD_NAME || '').trim();
-  const apiKey = (process.env.CLOUDINARY_API_KEY || '').trim();
+  const cloudName = (process.env.CLOUDINARY_CLOUD_NAME || 'dqwcd4v7g').trim();
+  const apiKey = (process.env.CLOUDINARY_API_KEY || '393249629561516').trim();
   const apiSecret = (process.env.CLOUDINARY_API_SECRET || '').trim();
 
-  if (!cloudName || !apiSecret || !apiKey) {
-    throw new Error('Cloudinary credentials (Cloud Name, API Key, or Secret) are missing. Please check your environment variables.');
+  if (!cloudName || !apiKey) {
+    throw new Error('Cloudinary credentials (Cloud Name or API Key) are missing.');
   }
 
   const timestamp = Math.round(new Date().getTime() / 1000);
   const folder = 'yazzfolio_motion';
   
   // Cloudinary Signature Logic:
-  // 1. Collect and sort parameters alphabetically
-  // 2. String to sign: 'parameter1=value1&parameter2=value2<API_SECRET>'
-  // 3. Hash the resulting string using SHA-1
-  const sortedParams = `folder=${folder}&timestamp=${timestamp}`;
+  // 1. Collect all parameters except api_key, file, cloud_name, resource_type
+  // 2. Sort parameters alphabetically
+  // 3. String to sign: 'parameter1=value1&parameter2=value2<API_SECRET>'
+  // 4. Hash the resulting string using SHA-1
+  const signatureData: Record<string, string> = {
+    folder: folder,
+    timestamp: timestamp.toString()
+  };
+
+  const sortedParams = Object.keys(signatureData)
+    .sort()
+    .map(key => `${key}=${signatureData[key]}`)
+    .join('&');
+
   const stringToSign = `${sortedParams}${apiSecret}`;
   
   const signature = createHash('sha1')

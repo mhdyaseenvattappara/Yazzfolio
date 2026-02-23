@@ -12,7 +12,7 @@ import { cn } from '@/lib/utils';
 import { useInView } from '@/hooks/use-in-view';
 
 export function FeaturedVideo() {
-  const { ref, isInView } = useInView({ threshold: 0.3, once: false });
+  const { ref, isInView } = useInView({ threshold: 0.2, once: false });
   const firestore = useFirestore();
   const [adminUserId, setAdminUserId] = useState<string | null>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -42,7 +42,6 @@ export function FeaturedVideo() {
   const { data: videos, isLoading } = useCollection<Video>(featuredVideoQuery);
   const featured = videos?.[0];
 
-  // Handle auto-play logic based on visibility
   useEffect(() => {
     if (videoRef.current) {
       if (isInView) {
@@ -58,18 +57,17 @@ export function FeaturedVideo() {
   const isDirectVideo = featured?.videoUrl?.match(/\.(mp4|webm|ogg|mov)$|^https:\/\/res\.cloudinary\.com/);
 
   return (
-    <section ref={ref} className="py-24 sm:py-32 overflow-hidden bg-card/30">
-      <div className="container mx-auto px-4 md:px-6">
+    <section ref={ref} className="py-12 md:py-20 overflow-hidden bg-background">
+      <div className="w-full max-w-[1600px] mx-auto px-4 md:px-8">
         <div className={cn(
-            "max-w-6xl mx-auto rounded-[3rem] overflow-hidden border border-border/50 shadow-2xl relative transition-all duration-1000",
+            "w-full rounded-[2rem] md:rounded-[3.5rem] overflow-hidden border border-border/50 shadow-2xl relative transition-all duration-1000",
             isInView ? "opacity-100 translate-y-0 scale-100" : "opacity-0 translate-y-10 scale-95"
         )}>
           {isLoading ? (
-            <Skeleton className="w-full aspect-video md:h-[600px]" />
+            <Skeleton className="w-full aspect-video h-[50vh] md:h-[80vh]" />
           ) : (
-            <div className="relative aspect-video md:h-[600px] group bg-[#0a0a0a]">
+            <div className="relative w-full h-[50vh] sm:h-[60vh] md:h-[80vh] group bg-[#0a0a0a]">
               
-              {/* Conditional Video or Thumbnail */}
               {isDirectVideo ? (
                 <video
                   ref={videoRef}
@@ -87,53 +85,49 @@ export function FeaturedVideo() {
                 />
               )}
               
-              {/* Cinematic Gradient Overlays */}
               <div className="absolute inset-0 bg-black/40 group-hover:bg-black/20 transition-colors duration-700" />
-              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/10 to-transparent" />
               
-              {/* Floating Controls */}
-              <div className="absolute top-8 right-8 z-20 flex gap-2">
+              <div className="absolute top-6 right-6 md:top-10 md:right-10 z-20 flex gap-2">
                   <Button 
                     variant="outline" 
                     size="icon" 
-                    className="rounded-full bg-black/20 backdrop-blur-xl border-white/10 text-white hover:bg-white/10 h-12 w-12"
+                    className="rounded-full bg-black/20 backdrop-blur-xl border-white/10 text-white hover:bg-white/10 h-10 w-10 md:h-12 md:w-12"
                     onClick={() => setIsMuted(!isMuted)}
                   >
-                    {isMuted ? <VolumeX className="h-5 w-5" /> : <Volume2 className="h-5 w-5" />}
+                    {isMuted ? <VolumeX className="h-4 w-4 md:h-5 md:w-5" /> : <Volume2 className="h-4 w-4 md:h-5 md:w-5" />}
                   </Button>
               </div>
 
-              {/* Content Core */}
-              <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-8 z-10">
-                <div className="space-y-6 max-w-2xl">
-                    <p className="text-[10px] font-black uppercase tracking-[0.5em] text-white/60 mb-2">Featured Showreel</p>
-                    <h2 className="text-4xl md:text-7xl font-black tracking-tightest text-white leading-none">
+              <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-6 md:p-12 z-10">
+                <div className="space-y-4 md:space-y-8 max-w-4xl">
+                    <p className="text-[9px] md:text-[11px] font-black uppercase tracking-[0.5em] text-white/60 mb-2">Featured Visual Artifact</p>
+                    <h2 className="text-3xl md:text-8xl font-black tracking-tightest text-white leading-[0.9] drop-shadow-2xl">
                         {featured.title}
                     </h2>
-                    <p className="text-white/70 text-lg md:text-xl font-medium leading-relaxed line-clamp-2 md:line-clamp-none">
+                    <p className="text-white/70 text-sm md:text-xl font-medium leading-relaxed max-w-2xl mx-auto line-clamp-2 md:line-clamp-none">
                         {featured.description}
                     </p>
                     
-                    <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-8">
-                        <Button asChild size="lg" className="h-16 px-10 rounded-full bg-white text-black hover:bg-white/90 font-black shadow-2xl transition-all hover:scale-105">
+                    <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4 md:pt-10">
+                        <Button asChild size="lg" className="h-14 md:h-16 px-8 md:px-12 rounded-full bg-white text-black hover:bg-white/90 font-black shadow-2xl transition-all hover:scale-105">
                             <a href={featured.videoUrl} target="_blank" rel="noopener noreferrer">
-                                <Play className="mr-3 h-5 w-5 fill-current" />
-                                Launch Portfolio
+                                <Play className="mr-3 h-4 w-4 md:h-5 md:w-5 fill-current" />
+                                Launch Showreel
                             </a>
                         </Button>
-                        <Button asChild variant="outline" size="lg" className="h-16 px-10 rounded-full border-white/20 bg-white/5 backdrop-blur-md text-white hover:bg-white/10 font-bold transition-all">
+                        <Button asChild variant="outline" size="lg" className="h-14 md:h-16 px-8 md:px-12 rounded-full border-white/20 bg-white/5 backdrop-blur-md text-white hover:bg-white/10 font-bold transition-all">
                             <Link href="/videos">
-                                Enter Motion Archive <MoveRight className="ml-3 h-5 w-5" />
+                                Enter Archive <MoveRight className="ml-3 h-4 w-4 md:h-5 md:w-5" />
                             </Link>
                         </Button>
                     </div>
                 </div>
               </div>
 
-              {/* Reel Marker Overlay */}
-              <div className="absolute bottom-10 right-10 flex items-center gap-4 text-white/20 select-none z-10">
-                  <div className="h-px w-12 bg-white/20" />
-                  <span className="text-[9px] font-black uppercase tracking-[0.4em]">Visual Artifact v2.0</span>
+              <div className="absolute bottom-8 right-8 md:bottom-12 md:right-12 hidden sm:flex items-center gap-4 text-white/20 select-none z-10">
+                  <div className="h-px w-16 bg-white/20" />
+                  <span className="text-[10px] font-black uppercase tracking-[0.4em]">Secure Node v2.0</span>
               </div>
             </div>
           )}
