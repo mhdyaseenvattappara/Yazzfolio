@@ -17,9 +17,9 @@ export async function uploadToCloudinary(
   base64Data: string, 
   resourceType: 'image' | 'video' | 'auto' = 'auto'
 ): Promise<string> {
-  const cloudName = process.env.CLOUDINARY_CLOUD_NAME;
-  const apiKey = process.env.CLOUDINARY_API_KEY;
-  const apiSecret = process.env.CLOUDINARY_API_SECRET;
+  const cloudName = (process.env.CLOUDINARY_CLOUD_NAME || '').trim();
+  const apiKey = (process.env.CLOUDINARY_API_KEY || '').trim();
+  const apiSecret = (process.env.CLOUDINARY_API_SECRET || '').trim();
 
   if (!cloudName || !apiSecret || !apiKey) {
     throw new Error('Cloudinary credentials are missing from the environment.');
@@ -29,8 +29,11 @@ export async function uploadToCloudinary(
   const folder = 'yazzfolio_motion';
   
   // Create signature for signed upload
-  const signatureStr = `folder=${folder}&timestamp=${timestamp}${apiSecret}`;
-  const signature = createHash('sha1').update(signatureStr).digest('hex');
+  // Parameters must be sorted alphabetically
+  const paramsToSign = `folder=${folder}&timestamp=${timestamp}`;
+  const signature = createHash('sha1')
+    .update(`${paramsToSign}${apiSecret}`)
+    .digest('hex');
 
   const formData = new FormData();
   formData.append('file', base64Data);
@@ -48,12 +51,13 @@ export async function uploadToCloudinary(
     const result = await response.json();
 
     if (result.error) {
+      console.error('Cloudinary API Error:', result.error);
       throw new Error(result.error.message || 'Cloudinary upload failed');
     }
 
     return result.secure_url;
   } catch (error: any) {
-    console.error('Cloudinary Upload Error:', error);
+    console.error('Cloudinary Upload Execution Error:', error);
     throw new Error(error.message || 'An unexpected error occurred during Cloudinary upload.');
   }
 }
