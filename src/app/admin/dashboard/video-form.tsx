@@ -146,7 +146,7 @@ export function VideoForm({ video, onSuccess }: VideoFormProps) {
           name="thumbnailUrl"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="text-xs font-black uppercase tracking-widest opacity-60">Thumbnail (ImgBB)</FormLabel>
+              <FormLabel className="text-xs font-black uppercase tracking-widest opacity-60">Thumbnail (Optional)</FormLabel>
               <FormControl>
                 <ImageUpload
                   initialImageUrl={field.value}

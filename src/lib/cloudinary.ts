@@ -21,11 +21,11 @@ export async function uploadToCloudinary(
   const apiKey = (process.env.CLOUDINARY_API_KEY || '393249629561516').trim();
   const apiSecret = (process.env.CLOUDINARY_API_SECRET || '').trim();
 
-  if (!cloudName || !apiKey) {
-    throw new Error('Cloudinary credentials (Cloud Name or API Key) are missing.');
+  if (!cloudName || !apiKey || !apiSecret) {
+    throw new Error('Cloudinary credentials (Cloud Name, API Key, or API Secret) are missing.');
   }
 
-  const timestamp = Math.round(new Date().getTime() / 1000);
+  const timestamp = Math.round(new Date().getTime() / 1000).toString();
   const folder = 'yazzfolio_motion';
   
   // Cloudinary Signature Logic:
@@ -36,7 +36,7 @@ export async function uploadToCloudinary(
   
   const parameters: Record<string, string> = {
     folder: folder,
-    timestamp: timestamp.toString()
+    timestamp: timestamp
   };
 
   // Sort keys alphabetically to ensure deterministic signature
@@ -54,7 +54,7 @@ export async function uploadToCloudinary(
   const formData = new FormData();
   formData.append('file', base64Data);
   formData.append('api_key', apiKey);
-  formData.append('timestamp', timestamp.toString());
+  formData.append('timestamp', timestamp);
   formData.append('signature', signature);
   formData.append('folder', folder);
 

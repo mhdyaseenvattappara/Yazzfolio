@@ -80,7 +80,6 @@ export function FeaturedVideo() {
                 <video
                   ref={videoRef}
                   src={featured.videoUrl}
-                  poster={featured.thumbnailUrl}
                   muted={isMuted}
                   loop
                   autoPlay
