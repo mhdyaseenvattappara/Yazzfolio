@@ -23,17 +23,13 @@ export async function uploadToCloudinary(
   const apiSecret = (process.env.CLOUDINARY_API_SECRET || '').trim();
 
   if (!apiSecret) {
-    throw new Error('Cloudinary API Secret is missing in environment variables. Signed uploads require a secret.');
+    throw new Error('Cloudinary API Secret is missing. Signed uploads require a secret.');
   }
 
   const timestamp = Math.round(new Date().getTime() / 1000).toString();
   const folder = 'yazzfolio_motion';
   
-  // Cloudinary Signature Requirements:
-  // 1. All parameters except file, cloud_name, resource_type, and api_key.
-  // 2. Parameters must be sorted alphabetically.
-  // 3. Secret appended at the end without & separator.
-  
+  // Parameters must be sorted alphabetically for Cloudinary signature
   const paramsToSign: Record<string, string> = {
     folder: folder,
     timestamp: timestamp
