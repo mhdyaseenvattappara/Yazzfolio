@@ -1,9 +1,8 @@
-
 'use server';
 
 /**
  * @fileOverview Server-side utility for uploading assets to Cloudinary.
- * Strictly adheres to Cloudinary's signing requirements.
+ * Strictly adheres to Cloudinary's signing requirements with alphabetical sorting.
  */
 
 import { createHash } from 'node:crypto';
@@ -20,29 +19,29 @@ export async function uploadToCloudinary(
 ): Promise<string> {
   const cloudName = (process.env.CLOUDINARY_CLOUD_NAME || 'dqwcd4v7g').trim();
   const apiKey = (process.env.CLOUDINARY_API_KEY || '393249629561516').trim();
-  const apiSecret = (process.env.CLOUDINARY_API_SECRET || '').trim();
+  const apiSecret = (process.env.CLOUDINARY_API_SECRET || 'AvlGZsstzFxJ0CMxt5Z545ukAHo').trim();
 
   if (!apiSecret) {
-    throw new Error('Cloudinary API Secret is missing in environment variables.');
+    throw new Error('Cloudinary API Secret is missing. Please check your environment variables.');
   }
 
   const timestamp = Math.round(new Date().getTime() / 1000).toString();
   const folder = 'yazzfolio_motion';
   
-  // 1. Prepare parameters (exclude file, api_key, and signature)
-  // Parameters MUST be sorted alphabetically for Cloudinary signature validation
+  // 1. Prepare parameters for signing
+  // Cloudinary signatures EXCLUDE the file, api_key, and the signature itself.
+  // Parameters MUST be sorted alphabetically.
   const paramsToSign: Record<string, string> = {
     folder: folder,
     timestamp: timestamp
   };
 
-  // 2. Generate signature string: param1=val1&param2=val2...api_secret
   const signatureString = Object.keys(paramsToSign)
     .sort()
     .map(key => `${key}=${paramsToSign[key]}`)
     .join('&') + apiSecret;
 
-  // 3. Hash with SHA-1
+  // 2. Hash with SHA-1
   const signature = createHash('sha1')
     .update(signatureString)
     .digest('hex');
