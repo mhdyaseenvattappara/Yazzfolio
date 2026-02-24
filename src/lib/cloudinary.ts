@@ -1,3 +1,4 @@
+
 'use server';
 
 /**
@@ -8,7 +9,7 @@
 import { createHash } from 'node:crypto';
 
 /**
- * Uploads a base64 encoded file to Cloudinary.
+ * Uploads a base64 encoded file to Cloudinary using Signed Uploads.
  * @param base64Data The file data URI.
  * @param resourceType 'image' | 'video' | 'auto'
  * @returns The secure URL of the uploaded asset.
@@ -21,32 +22,28 @@ export async function uploadToCloudinary(
   const apiKey = (process.env.CLOUDINARY_API_KEY || '393249629561516').trim();
   const apiSecret = (process.env.CLOUDINARY_API_SECRET || '').trim();
 
-  if (!cloudName || !apiKey || !apiSecret) {
-    throw new Error('Cloudinary credentials (Cloud Name, API Key, or API Secret) are missing.');
+  if (!apiSecret) {
+    throw new Error('Cloudinary API Secret is missing in environment variables. Signed uploads require a secret.');
   }
 
   const timestamp = Math.round(new Date().getTime() / 1000).toString();
   const folder = 'yazzfolio_motion';
   
-  // Cloudinary Signature Logic:
-  // 1. Collect all parameters except api_key, file, cloud_name, resource_type
-  // 2. Sort parameters alphabetically
-  // 3. String to sign: 'parameter1=value1&parameter2=value2<API_SECRET>'
-  // 4. Hash the resulting string using SHA-1
+  // Cloudinary Signature Requirements:
+  // 1. All parameters except file, cloud_name, resource_type, and api_key.
+  // 2. Parameters must be sorted alphabetically.
+  // 3. Secret appended at the end without & separator.
   
-  const parameters: Record<string, string> = {
+  const paramsToSign: Record<string, string> = {
     folder: folder,
     timestamp: timestamp
   };
 
-  // Sort keys alphabetically to ensure deterministic signature
-  const sortedKeys = Object.keys(parameters).sort();
-  
-  // Create signature string using exact sorting requirements
-  const signatureParts = sortedKeys.map(key => `${key}=${parameters[key]}`);
-  const signatureString = `${signatureParts.join('&')}${apiSecret}`;
-  
-  // Generate SHA-1 hash via crypto.createHash
+  const signatureString = Object.keys(paramsToSign)
+    .sort()
+    .map(key => `${key}=${paramsToSign[key]}`)
+    .join('&') + apiSecret;
+
   const signature = createHash('sha1')
     .update(signatureString)
     .digest('hex');
@@ -73,7 +70,7 @@ export async function uploadToCloudinary(
 
     return result.secure_url;
   } catch (error: any) {
-    console.error('Cloudinary Upload Execution Error:', error);
-    throw new Error(error.message || 'An unexpected error occurred during Cloudinary upload.');
+    console.error('Cloudinary Upload Error:', error);
+    throw new Error(error.message || 'Failed to upload video to Cloudinary.');
   }
 }

@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useCollection, useFirestore, useMemoFirebase } from '@/firebase';
@@ -45,12 +46,9 @@ export function FeaturedVideo() {
   useEffect(() => {
     if (videoRef.current) {
       if (isInView) {
-        const playPromise = videoRef.current.play();
-        if (playPromise !== undefined) {
-            playPromise.catch(error => {
-                console.log("Autoplay was prevented by browser policy", error);
-            });
-        }
+        videoRef.current.play().catch(() => {
+            // Autoplay blocked or interrupted
+        });
       } else {
         videoRef.current.pause();
       }
@@ -59,22 +57,22 @@ export function FeaturedVideo() {
 
   if (!isLoading && !featured) return null;
 
-  // Broaden check: if it has common video extension or comes from cloudinary video delivery
+  // Cinematic Fill logic: check if the URL is from Cloudinary or has video extension
   const isDirectVideo = featured?.videoUrl?.match(/\.(mp4|webm|ogg|mov|m4v)($|\?)/i) || 
                         featured?.videoUrl?.includes('cloudinary.com') ||
                         featured?.videoUrl?.includes('video/upload');
 
   return (
     <section id="videos" ref={ref} className="py-12 md:py-20 overflow-hidden bg-background">
-      <div className="w-full max-w-[1600px] mx-auto px-4 md:px-8">
+      <div className="w-full px-0 sm:px-4 md:px-8">
         <div className={cn(
-            "w-full rounded-[2rem] md:rounded-[3.5rem] overflow-hidden border border-border/50 shadow-2xl relative transition-all duration-1000",
+            "w-full rounded-none sm:rounded-[2rem] md:rounded-[3.5rem] overflow-hidden border-y sm:border border-border/50 shadow-2xl relative transition-all duration-1000",
             isInView ? "opacity-100 translate-y-0 scale-100" : "opacity-0 translate-y-10 scale-95"
         )}>
           {isLoading ? (
             <Skeleton className="w-full h-[50vh] md:h-[80vh]" />
           ) : (
-            <div className="relative w-full h-[50vh] sm:h-[60vh] md:h-[80vh] group bg-[#0a0a0a]">
+            <div className="relative w-full h-[60vh] sm:h-[70vh] md:h-[80vh] group bg-[#0a0a0a]">
               
               {isDirectVideo ? (
                 <video
@@ -89,7 +87,7 @@ export function FeaturedVideo() {
               ) : (
                 <div 
                   className="absolute inset-0 bg-cover bg-center transition-transform duration-[2s] group-hover:scale-105"
-                  style={{ backgroundImage: `url(${featured.thumbnailUrl})` }}
+                  style={{ backgroundImage: `url(${featured.thumbnailUrl || ''})` }}
                 />
               )}
               

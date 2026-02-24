@@ -1,3 +1,4 @@
+
 'use client';
 
 import { z } from 'zod';
@@ -131,7 +132,7 @@ export function VideoForm({ video, onSuccess }: VideoFormProps) {
         toast({ 
             variant: 'destructive', 
             title: 'Upload Failed', 
-            description: err.message || 'Check your file size (Max 64MB) and connection.' 
+            description: err.message || 'Check your file size (Max 64MB) and secret key.' 
         });
     } finally {
         setIsSubmitting(false);
