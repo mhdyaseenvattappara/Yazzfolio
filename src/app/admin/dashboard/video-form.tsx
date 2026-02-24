@@ -103,7 +103,7 @@ export function VideoForm({ video, onSuccess }: VideoFormProps) {
         }
 
         if (!finalVideoUrl) {
-            throw new Error('Please upload a video or provide an external URL.');
+            throw new Error('Please upload a video file or provide an external URL.');
         }
 
         const dataToSave = {
@@ -123,8 +123,8 @@ export function VideoForm({ video, onSuccess }: VideoFormProps) {
         setUploadProgress(100);
         
         toast({
-            title: video ? 'Video Updated' : 'Motion Reel Added',
-            description: `"${values.title}" has been saved.`,
+            title: video ? 'Visual Reel Updated' : 'Motion Reel Published',
+            description: `"${values.title}" has been saved to your archive.`,
         });
         onSuccess();
     } catch (err: any) {
@@ -132,7 +132,7 @@ export function VideoForm({ video, onSuccess }: VideoFormProps) {
         toast({ 
             variant: 'destructive', 
             title: 'Upload Failed', 
-            description: err.message || 'Check your file size (Max 64MB) and secret key.' 
+            description: err.message || 'Check your credentials and file size (Max 64MB).' 
         });
     } finally {
         setIsSubmitting(false);
@@ -163,7 +163,7 @@ export function VideoForm({ video, onSuccess }: VideoFormProps) {
         />
 
         <div className="space-y-3">
-            <FormLabel className="text-xs font-black uppercase tracking-widest opacity-60">Video Asset (Cloudinary)</FormLabel>
+            <FormLabel className="text-xs font-black uppercase tracking-widest opacity-60">Visual Asset (Cloudinary)</FormLabel>
             <div 
                 className="w-full h-32 border-2 border-dashed rounded-2xl flex flex-col items-center justify-center bg-muted/20 hover:bg-accent/10 transition-all cursor-pointer group"
                 onClick={() => videoInputRef.current?.click()}
@@ -202,7 +202,7 @@ export function VideoForm({ video, onSuccess }: VideoFormProps) {
                 render={({ field }) => (
                     <FormItem>
                         <FormControl>
-                            <Input placeholder="Or paste external URL (YT/Vimeo)..." {...field} className="h-10 rounded-xl bg-muted/30" />
+                            <Input placeholder="Or paste external URL (YouTube/Vimeo)..." {...field} className="h-10 rounded-xl bg-muted/30" />
                         </FormControl>
                         <FormMessage />
                     </FormItem>
@@ -215,9 +215,9 @@ export function VideoForm({ video, onSuccess }: VideoFormProps) {
           name="title"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="text-xs font-black uppercase tracking-widest opacity-60">Title</FormLabel>
+              <FormLabel className="text-xs font-black uppercase tracking-widest opacity-60">Reel Title</FormLabel>
               <FormControl>
-                <Input placeholder="Reel 2024 / Product Promo..." {...field} className="h-12 rounded-xl" />
+                <Input placeholder="e.g. Motion Design Reel 2024" {...field} className="h-12 rounded-xl" />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -229,9 +229,9 @@ export function VideoForm({ video, onSuccess }: VideoFormProps) {
           name="description"
           render={({ field }) => (
             <FormItem>
-              <FormLabel className="text-xs font-black uppercase tracking-widest opacity-60">Brief Description</FormLabel>
+              <FormLabel className="text-xs font-black uppercase tracking-widest opacity-60">Visual Narrative</FormLabel>
               <FormControl>
-                <Textarea placeholder="What is this video about?" {...field} className="min-h-[100px] rounded-xl" />
+                <Textarea placeholder="Describe the creative direction..." {...field} className="min-h-[100px] rounded-xl" />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -240,8 +240,8 @@ export function VideoForm({ video, onSuccess }: VideoFormProps) {
 
         <div className="flex items-center justify-between p-4 bg-muted/30 rounded-2xl border border-border/50">
             <div className="space-y-0.5">
-                <FormLabel className="text-sm font-bold">Featured Status</FormLabel>
-                <FormDescription className="text-[10px] uppercase tracking-wider font-medium">Show prominently on landing page</FormDescription>
+                <FormLabel className="text-sm font-bold">Featured Presence</FormLabel>
+                <FormDescription className="text-[10px] uppercase tracking-wider font-medium text-muted-foreground">Force presence on landing page</FormDescription>
             </div>
             <FormField
                 control={form.control}
@@ -259,7 +259,7 @@ export function VideoForm({ video, onSuccess }: VideoFormProps) {
         {isSubmitting && (
             <div className="space-y-2">
                 <div className="flex justify-between text-[10px] font-black uppercase text-primary">
-                    <span>Processing & Synchronizing...</span>
+                    <span>Synchronizing Nodes...</span>
                     <span>{uploadProgress}%</span>
                 </div>
                 <div className="h-1 w-full bg-muted rounded-full overflow-hidden">
@@ -268,9 +268,9 @@ export function VideoForm({ video, onSuccess }: VideoFormProps) {
             </div>
         )}
 
-        <Button type="submit" disabled={isSubmitting} className="h-14 rounded-2xl text-lg font-black tracking-tight shadow-xl">
+        <Button type="submit" disabled={isSubmitting} className="h-14 rounded-2xl text-lg font-black tracking-tight shadow-xl bg-primary text-primary-foreground hover:scale-[1.02] active:scale-[0.98] transition-all">
           {isSubmitting ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : <CheckCircle2 className="mr-2 h-5 w-5" />}
-          {video ? 'Update Visual Reel' : 'Publish to Motion Archive'}
+          {video ? 'Update Visual Record' : 'Commit to Motion Archive'}
         </Button>
       </form>
     </Form>

@@ -3,7 +3,7 @@
 
 /**
  * @fileOverview Server-side utility for uploading assets to Cloudinary.
- * Specifically used for high-performance video reels.
+ * Strictly adheres to Cloudinary's signing requirements.
  */
 
 import { createHash } from 'node:crypto';
@@ -23,23 +23,26 @@ export async function uploadToCloudinary(
   const apiSecret = (process.env.CLOUDINARY_API_SECRET || '').trim();
 
   if (!apiSecret) {
-    throw new Error('Cloudinary API Secret is missing. Signed uploads require a secret.');
+    throw new Error('Cloudinary API Secret is missing in environment variables.');
   }
 
   const timestamp = Math.round(new Date().getTime() / 1000).toString();
   const folder = 'yazzfolio_motion';
   
-  // Parameters must be sorted alphabetically for Cloudinary signature
+  // 1. Prepare parameters (exclude file, api_key, and signature)
+  // Parameters MUST be sorted alphabetically for Cloudinary signature validation
   const paramsToSign: Record<string, string> = {
     folder: folder,
     timestamp: timestamp
   };
 
+  // 2. Generate signature string: param1=val1&param2=val2...api_secret
   const signatureString = Object.keys(paramsToSign)
     .sort()
     .map(key => `${key}=${paramsToSign[key]}`)
     .join('&') + apiSecret;
 
+  // 3. Hash with SHA-1
   const signature = createHash('sha1')
     .update(signatureString)
     .digest('hex');
@@ -67,6 +70,6 @@ export async function uploadToCloudinary(
     return result.secure_url;
   } catch (error: any) {
     console.error('Cloudinary Upload Error:', error);
-    throw new Error(error.message || 'Failed to upload video to Cloudinary.');
+    throw new Error(error.message || 'Failed to upload asset to Cloudinary.');
   }
 }
